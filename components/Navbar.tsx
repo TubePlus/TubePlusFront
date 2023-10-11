@@ -1,25 +1,83 @@
+'use client';
 import Image from 'next/image';
-import Link from 'next/link';
+import {
+    Navbar as NextNavbar,
+    NavbarBrand,
+    NavbarContent,
+    NavbarItem,
+    Link,
+    Button,
+    Input,
+    DropdownTrigger,
+    DropdownMenu,
+    DropdownItem,
+    Dropdown,
+} from '@nextui-org/react';
+import { ThemeSwitcher } from './ThemeSwitcher';
+import { usePathname } from 'next/navigation';
+import { DotsHorizontalIcon, MagnifyingGlassIcon } from '@radix-ui/react-icons';
 
 const Navbar = () => {
+    const pathname = usePathname();
     return (
-        <div className="fixed top-0 inset-x-0 h-fit bg-zinc-100 border-b border-zinc-300 z-[10] py-2">
-            <div className="container max-w mx-auto flex items-center justify-between gap-2">
-                <Link href="/" className="flex gap-2 items-center">
-                    {/* <Icons.logo className="h-8 w-8 sm:h-6 sm:w-6" /> */}{' '}
-                    {/*TODO: import and configure svg logo*/}
-                    <Image
-                        alt="logo"
-                        src="/images/tubePlus_logo.png"
-                        width={32}
-                        height={32}
-                    />
-                    <p className="hidden text-zinc-700 text-sm font-medium md:block">
-                        MyComm
-                    </p>
-                </Link>
-            </div>
-        </div>
+        <NextNavbar
+            isBordered
+            className="backdrop-blur bg-zinc-900/0"
+            height={'3rem'}>
+            <NavbarBrand as={Link} href={'/'}>
+                <Image
+                    alt="logo"
+                    src="/images/tubePlus_logo.png"
+                    width={32}
+                    height={32}
+                />
+                <p className="font-bold text-zinc-800 dark:text-zinc-200 ml-1 md:hidden">
+                    TubePlus
+                </p>
+            </NavbarBrand>
+            {pathname.startsWith('/dev') ? (
+                <>
+                    <NavbarContent>
+                        <NavbarItem>
+                            <Input
+                                fullWidth
+                                variant="faded"
+                                startContent={
+                                    <MagnifyingGlassIcon className="text-black/50 dark:text-white/90 text-slate-400 pointer-events-none flex-shrink-0" />
+                                }
+                            />
+                        </NavbarItem>
+                    </NavbarContent>
+
+                    <NavbarContent as={'div'} justify="end">
+                        <NavbarItem>
+                            <Button as={Link} href="/dev/login">
+                                Log In
+                            </Button>
+                        </NavbarItem>
+                        <Dropdown>
+                            <DropdownTrigger>
+                                <Button isIconOnly>
+                                    <DotsHorizontalIcon />
+                                </Button>
+                            </DropdownTrigger>
+                            <DropdownMenu closeOnSelect={false}>
+                                <DropdownItem endContent={<ThemeSwitcher />}>
+                                    Dark Mode
+                                </DropdownItem>
+                                <DropdownItem>User Settings</DropdownItem>
+                            </DropdownMenu>
+                        </Dropdown>
+                    </NavbarContent>
+                </>
+            ) : (
+                <NavbarContent justify="end">
+                    <NavbarItem>
+                        <ThemeSwitcher />
+                    </NavbarItem>
+                </NavbarContent>
+            )}
+        </NextNavbar>
     );
 };
 
