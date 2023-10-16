@@ -1,23 +1,20 @@
 import { Desktop, Mobile, Tablet } from '@/components/Responsive';
+import MainSidebar from '@/components/sidebar/MainSidebar';
 import dynamic from 'next/dynamic';
 
-const MainSidebar = dynamic(() => import('@/components/sidebar/MainSidebar'), {
-  loading: () => <p>loading...</p>,
-});
+import Sidebar from '@/components/sidebar/Sidebar';
 
 export default function Home() {
   return (
     <>
-      <Desktop>
-        <div className="col-start-4 col-end-13 gap-unit-md flex flex-col pt-4">
-          This is Homepage...
-        </div>
-      </Desktop>
-
       <Tablet>
         <div className="col-start-5 col-end-11 gap-unit-md flex flex-col pt-4">
           This is Homepage...
         </div>
+
+        <Sidebar>
+          <MainSidebar />
+        </Sidebar>
       </Tablet>
 
       <Mobile>
@@ -25,8 +22,6 @@ export default function Home() {
           This is Homepage...
         </div>
       </Mobile>
-
-      <MainSidebar />
     </>
   );
 }
