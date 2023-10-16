@@ -46,6 +46,7 @@ const Navbar = async () => {
         </NavbarItem>
       </NavbarContent>
 
+      {/* TODO: 아래 코드를 컴포넌트로 분리해야 될까? */}
       {session?.user ? (
         <Suspense
           fallback={

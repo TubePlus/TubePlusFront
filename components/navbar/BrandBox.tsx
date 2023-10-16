@@ -39,6 +39,7 @@ const BrandBox = () => {
         <Skeleton className="rounded-lg w-8 h-8" />
       </div>
 
+      {/* TODO: skeleton 적용 안되고 있음 */}
       <div className="hidden lg:block">
         <Skeleton className="h-8 w-full rounded-lg" />
       </div>

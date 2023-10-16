@@ -11,6 +11,7 @@ module.exports = {
     './node_modules/@nextui-org/theme/dist/**/*.{js,ts,jsx,tsx}',
   ],
   theme: {
+    // TODO: tailwind 상세 설정 추가(커스터마이징 필요 시)
     screen: {
       sm: '640px',
       // @media (min-width: 640px) {...}
