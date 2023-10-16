@@ -1,6 +1,5 @@
 import { Desktop, Mobile, Tablet } from '@/components/Responsive';
 import dynamic from 'next/dynamic';
-import { Suspense } from 'react';
 
 const MainSidebar = dynamic(() => import('@/components/sidebar/MainSidebar'), {
   loading: () => <p>loading...</p>,

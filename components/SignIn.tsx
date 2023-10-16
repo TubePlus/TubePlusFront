@@ -3,7 +3,7 @@ import { Divider } from '@nextui-org/divider';
 import { Link } from '@nextui-org/link';
 import NextLink from 'next/link';
 import Image from 'next/image';
-import UserAuthForm from './UserAuthForm';
+import LogInButton from './LogInButton';
 
 const SignIn = () => {
   return (
@@ -24,9 +24,12 @@ const SignIn = () => {
           User Agreement and Privacy Policy.
         </p>
       </div>
+
       <Divider />
+
       {/* login button */}
-      <UserAuthForm />
+      <LogInButton />
+
       <Divider />
       <div className="pt-unit-xl">
         New to TubePlus?{' '}
