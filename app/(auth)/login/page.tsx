@@ -1,30 +1,32 @@
 import SignIn from '@/components/SignIn';
+import { Button } from '@nextui-org/button';
 import { Card, CardBody, CardFooter, CardHeader } from '@nextui-org/card';
-import { ChevronLeftIcon } from '@radix-ui/react-icons';
-import Link from 'next/link';
 import { Divider } from '@nextui-org/divider';
+import { ChevronLeftIcon } from '@radix-ui/react-icons';
 import { Chip } from '@nextui-org/chip';
+import Link from 'next/link';
 import { Avatar } from '@nextui-org/avatar';
 import { memebers } from '@/data/members';
-import BackButton from '@/components/BackButton';
 
-const LogInModalPage = () => {
+const LogInPage = () => {
     return (
-        <div>
-            <div className="z-50 backdrop-blur-sm backdrop-saturate-150 bg-overlay/10 w-screen h-screen fixed inset-0" />
-            <div className="z-50 flex w-screen h-[100dvh] fixed inset-0 items-center justify-center max-w-xl gap-20 mx-auto">
+        <div className="absolute inset-0">
+            <div className="flex flex-col items-center justify-center h-full max-w-xl gap-20 mx-auto">
                 <Card
-                    classNames={{
-                        base: 'bg-white mx-auto border border-zinc-300/20',
-                    }}
-                    shadow="lg"
-                    isBlurred>
+                    classNames={{ base: 'bg-white dark:bg-zinc-700' }}
+                    shadow="none">
                     <CardHeader>
                         <div className="justify-start w-full">
-                            <BackButton
-                                name="Home"
-                                icon={<ChevronLeftIcon />}
-                            />
+                            <Button
+                                as={Link}
+                                className="pl-0"
+                                variant="light"
+                                startContent={
+                                    <ChevronLeftIcon className="w-4 h-4 mr-2" />
+                                }
+                                href={'/'}>
+                                Home
+                            </Button>
                         </div>
                     </CardHeader>
 
@@ -66,4 +68,4 @@ const LogInModalPage = () => {
     );
 };
 
-export default LogInModalPage;
+export default LogInPage;

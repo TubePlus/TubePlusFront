@@ -15,9 +15,10 @@
     "next": "13.5.4",
     "next-auth": "^4.23.2",
     "next-themes": "^0.2.1",
+    "notyf": "^3.10.0",
     "react": "^18",
     "react-dom": "^18",
-    "tailwind-merge": "^1.14.0",
+    "react-responsive": "^9.0.2",
     "tailwindcss-animate": "^1.0.7"
   },
   "devDependencies": {
