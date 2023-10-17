@@ -9,7 +9,7 @@ import React, { Suspense, useEffect, useState } from 'react';
 export const ThemeSwitcher = ({ type }: { type: 'toggle' | 'button' }) => {
   const pathname = usePathname();
   const [mounted, setMounted] = useState(false); // hydration error 방지
-  const { theme, setTheme, systemTheme } = useTheme();
+  const { theme, setTheme, systemTheme } = useTheme(); // TODO: user를 위한 setThme() 사용 시 Handler 안에 넣어서 session 확인, 확인 후 post fetch
 
   useEffect(() => {
     setMounted(true);
@@ -19,9 +19,7 @@ export const ThemeSwitcher = ({ type }: { type: 'toggle' | 'button' }) => {
         setTheme('system');
       }
     };
-  }, []); // 경고: 의존성 배열에 setTheme 필요 - mount 시에만 실행되어야 하기 때문에 추가하면 안됨
-
-  // if (!mounted) return null;
+  }, []); // TODO: Warning 의존성 배열에 setTheme 필요 - "mount 시에만 실행되어야 하기 때문에 추가하면 안됨"
 
   switch (type) {
     case 'toggle':

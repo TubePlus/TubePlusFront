@@ -3,17 +3,11 @@ import {
   NavbarContent,
   NavbarItem,
 } from '@nextui-org/navbar';
-import { Button } from '@nextui-org/button';
-import { Input } from '@nextui-org/input';
-import { ThemeSwitcher } from '../ThemeSwitcher';
-import { MagnifyingGlassIcon } from '@radix-ui/react-icons';
-import Link from 'next/link';
-import { Desktop, Mobile } from '../Responsive';
-import { Skeleton } from '@nextui-org/skeleton';
-import { useSession } from 'next-auth/react';
-import { Suspense } from 'react';
-import AuthenticatedUserBox from './AuthenticatedUserBox';
 import BrandBox from './BrandBox';
+import SearchBox from './SearchBox';
+import UserPushBox from './UserPushBox';
+import AuthenticatedUserDropdown from './AuthenticatedUserDropdown';
+import UnauthenticatedUserDropdown from './UnauthenticatedUserDropdown';
 import { getAuthSession } from '@/lib/auth';
 
 const Navbar = async () => {
@@ -21,75 +15,47 @@ const Navbar = async () => {
 
   return (
     <NextNavbar
-      className="dark:bg-zinc-800"
-      classNames={{ base: 'min-w-[365px]', wrapper: 'max-w-[1524px]' }}
+      className="bg-zinc-100 dark:bg-zinc-800 z-[999]"
+      classNames={{ base: 'min-w-[360px]', wrapper: 'px-4 max-w-[1524px]' }}
       isBordered
       isBlurred
       height={'3rem'}
     >
-      <Mobile>
-        <p>true</p>
-      </Mobile>
-
       <BrandBox />
 
-      <NavbarContent className="flex-grow-[2] !basis-80">
-        <NavbarItem className="min-w-[150px] w-full mx-unit-lg">
-          <Input
-            variant="bordered"
-            fullWidth
-            placeholder="Search TubePlus"
-            startContent={
-              <MagnifyingGlassIcon className="text-black/50 dark:text-white/90 text-slate-400 pointer-events-none flex-shrink-0" />
-            }
-          />
+      <NavbarContent
+        className="basis-[750px] tablet:flex mobileL:hidden mobileM:hidden"
+        justify="center"
+      >
+        <NavbarItem className="w-full">
+          <SearchBox type="input" />
         </NavbarItem>
       </NavbarContent>
 
-      {/* TODO: 아래 코드를 컴포넌트로 분리해야 될까? */}
-      {session?.user ? (
-        <Suspense
-          fallback={
-            <div className="max-w-[300px] flex items-center gap-3">
-              <div>
-                <Skeleton className="flex rounded-full w-12 h-12" />
-              </div>
-              <div className="inline-flex flex-col items-start gap-2">
-                <Skeleton className="h-3 w-40 rounded-lg" />
-                <Skeleton className="h-3 w-40 rounded-lg" />
-              </div>
-            </div>
-          }
-        >
-          <AuthenticatedUserBox session={session} />
-        </Suspense>
-      ) : (
-        <NavbarContent as={'div'} justify="end" className="w-fit !flex-grow-0">
-          <NavbarItem>
-            <Button as={Link} href="/login">
-              Log In
-            </Button>
-          </NavbarItem>
-
-          <Suspense
-            fallback={
-              <div>
-                <Skeleton className="flex rounded-lg w-20 h-10" />
-              </div>
-            }
-          >
-            <Desktop>
-              <NavbarItem>
-                <Button as={Link} href="/signup">
-                  Sign up
-                </Button>
-              </NavbarItem>
-            </Desktop>
-          </Suspense>
-
-          <ThemeSwitcher type="button" />
-        </NavbarContent>
-      )}
+      <NavbarContent
+        as={'div'}
+        justify="end"
+        className="w-fit !flex-grow-0 gap-2"
+      >
+        <NavbarItem className="tablet:hidden mobileL:flex">
+          <SearchBox type="button" />
+        </NavbarItem>
+        {/* TODO: 아래 코드를 컴포넌트로 분리해야 될까? */}
+        {session?.user ? (
+          <>
+            <UserPushBox />
+            <NavbarItem>
+              <AuthenticatedUserDropdown />
+              {/* UserDropdown은 재사용 여지가 있어 NavItem을 포함하지 않음 */}
+            </NavbarItem>
+          </>
+        ) : (
+          <>
+            <UnauthenticatedUserDropdown />
+            {/* UnauthenticatedUserDropdownd은 NavItem을 포함 */}
+          </>
+        )}
+      </NavbarContent>
     </NextNavbar>
   );
 };

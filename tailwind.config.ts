@@ -11,15 +11,16 @@ module.exports = {
     './node_modules/@nextui-org/theme/dist/**/*.{js,ts,jsx,tsx}',
   ],
   theme: {
-    // TODO: tailwind 상세 설정 추가(커스터마이징 필요 시)
-    screen: {
-      sm: '640px',
-      // @media (min-width: 640px) {...}
-      md: '768px',
-      // @media (min-width: 768px) {...}
-      lg: '1024px',
-      // @media (min-width: 1024px) {...}
+    screens: {
+      mobileM: '360px',
+      mobileL: '480px',
+      tablet: '640px',
+      desktop: '1024px',
     },
   },
-  plugins: [require('tailwindcss-animate'), nextui()],
+  plugins: [
+    require('tailwindcss-animate'),
+    require('tailwind-scrollbar'),
+    nextui(),
+  ],
 };

@@ -1,29 +1,48 @@
-import { Desktop, Mobile, Tablet } from '../Responsive';
+'use client';
+import { MobileValue } from '../Responsive';
+import useGlobalState from '@/hooks/use-global-state';
 
-const Sidebar = ({ children }: { children: React.ReactNode }) => {
-  return (
-    // TODO: 기본 스타일을 정의하고 반응형을 내부에 정의
-    // <div
-    //         className={`relative block overflow-y-auto order-first isolate border-r border-solid border-divider dark:border-zinc-200/20 ${
-    //             isDesktop
-    //                 ? 'col-span-3'
-    //                 : isTablet
-    //                 ? 'col-span-4'
-    //                 : isMobile
-    //                 ? '!fixed !left-full'
-    //                 : ''
-    //         } `}></div>
+const Sidebar = ({
+  children,
+  className,
+}: {
+  children: React.ReactNode;
+  className?: string;
+}) => {
+  // TODO: mounted Skeleton 추가 필요?
+  const isMobile = MobileValue(); // for Rerender this component
+  const [isOpen, setIsOpen] = useGlobalState('sidebarStatus');
+
+  return isMobile ? (
     <>
-      <Desktop>
-        <div className="col-span-3">{children}</div>
-      </Desktop>
-      <Tablet>
-        <div className="col-span-4">{children}</div>
-      </Tablet>
-      <Mobile>
-        <div className="!fixed left-full">{children}</div>
-      </Mobile>
+      <div
+        className={`${className}
+                    ${
+                      isOpen
+                        ? 'mobileL:left-0 mobileM:!left-0'
+                        : 'mobileL:-left-full mobileM:!-left-full'
+                    } duration-300 mobileM:absolute
+                    min-w-[250px] overflow-hidden order-first isolate
+                    border-r border-solid border-divider dark:border-zinc-200/20
+                    bg-zinc-100 dark:bg-zinc-800 z-50
+                    `}
+      >
+        {children}
+      </div>
+
+      <div
+        className={`${
+          isOpen ? 'absolute w-full h-full bg-black opacity-30' : 'opacity-0'
+        } duration-300 z-40`}
+        onClick={() => setIsOpen(!isOpen)}
+      />
     </>
+  ) : (
+    <div
+      className={`${className} overflow-hidden order-first isolate border-r border-solid border-divider dark:border-zinc-200/20 bg-zinc-100 dark:bg-zinc-800`}
+    >
+      {children}
+    </div>
   );
 };
 

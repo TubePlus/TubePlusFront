@@ -10,6 +10,14 @@ const nextConfig = {
       },
     ],
   },
+  async rewrites() {
+    return [
+      {
+        source: '/login-no-modal',
+        destination: '/login',
+      },
+    ];
+  },
 };
 
 module.exports = nextConfig;

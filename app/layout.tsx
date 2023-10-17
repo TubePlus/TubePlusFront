@@ -3,7 +3,6 @@ import '@/styles/globals.css';
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import { Providers } from './providers';
-import { Desktop, Mobile, Tablet } from '@/components/Responsive';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -20,30 +19,21 @@ export default function RootLayout({
   modal: React.ReactNode;
 }) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body
-        className={`${inter.className} h-screen w-screen bg-zinc-100 dark:bg-zinc-800`}
+        className={`${inter.className} h-screen w-screen bg-zinc-100 dark:bg-zinc-800 scrollbar-none`}
       >
         <Providers>
           {modal}
           <Navbar />
-          <Desktop>
-            <div className="max-w-[1524px] grid grid-cols-12 gap-unit-lg m-auto overflow-y-auto">
-              {children}
-            </div>
-          </Desktop>
-
-          <Tablet>
-            <div className="max-w-[1024px] grid grid-cols-10 gap-unit-lg m-auto overflow-y-auto">
-              {children}
-            </div>
-          </Tablet>
-
-          <Mobile>
-            <div className="max-w-[640px] grid grid-cols-4 gap-unit-lg m-auto overflow-y-auto">
-              {children}
-            </div>
-          </Mobile>
+          <div
+            className={`grid m-auto overflow-y-auto scrollbar-thin
+                        desktop:gap-unit-lg tablet:gap-unit-md mobileL:gap-unit-md mobileM:gap-unit-sm
+                        desktop:max-w-[1524px] tablet:max-w-[1024px] mobileL:max-w-[640px] mobileM:max-w-[640px]
+                        desktop:grid-cols-12 tablet:grid-cols-10 mobileL:grid-cols-8 mobileM:grid-cols-4`}
+          >
+            {children}
+          </div>
         </Providers>
       </body>
     </html>
