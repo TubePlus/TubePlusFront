@@ -1,6 +1,6 @@
 'use client';
-import { Divider } from '@nextui-org/divider';
-import { Accordion, AccordionItem } from '@nextui-org/accordion';
+import Link from 'next/link';
+import { useEffect, useState } from 'react';
 import { useSession } from 'next-auth/react';
 import {
   defaultMenuItem,
@@ -9,21 +9,19 @@ import {
   subscribeMenuItem,
 } from '@/data/sidebar';
 import SidebarMenu from './SidebarMenu';
-import { useEffect, useState } from 'react';
+import { Button } from '@nextui-org/button';
+import { Divider } from '@nextui-org/divider';
+import { Tooltip } from '@nextui-org/tooltip';
+import { LightningBoltIcon } from '@radix-ui/react-icons';
+import { Accordion, AccordionItem } from '@nextui-org/accordion';
 
 const MainSidebar = () => {
   const { data: session } = useSession();
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
+  const username = session?.user.name; // TODO: 현재 google에서 전체 이름을 불러오고 있음. 기본값 별명(: young1ll)
 
   return (
     <div
-      className={`${
-        mounted ? '!flex' : '!hidden'
-      } flex pt-4 px-4 flex-col gap-2 h-[calc(100vh-3rem-1px)] overflow-y-scroll scrollbar-thin scrollbar-thumb-zinc-400 scrollbar-rounded-full`}
+      className={`flex flex-col gap-2 pt-4 pl-2 h-[calc(100vh-3rem-1px)] overflow-y-scroll scrollbar-thin scrollbar-thumb-zinc-400 scrollbar-rounded-full`}
     >
       <SidebarMenu menuItem={defaultMenuItem} startContentType="icon" />
 
@@ -31,7 +29,7 @@ const MainSidebar = () => {
 
       {session?.user ? (
         <>
-          <Accordion className="px-0" isCompact>
+          <Accordion className="px-0 tablet:hidden desktop:block" isCompact>
             <AccordionItem
               title="My Subscription"
               classNames={{
@@ -45,6 +43,19 @@ const MainSidebar = () => {
               />
             </AccordionItem>
           </Accordion>
+
+          <Tooltip radius="sm" placement="right" content="My ubscription">
+            <Button
+              variant="light"
+              as={Link}
+              href={`/user/${username}/subscription`}
+              className="flex w-full desktop:hidden"
+              fullWidth
+              isIconOnly
+            >
+              <LightningBoltIcon />
+            </Button>
+          </Tooltip>
 
           <Divider />
         </>
@@ -63,7 +74,7 @@ const MainSidebar = () => {
 
       <Divider />
 
-      <div className="grid grid-cols-2 gap-1">
+      <div className="grid grid-cols-2 gap-1 tablet:hidden desktop:grid">
         <SidebarMenu menuItem={languages} />
       </div>
     </div>

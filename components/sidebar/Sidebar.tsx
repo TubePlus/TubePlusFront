@@ -1,4 +1,5 @@
 'use client';
+import { useEffect, useState } from 'react';
 import { MobileValue } from '../Responsive';
 import useGlobalState from '@/hooks/use-global-state';
 
@@ -12,6 +13,11 @@ const Sidebar = ({
   // TODO: mounted Skeleton 추가 필요?
   const isMobile = MobileValue(); // for Rerender this component
   const [isOpen, setIsOpen] = useGlobalState('sidebarStatus');
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   return isMobile ? (
     <>
@@ -22,7 +28,7 @@ const Sidebar = ({
                         ? 'mobileL:left-0 mobileM:!left-0'
                         : 'mobileL:-left-full mobileM:!-left-full'
                     } duration-300 mobileM:absolute
-                    min-w-[250px] overflow-hidden order-first isolate
+                    overflow-hidden order-first isolate
                     border-r border-solid border-divider dark:border-zinc-200/20
                     bg-zinc-100 dark:bg-zinc-800 z-50
                     `}
@@ -39,7 +45,9 @@ const Sidebar = ({
     </>
   ) : (
     <div
-      className={`${className} overflow-hidden order-first isolate border-r border-solid border-divider dark:border-zinc-200/20 bg-zinc-100 dark:bg-zinc-800`}
+      className={`${className} ${
+        !mounted ? 'mobileM:hidden' : ''
+      } overflow-hidden order-first isolate border-r border-solid border-divider dark:border-zinc-200/20 bg-zinc-100 dark:bg-zinc-800`}
     >
       {children}
     </div>

@@ -6,7 +6,7 @@ export default function Home() {
     <>
       <div
         className={`desktop:col-start-4 desktop:col-end-13
-                    tablet:col-start-5 tablet:col-end-11
+                    tablet:col-start-2 tablet:col-end-11
                     mobileL:col-span-full mobileM:col-span-full gap-unit-md
                     flex flex-col pt-4
                     scrollbar-thin`}
@@ -16,7 +16,7 @@ export default function Home() {
 
       <Sidebar
         className={`desktop:block desktop:col-span-3
-                    tablet:block tablet:col-span-4
+                    tablet:block tablet:col-span-1 tablet:min-w-[60px]
                   `}
       >
         <MainSidebar />
