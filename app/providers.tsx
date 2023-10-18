@@ -4,7 +4,6 @@ import { NextUIProvider } from '@nextui-org/react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { SessionProvider } from 'next-auth/react';
 import { ThemeProvider as NextThemeProvider } from 'next-themes';
-import { useState } from 'react';
 
 export const queryClient = new QueryClient(); // defaultOption으로 초기값 설정 가능
 
