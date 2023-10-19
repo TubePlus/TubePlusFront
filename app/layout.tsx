@@ -26,6 +26,7 @@ export default function RootLayout({
         <Providers>
           {modal}
           <Navbar />
+
           <div
             className={`grid m-auto overflow-y-auto scrollbar-thin
                         desktop:gap-unit-lg tablet:gap-unit-md mobileL:gap-unit-md mobileM:gap-unit-sm
@@ -34,6 +35,7 @@ export default function RootLayout({
           >
             {children}
           </div>
+
         </Providers>
       </body>
     </html>
