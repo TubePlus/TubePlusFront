@@ -1,7 +1,12 @@
 import MainSidebar from '@/components/sidebar/MainSidebar';
 import Sidebar from '@/components/sidebar/Sidebar';
+import { ItemProps } from './user/[username]/page';
+import { Avatar } from '@nextui-org/avatar';
+import { memebers } from '@/data/members';
+import { Card } from '@nextui-org/card';
 
 export default function Home() {
+  const data = memebers; // for Fetch Data Test
   return (
     <>
       <div
@@ -11,7 +16,14 @@ export default function Home() {
                     flex flex-col pt-4
                     scrollbar-thin`}
       >
-        This is Homepage...
+        {data.map(
+          // for Fetch Data Test
+          (item: ItemProps, index) => (
+            <Card className="min-h-[150px]" key={index}>
+              <Avatar src={item.avatar} name={item.githubName} />
+            </Card>
+          ),
+        )}
       </div>
 
       <Sidebar

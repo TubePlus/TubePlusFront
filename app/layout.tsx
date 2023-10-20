@@ -27,7 +27,7 @@ export default function RootLayout({
           {modal}
           <Navbar />
           <div
-            className={`grid m-auto overflow-y-auto scrollbar-thin
+            className={`grid mx-auto pr-unit-lg overflow-y-auto scrollbar-thin
                         desktop:gap-unit-lg tablet:gap-unit-md mobileL:gap-unit-md mobileM:gap-unit-sm
                         desktop:max-w-[1524px] tablet:max-w-[1024px] mobileL:max-w-[640px] mobileM:max-w-[640px]
                         desktop:grid-cols-12 tablet:grid-cols-10 mobileL:grid-cols-8 mobileM:grid-cols-4`}
