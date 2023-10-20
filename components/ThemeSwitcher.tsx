@@ -43,7 +43,7 @@ export const ThemeSwitcher = ({ type }: { type: 'toggle' | 'button' }) => {
             theme === 'light' ? setTheme('dark') : setTheme('light')
           }
         >
-          {!session ? (
+          {theme === 'system' ? (
             systemTheme === 'light' ? (
               <SunIcon />
             ) : (
