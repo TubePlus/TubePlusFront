@@ -1,7 +1,8 @@
 'use client'
 import React from 'react'
 import CustomSlider from '@/components/CustomSlider';
-import { Chip } from '@nextui-org/chip';
+import { useState , useEffect } from 'react';
+import { slidebanner } from '@/types/banner';
 
 const dummydata = [
   {
@@ -25,15 +26,39 @@ const dummydata = [
 ]
 
 const MainTop = () => {
+  const [banner , setBanner] = useState<slidebanner[] | null>(null);
+
+  useEffect(() => {
+    const fetchBanner = async () => {
+      try { 
+        const response = await fetch('https://652c497bd0d1df5273ef56a5.mockapi.io/api/v1/banner' , {
+      method : 'GET',
+      headers : { 'Content-Type' : 'application/json'}
+    })
+    if (response.ok) {
+      const data = await response.json()
+      console.log('Success fecting data:', data)
+      setBanner(data)
+    }
+    } catch (error) {
+      console.error('Error fecting data:', error)
+    }
+  }
+    fetchBanner();
+  }
+  , [])
+
+  console.log('f d:' , banner)
+
+  if (banner === null) {
+    return null; // 데이터가 로딩 중일 때 렌더링을 방지
+  }
+  
   return (
     <>
-          <div className='w-full h-20 flex flex-wrap gap-y-2 '>
-            
-            <Chip color="default" className=''>Recommend Creator</Chip>
-
-            <CustomSlider data={dummydata} />
-
-          </div>
+        <div className='pt-5'>
+          <CustomSlider data={dummydata} />
+        </div>
     </>
   )
 }

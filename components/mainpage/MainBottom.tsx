@@ -1,3 +1,4 @@
+
 'use client'
 
 import React from "react";
@@ -40,13 +41,13 @@ const INITIAL_VISIBLE_COLUMNS = ["bookmark", "name", "category", "favorites", "r
 type User = typeof users[0];
 
 const MainBottom = () => {
+
   const [filterValue, setFilterValue] = React.useState("");
   const [selectedKeys, setSelectedKeys] = React.useState<Selection>(new Set([]));
   const [visibleColumns, setVisibleColumns] = React.useState<Selection>(new Set(INITIAL_VISIBLE_COLUMNS));
   const [statusFilter, setStatusFilter] = React.useState<Selection>("all");
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const [sortDescriptor, setSortDescriptor] = React.useState<SortDescriptor>({
-    column: "age",
     direction: "ascending",
   });
   const [page, setPage] = React.useState(1);
@@ -254,9 +255,9 @@ const MainBottom = () => {
           </div>
         </div>
           
-          {/* 페이지당 보여줄 콘텐츠 수 */}
+          {/* 출력할 크리에이터 수 설정 */}
         <div className="flex justify-between items-center">
-          <span className="text-default-400 text-small">Total {users.length} users</span>
+          <span className="text-default-400 text-small">Total {users.length} creators</span>
           <label className="flex items-center text-default-400 text-small">
             Rows per page:
             <select

@@ -3,6 +3,7 @@ import MainSidebar from '@/components/sidebar/MainSidebar'
 import React from 'react'
 import { Chip } from '@nextui-org/chip'
 import CommunityRecommend from '@/components/CommunityRecommend'
+import Post from '@/components/Post'
 
 function page() {
   return (
@@ -21,6 +22,8 @@ function page() {
         <CommunityRecommend />
         </div>
 
+        <Post />
+
       </div>
 
       <Sidebar
@@ -30,9 +33,6 @@ function page() {
       >
         <MainSidebar />
       </Sidebar>
-
-      
-
 
     </> 
   )

@@ -1,7 +1,7 @@
 export const communitydata = [
   {
     id:1,
-    name:"침 튜 브",
+    name:"침튜브",
     creatorname:"CalmDownMan",
     creatorimg: "https://yt3.googleusercontent.com/C7bTHnoo1S_MRbJXn4VwncNpB87C2aioJC_sKvgM-CGw_xgdxwiz0EFEqzj0SRVz6An2h81T4Q=s176-c-k-c0x00ffffff-no-rj",
     description:"한국인이라면 구독하셔야겠죠?",
@@ -23,7 +23,7 @@ export const communitydata = [
   },
   {
     id:3,
-    name:"좌왁굳",
+    name:"우왁굳",
     creatorname:"WooWoakGood",
     creatorimg: "https://yt3.googleusercontent.com/TfNiEYiPS4wX6BWXerod80xL3pB8RvRLHiEDiPTPo1ZOIsgYivENAGTu2Sax_YJ-8g9SCHtvFw=s176-c-k-c0x00ffffff-no-rj",
     description:"description",
