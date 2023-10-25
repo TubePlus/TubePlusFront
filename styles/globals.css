@@ -1,0 +1,73 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+/* swiper 관련 css */
+
+.swiper-scrollbar {
+  position: absolute;
+  left: 30px !important;
+  bottom: 8px !important;
+  width: 90% !important;
+  height: 2px !important;
+  z-index: 1 !important;
+  background: rgba(0,0,0,.1);
+}
+
+.swiper-scrollbar-drag {
+  width: 100%;
+  transform: translate3d(91.25px, 0px, 0px);
+  transition-duration: 0ms;
+  height: 100%;
+  width: 100%;
+  position: relative;
+  background: rgb(0, 0, 0) !important;
+  border-radius: 10px;
+  left: 0;
+  top: 0;
+}
+
+
+.swiper-pagination {
+  position: absolute;
+  right: 3px !important;
+  bottom: 12px !important;
+  z-index: 2 !important;
+  box-sizing: border-box !important;
+  height: 18px !important;
+  color: #000 !important;
+  font-size: 12px;
+  letter-spacing: -1.5px;
+  line-height: 14px;
+  font-family: Inter,Noto Sans KR,sans-serif;
+  display: block;
+  width: 100%;
+  text-align: right !important;
+  padding-right: 35px;
+}
+
+.swiper-pagination-current {
+  color: #000;
+  font-weight: 700;
+}
+
+
+/* grid 관련 css */
+.grid-container {
+  display: grid;
+  grid-template-columns: 1fr 2fr; /* 왼쪽(1fr)과 오른쪽(2fr) 영역을 정의 */
+  grid-gap: 20px; /* 그리드 간격 설정 */
+}
+
+.cate::after {
+  content: "";
+  clear: both;
+  display: inline-block;
+  width: 1px;
+  height: 10px;
+  background: #cbcbcb;
+  margin-right: 4px;
+  vertical-align: middle;
+  margin-bottom: 1px;
+}

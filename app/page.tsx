@@ -1,44 +1,31 @@
-import { buttonVariants } from '@/components/ui/Button';
-import Image from 'next/image';
-import Link from 'next/link';
+import MainSidebar from '@/components/sidebar/MainSidebar';
+import Sidebar from '@/components/sidebar/Sidebar';
+import MainTop from '@/components/mainpage/MainTop';
+import MainBottom from '@/components/mainpage/MainBottom';
+import { Desktop , Tablet, Mobile } from "../components/Responsive";
 
 export default function Home() {
-    return (
-        <>
-            <div className="relative">
-                <div className="container flex flex-col justify-center items-center my-10">
-                    <h1 className="text-8xl font-bold">COMING</h1>
-                    <h1 className="text-8xl font-bold">SOON</h1>
-                    <p className="mt-5 mx-10 text-center text-xl">
-                        잠시만 기다려주세요.
-                        <br />곧 새로운 홈페이지로 찾아뵙겠습니다!
-                    </p>
-                </div>
-                <Link
-                    className={buttonVariants({ className: 'w-full' })}
-                    href="https://www.notion.so/TubePlus-9183790a57494cacbfe6164f9929b0ad?pvs=4">
-                    About tubePlus
-                </Link>
+  return (
+    <>
+        <div
+        className={`desktop:col-start-4 desktop:col-end-13
+                    tablet:col-start-2 tablet:col-end-9
+                    mobileL:col-span-full mobileM:col-span-full gap-unit-md
+                    flex flex-col gap-y-10 pt-4
+                    scrollbar-thin`}
+      >
+        <MainTop />
+        <MainBottom />
+        </div>
 
-                <Image
-                    className="absolute top-0"
-                    alt="bg_plus"
-                    src={
-                        '/images/underConstruction/45d10e_74dd03e6ebde46ad8d20a9c8b222f870~mv2.gif'
-                    }
-                    width={68}
-                    height={68}
-                />
-                <Image
-                    className="absolute bottom-12 right-0"
-                    alt="bg_plus"
-                    src={
-                        '/images/underConstruction/45d10e_2e61ebde4b4b4fa2b9f09e10add2698d~mv2.gif'
-                    }
-                    width={68}
-                    height={68}
-                />
-            </div>
-        </>
-    );
+      <Sidebar
+        className={`desktop:block desktop:col-span-3
+                    tablet:block tablet:col-span-1 tablet:min-w-[60px]
+                  `}
+      >
+        <MainSidebar />
+      </Sidebar>
+
+    </>
+  );
 }
