@@ -27,7 +27,7 @@ const Navbar = async () => {
         className="basis-[750px] tablet:flex mobileL:hidden mobileM:hidden"
         justify="center"
       >
-        <NavbarItem className="w-full">
+        <NavbarItem className="w-full max-w-[600px]">
           <SearchBox type="input" />
         </NavbarItem>
       </NavbarContent>
@@ -40,7 +40,7 @@ const Navbar = async () => {
         <NavbarItem className="tablet:hidden mobileL:flex">
           <SearchBox type="button" />
         </NavbarItem>
-        {/* TODO: 아래 코드를 컴포넌트로 분리해야 될까? */}
+
         {session?.user ? (
           <>
             <UserPushBox />

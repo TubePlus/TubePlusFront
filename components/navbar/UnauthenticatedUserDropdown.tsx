@@ -35,7 +35,7 @@ const UnauthenticatedUserDropdown = () => {
       key: 'join',
       label: 'Log In/Sign Up',
       icon: EnterIcon,
-      href: '/login-no-modal',
+      href: '/login_m',
     },
     {
       key: 'about',

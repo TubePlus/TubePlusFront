@@ -1,14 +1,22 @@
 import { getToken } from 'next-auth/jwt';
+import withAuth, { NextRequestWithAuth } from 'next-auth/middleware';
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 
-export async function middleware(req: NextRequest) {
-  const token = await getToken({ req });
-
-  if (!token) {
-    return NextResponse.redirect(new URL('/login', req.nextUrl));
-  }
-}
+export default withAuth(
+  function middleware(req: NextRequestWithAuth) {
+    console.log(req.nextUrl.pathname);
+    console.log(req.nextauth.token);
+  },
+  {
+    callbacks: {
+      authorized: ({ token }) => token?.role == ('MEMBER' || 'ADMIN'),
+    },
+    pages: {
+      signIn: '/login',
+    },
+  },
+);
 
 // See "Matching Paths" below to learn more
 // https://next-auth.js.org/configuration/nextjs#middleware

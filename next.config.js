@@ -13,7 +13,7 @@ const nextConfig = {
   async rewrites() {
     return [
       {
-        source: '/login-no-modal',
+        source: '/login_m',
         destination: '/login',
       },
     ];

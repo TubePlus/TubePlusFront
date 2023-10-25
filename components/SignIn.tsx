@@ -27,8 +27,8 @@ const SignIn = () => {
 
       <Divider />
 
-      {/* login button */}
-      <LogInButton />
+      {/* client */}
+      <LogInButton forJoin />
 
       <Divider />
       <div className="pt-unit-xl">
