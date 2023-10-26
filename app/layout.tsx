@@ -21,7 +21,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body
-        className={`${inter.className} h-screen w-screen bg-zinc-100 dark:bg-zinc-800 scrollbar-none`}
+        className={`${inter.className} h-full w-screen bg-zinc-100 dark:bg-zinc-800 scrollbar-none`}
       >
         <Providers>
           {modal}

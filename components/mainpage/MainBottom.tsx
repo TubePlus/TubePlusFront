@@ -1,4 +1,3 @@
-
 'use client'
 
 import React from "react";
@@ -29,6 +28,7 @@ import {SearchIcon} from "../../data/table/SearchIcon";
 import {columns, users, categoryOptions} from "../../data/table/data";
 import {capitalize} from "../../data/table/utils";
 import FavoriteButton from "../FavoriteButton";
+import { useEffect } from "react";
 
 const statusColorMap: Record<string, ChipProps["color"]> = {
   active: "success",
@@ -42,6 +42,28 @@ type User = typeof users[0];
 
 const MainBottom = () => {
 
+const [creatordata, setcreatordata] = React.useState([]); // 크리에이터 데이터 저장
+
+useEffect(() => {
+  const fetchcreatortable = async () => {
+    try { 
+      const response = await fetch('https://652c497bd0d1df5273ef56a5.mockapi.io/api/v1/creatortable' , {
+    method : 'GET',
+    headers : { 'Content-Type' : 'application/json'}
+  })
+  if (response.ok) {
+    const creatordata = await response.json()
+    console.log('Success fecting data:', creatordata)
+    setcreatordata(creatordata)
+  }
+  } catch (error) {
+    console.error('Error fecting data:', error)
+  }
+}
+  fetchcreatortable();
+}
+, [])
+
   const [filterValue, setFilterValue] = React.useState("");
   const [selectedKeys, setSelectedKeys] = React.useState<Selection>(new Set([]));
   const [visibleColumns, setVisibleColumns] = React.useState<Selection>(new Set(INITIAL_VISIBLE_COLUMNS));
@@ -51,20 +73,16 @@ const MainBottom = () => {
     direction: "ascending",
   });
   const [page, setPage] = React.useState(1);
-
   const pages = Math.ceil(users.length / rowsPerPage);
-
   const hasSearchFilter = Boolean(filterValue);
 
   const headerColumns = React.useMemo(() => {
     if (visibleColumns === "all") return columns;
-
     return columns.filter((column) => Array.from(visibleColumns).includes(column.uid));
   }, [visibleColumns]);
 
   const filteredItems = React.useMemo(() => {
     let filteredUsers = [...users];
-
     if (hasSearchFilter) {
       filteredUsers = filteredUsers.filter((user) =>
         user.name.toLowerCase().includes(filterValue.toLowerCase()),
@@ -75,14 +93,12 @@ const MainBottom = () => {
     //     Array.from(statusFilter).includes(user.favorites),
     //   );
     // }
-
     return filteredUsers;
   }, [users, filterValue, statusFilter]);
 
   const items = React.useMemo(() => {
     const start = (page - 1) * rowsPerPage;
     const end = start + rowsPerPage;
-
     return filteredItems.slice(start, end);
   }, [page, filteredItems, rowsPerPage]);
 
@@ -91,10 +107,10 @@ const MainBottom = () => {
       const first = a[sortDescriptor.column as keyof User] as number;
       const second = b[sortDescriptor.column as keyof User] as number;
       const cmp = first < second ? -1 : first > second ? 1 : 0;
-
       return sortDescriptor.direction === "descending" ? -cmp : cmp;
     });
   }, [sortDescriptor, items]);
+
 
   const renderCell = React.useCallback((user: User, columnKey: React.Key) => {
     const cellValue = user[columnKey as keyof User];
@@ -140,7 +156,8 @@ const MainBottom = () => {
       case "RANKING":
         return (
           <div className="relative flex justify-end items-center gap-2">
-            <Dropdown className="bg-background border-1 border-default-200">
+            <p className="text-bold text-small capitalize">{user.ranking}</p>
+            {/* <Dropdown className="bg-background border-1 border-default-200">
               <DropdownTrigger>
                 <Button isIconOnly radius="full" size="sm" variant="light">
                   <VerticalDotsIcon className="text-default-400" size={100} width={100} height={100} />
@@ -151,7 +168,7 @@ const MainBottom = () => {
                 <DropdownItem>Edit</DropdownItem>
                 <DropdownItem>Delete</DropdownItem>
               </DropdownMenu>
-            </Dropdown>
+            </Dropdown> */}
           </div>
         );
 

@@ -1,39 +1,21 @@
-import Sidebar from '@/components/sidebar/Sidebar'
-import MainSidebar from '@/components/sidebar/MainSidebar'
-import React from 'react'
-import { Chip } from '@nextui-org/chip'
-import CommunityRecommend from '@/components/CommunityRecommend'
 import Post from '@/components/Post'
+import React from 'react'
+
 
 function page() {
   return (
     <>
       <div
-        className={`desktop:col-start-4 desktop:col-end-13
-                    tablet:col-start-2 tablet:col-end-11
+        className={`desktop:col-start-2 desktop:col-end-12
+                    tablet:col-start-1 tablet:col-end-10
                     mobileL:col-span-full mobileM:col-span-full gap-unit-md
                     flex flex-col pt-4
                     scrollbar-thin`}
       >
-        
-        <Chip color="default">Trending Today</Chip>
-
-        <div className='flex flex-row gap-6'>
-        <CommunityRecommend />
-        </div>
-
-        <Post />
-
+      
+      <Post />
+      
       </div>
-
-      <Sidebar
-        className={`desktop:block desktop:col-span-3
-                    tablet:block tablet:col-span-1 tablet:min-w-[60px]
-                  `}
-      >
-        <MainSidebar />
-      </Sidebar>
-
     </> 
   )
 }
