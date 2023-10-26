@@ -41,7 +41,7 @@ function CustomSlider({data}: {data: slidebanner[] | null}) {
             <div className='w-full h-[auto]'>
               <Link href={item.url}>
                 <Image
-                  // src={item.imgUrl}
+                  // src={item.imgUrl} Memo: 데이터패칭 받을때 사용할 경로
                   // alt={item.imgAlt}
                   src={`/images/${item.imgUrl}`}
                   alt={`/images/${item.imgAlt}`}
