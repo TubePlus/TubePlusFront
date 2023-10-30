@@ -20,6 +20,7 @@ import { User } from '@nextui-org/user';
 import { MobileValue } from '../Responsive';
 import { Avatar, Skeleton, useSkeleton } from '@nextui-org/react';
 import { Suspense } from 'react';
+import Link from 'next/link';
 
 const userItems = [
   {
@@ -99,14 +100,28 @@ const AuthenticatedUserDropdown = () => {
         )}
       </DropdownTrigger>
 
-      <DropdownMenu closeOnSelect={false} variant="faded">
+      <DropdownMenu
+        aria-label="User Dropdown Menu"
+        variant="faded"
+        closeOnSelect={false}
+      >
         <DropdownSection
           title={'User'}
           showDivider
           aria-label="User Items Section"
         >
           {userItems.map(item => (
-            <DropdownItem key={item.key}>{item.label}</DropdownItem>
+            <DropdownItem key={item.key}>
+              <Link
+                href={
+                  item.key === 'profile'
+                    ? item.href + `/${session?.user.username}`
+                    : item.href
+                }
+              >
+                {item.label}
+              </Link>
+            </DropdownItem>
           ))}
         </DropdownSection>
 
@@ -115,7 +130,10 @@ const AuthenticatedUserDropdown = () => {
           showDivider
           aria-label="User Theme Section"
         >
-          <DropdownItem endContent={<ThemeSwitcher type="toggle" />}>
+          <DropdownItem
+            endContent={<ThemeSwitcher type="toggle" />}
+            closeOnSelect={false}
+          >
             Dark Mode
           </DropdownItem>
         </DropdownSection>
