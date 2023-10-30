@@ -24,7 +24,7 @@ const Navbar = async () => {
       <BrandBox />
 
       <NavbarContent
-        className="basis-[750px] tablet:flex mobileL:hidden mobileM:hidden"
+        className="basis-[750px] desktop:flex mobileL:hidden mobileM:hidden"
         justify="center"
       >
         <NavbarItem className="w-full max-w-[600px]">
@@ -37,7 +37,7 @@ const Navbar = async () => {
         justify="end"
         className="w-fit !flex-grow-0 gap-2"
       >
-        <NavbarItem className="tablet:hidden mobileL:flex">
+        <NavbarItem className="desktop:hidden tablet:flex">
           <SearchBox type="button" />
         </NavbarItem>
 

@@ -32,7 +32,7 @@ import { QuickResultBox } from './QuickResultBox';
 // Don't Touch This Filter Items
 const SearchFilter = [
   { label: 'Creator', value: 'creator' },
-  { label: 'Board', value: 'Board' },
+  { label: 'Board', value: 'board' },
   { label: 'Post', value: 'post' },
 ];
 
@@ -129,28 +129,63 @@ const SearchBox = ({
               backdrop: 'z-[999]',
             }}
             isOpen={isOpen}
+            closeButton={false}
             placement="center"
             onOpenChange={onOpenChange}
           >
             <ModalContent>
-              <Input
-                classNames={{}}
-                radius="none"
-                placeholder="Search TubePlus"
-                startContent={<MagnifyingGlassIcon className="w-6 h-6" />}
-                endContent={
-                  <Kbd classNames={{ content: 'text-xs' }} keys={['escape']}>
-                    ESC
-                  </Kbd>
-                }
-                value={searchValue}
-                onValueChange={setSearchValue}
-              />
+              <div className="flex">
+                <Select
+                  className="max-w-[120px] mx-[-1px]"
+                  classNames={{
+                    base: 'flex-0',
+                    trigger: 'rounded-se-none rounded-ee-none',
+                    label: '!text-[11px]',
+                    value: 'leading-1',
+                    mainWrapper: 'h-10',
+                    innerWrapper: 'pt-3',
+                  }}
+                  selectedKeys={selectValue}
+                  onSelectionChange={setSelectValue}
+                  radius="none"
+                  size="sm"
+                  items={SearchFilter}
+                  label="Search Filter"
+                >
+                  {filterItem => (
+                    <SelectItem key={filterItem.value}>
+                      {filterItem.label}
+                    </SelectItem>
+                  )}
+                </Select>
+                <Input
+                  classNames={{}}
+                  radius="none"
+                  placeholder="Search TubePlus"
+                  startContent={<MagnifyingGlassIcon className="w-6 h-6" />}
+                  endContent={
+                    <Kbd classNames={{ content: 'text-xs' }} keys={['escape']}>
+                      ESC
+                    </Kbd>
+                  }
+                  value={searchValue}
+                  onValueChange={setSearchValue}
+                />
+              </div>
+
               <Divider />
+
               <ModalBody>
                 {searchValue
-                  ? `Search for "${searchValue}"`
+                  ? `Search for ${Array.from(selectValue).join(
+                      '',
+                    )} | "${searchValue}"`
                   : 'How are you today?'}
+
+                <QuickResultBox // fetching...
+                  searchValue={searchValue}
+                  selectValue={selectValue}
+                />
               </ModalBody>
             </ModalContent>
           </Modal>
@@ -194,7 +229,7 @@ export const SearchInput = forwardRef(
     variant,
     children,
     // TODO: warning ref(Warning: forwardRef render functions accept exactly two parameters: props and ref. Did you forget to use the ref parameter?)
-
+    // NOTE: https://deepscan.io/docs/rules/react-useless-forward-ref
     ...props
   }: {
     variant: 'bordered' | 'flat';

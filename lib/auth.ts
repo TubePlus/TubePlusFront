@@ -1,7 +1,11 @@
 import { NextAuthOptions, getServerSession } from 'next-auth';
 import GoogleProvider from 'next-auth/providers/google';
 import { baseUrl, endpointPrefix } from './fetcher';
-import { redirect } from 'next/navigation';
+
+const clientId = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID!;
+const clientSecret = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_SECRET!;
+const redirectUri = process.env.NEXTAUTH_URL!;
+const scope = 'openid profile email https://www.googleapis.com/auth/youtube';
 
 // TODO: login(sign-up) 성공 시 - db로부터 user login 성공 데이터를 받아와
 export const authOptions: NextAuthOptions = {
@@ -11,49 +15,29 @@ export const authOptions: NextAuthOptions = {
     strategy: 'jwt',
   },
   pages: {
-    signIn: '/login',
-    error: '/join',
+    signIn: '/login' || '/join',
   },
   providers: [
-    {
-      id: 'google-custom',
-      name: 'Google',
-      type: 'oauth',
-      version: '2.0',
-      accessTokenUrl: 'https://accounts.google.com/o/oauth2/token',
-      requestTokenUrl: 'https://accounts.google.com/o/oauth2/auth',
-      wellKnown: 'https://accounts.google.com/.well-known/openid-configuration',
-      profileUrl: 'https://www.googleapis.com/oauth2/v1/userinfo?alt=json',
-      clientId: process.env.GOOGLE_CLIENT_ID!,
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
-
-      authorization: {
-        params: {
-          scope:
-            'https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/userinfo.email',
-        },
-      },
-
-      profile(profile, tokens) {
-        console.info(
-          '[INFO] Check TokenSet: TokenSet from OAuth 2.0 CustomProvier "google-custom"\n',
-          tokens,
-        );
-        return { ...profile, ...tokens };
-      },
-    },
-
     GoogleProvider({
-      clientId: process.env.GOOGLE_CLIENT_ID!,
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
+      name: 'google',
+      clientId: clientId,
+      clientSecret: clientSecret,
 
       async profile(profile, tokens) {
+        // NOTE: Check TOKENSET and PROFILE before the process!
         console.info(
-          '[INFO] Check TokenSet: TokenSet from OAuth 2.0 GoogleProvider\n',
+          '[INFO] Processing...\nTokenSet from OAuth 2.0 GoogleProvider\n',
           tokens,
-        ); // NOTE: Check TOKENSET before the process!
+        );
+        console.log(
+          '[INFO] Processing...\nProfile form OAuth 2.0 GoogleProvider\n',
+          profile,
+        );
 
-        console.log('[INFO] Check profile: profile\n', profile);
+        const logInBody = {
+          email: profile.email,
+          token: tokens.access_token,
+        };
 
         const response = await fetch(
           baseUrl + endpointPrefix + '/users/login',
@@ -62,7 +46,7 @@ export const authOptions: NextAuthOptions = {
             headers: {
               'Content-type': 'application/json',
             },
-            body: JSON.stringify(profile.email),
+            body: JSON.stringify(logInBody),
           },
         );
         const dbUser = await response.json();
@@ -71,7 +55,11 @@ export const authOptions: NextAuthOptions = {
           dbUser,
         );
 
-        if (dbUser.message == '로그인 실패') {
+        if (
+          dbUser.message == '로그인 실패' ||
+          dbUser.message == 'Internal Server Error' ||
+          dbUser.message == '해당 회원이 존재하지 않습니다.'
+        ) {
           console.error(
             "[ERROR] Log in Failed: User Data isn't exists in tubePlus Database...\n",
           );
@@ -86,7 +74,7 @@ export const authOptions: NextAuthOptions = {
           image: profile.picture,
           locale: profile.locale,
 
-          uuid: dbUser.data.uuid,
+          //   uuid: dbUser.data.uuid,
           username: dbUser.data.username,
           role: dbUser.data.role,
           is_creator: dbUser.data.isCreator,
@@ -106,7 +94,7 @@ export const authOptions: NextAuthOptions = {
           image: profile.picture,
           locale: profile.locale,
 
-          uuid: dbUser.data.uuid,
+          //   uuid: dbUser.data.uuid,
           username: dbUser.data.username,
           role: dbUser.data.role,
           is_creator: dbUser.data.isCreator,
@@ -116,7 +104,7 @@ export const authOptions: NextAuthOptions = {
 
       authorization: {
         params: {
-          scope: 'openid profile email https://www.googleapis.com/auth/youtube',
+          scope: scope,
         },
       },
     }),
@@ -133,13 +121,19 @@ export const authOptions: NextAuthOptions = {
       session.user = token;
       return session;
     },
-    async redirect({ url, baseUrl }) {
-      // Allows relative callback URLs
-      if (url.startsWith('/')) return `${baseUrl}${url}`;
-      // Allows callback URLs on the same origin
-      else if (new URL(url).origin === baseUrl) return url;
-      return baseUrl;
+    async signIn({ credentials }) {
+      if (credentials) {
+        console.log(credentials);
+      }
+      return true;
     },
+    // async redirect({ url, baseUrl }) {
+    //   // Allows relative callback URLs
+    //   if (url.startsWith('/')) return `${baseUrl}${url}`;
+    //   // Allows callback URLs on the same origin
+    //   else if (new URL(url).origin === baseUrl) return url;
+    //   return baseUrl;
+    // },
   },
 };
 

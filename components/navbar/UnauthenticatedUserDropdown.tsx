@@ -61,8 +61,8 @@ const UnauthenticatedUserDropdown = () => {
         </NavbarItem>
 
         <NavbarItem>
-          <Button as={Link} href="/signup">
-            Sign up
+          <Button as={Link} href="/join">
+            Join Us
           </Button>
         </NavbarItem>
 

@@ -6,23 +6,30 @@ export enum Role {
   admin = 'ADMIN',
 }
 
-interface IUser extends DefaultUser {
-  uuid?: string;
+export interface DBUserProps extends DefaultUser {
   id: string;
-  locale: string;
+  uuid?: string;
+  name?: string;
+  username?: string;
+  email: string;
   image: string;
+  bio?: string;
   role?: Role;
+  locale?: string;
   darkmode?: boolean;
+  link?: [{ url: string }];
   is_creator?: boolean;
+  created_at?: string;
 }
+
 declare module 'next-auth' {
-  interface User extends IUser {}
+  interface User extends DBUserProps {}
   interface Session {
     user: User;
   }
 }
 
 declare module 'next-auth/jwt' {
-  interface User extends IUser {}
+  interface User extends DBUserProps {}
   interface JWT extends User {}
 }
