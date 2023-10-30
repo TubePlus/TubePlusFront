@@ -13,21 +13,19 @@ import React, { Key } from 'react';
 import QuickResultQuery from './QuickResultQuery';
 
 type Selection = 'all' | Set<Key>; // same with @nextui-org/react
-interface Board {
+interface ResultProps {
+  id: number;
   name: string;
+  username?: string;
   type: string;
   descriptoin: string;
-  visible: boolean;
-  limit: string;
-  erase: boolean;
-}
-interface Post {
-  name: string;
-  type: string;
-  descriptoin: string;
-  visible: boolean;
-  limit: string;
-  erase: boolean;
+  email?: string;
+  image?: string;
+  visible?: boolean;
+  limit?: string;
+  erase?: boolean;
+  is_oted?: boolean;
+  voted_count?: boolean;
 }
 
 // TODO: fetch here Search Results
@@ -77,7 +75,7 @@ export const QuickResultBox = ({
               </>
             ) : !isError ? (
               data &&
-              data.map((row: DBUserProps) => (
+              data.map((row: ResultProps) => (
                 // TODO: tablet 일 때, 구성요소의 사이즈 대응 필요
                 <Card
                   key={row.id}

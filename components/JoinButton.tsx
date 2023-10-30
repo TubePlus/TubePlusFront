@@ -117,14 +117,18 @@ const JoinButton = () => {
 
       console.log('[INFO] Check user infomation body', postBody);
 
-      const signUpResponse = await fetch(baseUrl + '/users/signup', {
-        method: 'POST',
-        headers: {
-          'Content-type': 'application/json',
+      const signUpResponse = await fetch(
+        baseUrl + endpointPrefix + '/users/signup',
+        {
+          method: 'POST',
+          headers: {
+            'Content-type': 'application/json',
+          },
+          body: JSON.stringify(postBody),
         },
-        body: JSON.stringify(postBody),
-      });
+      );
       const result = await signUpResponse.json();
+      console.log(result);
       if (result.code === 'S001') {
         alert('Welcome!! 가입성공!');
       }
