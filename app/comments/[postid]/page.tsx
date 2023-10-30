@@ -43,13 +43,11 @@ function Comment({ params }: { params: { postid: string } }) {
     data: postcontents,
     isLoading: isLoadingPost,
     isError: isErrorPost,
-    error: errorPost,
   } = useQuery(['postcontents', params.postid], () => fetchPosts(params.postid));
   const {
     data: comments,
     isLoading: isLoadingComments,
     isError: isErrorComments,
-    error: errorComments,
   } = useQuery(['comments', params.postid], () => fetchComments(params.postid));
 
   const variants = ["flat", "faded", "bordered", "underlined"];
@@ -76,7 +74,7 @@ function Comment({ params }: { params: { postid: string } }) {
         <div className='flex flex-nowrap gap-[700px]'>
         <div className='flex flex-nowrap gap-4'>
         <Avatar src={postcontents.avatar} />
-          <Chip color='default'> {postcontents.authorname} </Chip>
+          <Chip color='default'> {postcontents.authorName} </Chip>
           <Chip color='default'> {postcontents.title} </Chip>
         </div>
 
@@ -168,7 +166,7 @@ function Comment({ params }: { params: { postid: string } }) {
             return (
               <div key={comment.id} className='pl-10 pr-6 pb-4'>
                 <User   
-                  name={`${comment.commentername}`}
+                  name={`${comment.commenterName}`}
                   description="Product Designer"
                   avatarProps={{
                     src: `${comment.avatar}`
@@ -182,7 +180,7 @@ function Comment({ params }: { params: { postid: string } }) {
                     labelPlacement="outside"
                     // placeholder=
                     className="max-w-full"
-                    defaultValue={`${comment.replycontents}`}
+                    defaultValue={`${comment.replyContent}`}
                   />
               </div>
             );

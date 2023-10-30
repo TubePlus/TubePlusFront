@@ -1,11 +1,11 @@
 export interface post {
   id: number;
-  isvoted: boolean;
-  boardid: number;
+  isVoted: boolean;
+  boardId: number;
   title: string;
   contents: string;
-  votecounts: number;
-  authoruuid: string;
-  authorname: string;
+  voteCounts: number;
+  authorUuid: string;
+  authorName: string;
   avatar: string;
 }

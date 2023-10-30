@@ -48,7 +48,7 @@ const Post = () => {
         <div className='flex flex-nowrap gap-[700px]'>
         <div className='flex flex-nowrap gap-4'>
         <Avatar src={item.avatar} />
-          <Chip color='default'> {item.authorname} </Chip>
+          <Chip color='default'> {item.authorName} </Chip>
           <Chip color='default'> {item.title} </Chip>
         </div>
 
@@ -56,7 +56,7 @@ const Post = () => {
           <button>
           <ThickArrowUpIcon className='w-8 h-8' />
           </button>
-            <b>{item.votecounts}</b>
+            <b>{item.voteCounts}</b>
           <button>
           <ThickArrowDownIcon className='w-8 h-8' />
           </button>

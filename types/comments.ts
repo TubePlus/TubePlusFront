@@ -1,12 +1,11 @@
 export interface CommentProps
   {
   id: number;
-  postid: number;
-  commenteruuid: string;
-  commentername: string;
-  childcoount: number;
-  parentid: number;
-  replycontent: string;
+  postId: number;
+  commenterUuid: string;
+  commenterName: string;
+  childCoount: number;
+  parentId: number;
+  replyContent: string;
   avatar: string;
-  replycontents: string;
   }

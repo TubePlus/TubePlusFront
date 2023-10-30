@@ -27,13 +27,36 @@ function CustomSlider({data}: {data: slidebanner[] | null}) {
       }}
       autoplay={{
         delay: 2000,
-        disableOnInteraction: true
+        disableOnInteraction: true,
       }}
+      navigation={
+        {
+          nextEl: '.swiper-button-next',
+          prevEl: '.swiper-button-prev'
+        }
+      }
       loop={true}
+      autoHeight={true}
       spaceBetween={0}
       slidesPerView={1}
-      onSlideChange={() => console.log('slide change')}
-      onSwiper={(swiper) => console.log(swiper)}
+      keyboard={true}
+      mousewheel={true}
+      grabCursor={true}
+      effect={'creative'}
+      creativeEffect={{
+        prev: {
+          shadow: true,
+          translate: [0, 0, -400],
+        },
+        next: {
+          translate: ['100%', 0, 0],
+        },
+      }}
+
+
+
+      // onSlideChange={() => console.log('slide change')}
+      // onSwiper={(swiper) => console.log(swiper)}
     >
       {data && data.map((item:slidebanner) => (
         <div key={item.id}>
