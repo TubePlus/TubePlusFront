@@ -8,6 +8,12 @@ const nextConfig = {
         port: '',
         pathname: '**',
       },
+      {
+        protocol: 'https',
+        hostname: 'cloudflare-ipfs.com',
+        port: '',
+        pathname: '**',
+      },
     ],
   },
   async rewrites() {
@@ -20,9 +26,3 @@ const nextConfig = {
   },
 };
 
-module.exports = nextConfig;
-
-// module.exports = withTwin({
-//     ...nextConfig,
-//     // reactStrictMode: true,
-// });
