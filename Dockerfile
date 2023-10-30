@@ -6,7 +6,7 @@ WORKDIR /usr/app
 # Install dependencies based on the preferred package manager
 COPY ./ ./
 
-RUN npm i
+RUN npm i --force
 RUN npm run build
 
 EXPOSE 3000
