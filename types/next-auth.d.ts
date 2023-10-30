@@ -1,20 +1,35 @@
-import type { Session, User } from 'next-auth';
-import type { JWT } from 'next-auth/jwt';
+import { DefaultSession, DefaultUser } from 'next-auth';
+import { JWT, DefaultJWT } from 'next-auth/jwt';
 
-type UserId = string;
+export enum Role {
+  user = 'MEMBER',
+  admin = 'ADMIN',
+}
 
-declare module 'next-auth/jwt' {
-    interface JWT {
-        id: UserId;
-        username?: string | null;
-    }
+export interface DBUserProps extends DefaultUser {
+  id: string;
+  uuid?: string;
+  name?: string;
+  username?: string;
+  email: string;
+  image: string;
+  bio?: string;
+  role?: Role;
+  locale?: string;
+  darkmode?: boolean;
+  link?: [{ url: string }];
+  is_creator?: boolean;
+  created_at?: string;
 }
 
 declare module 'next-auth' {
-    interface Session {
-        user: User & {
-            id: UserId;
-            username?: string | null;
-        };
-    }
+  interface User extends DBUserProps {}
+  interface Session {
+    user: User;
+  }
+}
+
+declare module 'next-auth/jwt' {
+  interface User extends DBUserProps {}
+  interface JWT extends User {}
 }

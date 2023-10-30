@@ -1,5 +1,6 @@
 import MainSidebar from '@/components/sidebar/MainSidebar';
 import Sidebar from '@/components/sidebar/Sidebar';
+
 import MainTop from '@/components/mainpage/MainTop';
 import MainBottom from '@/components/mainpage/MainBottom';
 import { Desktop , Tablet, Mobile } from "../components/Responsive";
@@ -8,8 +9,8 @@ import CommunityRecommend from '@/components/CommunityRecommend'
 import Post from '@/components/Post'
 // import React , { useRef } from 'react'; Todo: 페이지 중간에 있는 community 컴포넌트로 이동하는 기능
 
-
 export default function Home() {
+  const data = memebers; // for Fetch Data Test
   return (
     <>
         <div

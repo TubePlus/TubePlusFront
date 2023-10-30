@@ -1,40 +1,140 @@
 import { NextAuthOptions, getServerSession } from 'next-auth';
 import GoogleProvider from 'next-auth/providers/google';
+import { baseUrl, endpointPrefix } from './fetcher';
 
+const clientId = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID!;
+const clientSecret = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_SECRET!;
+const redirectUri = process.env.NEXTAUTH_URL!;
+const scope = 'openid profile email https://www.googleapis.com/auth/youtube';
+
+// TODO: login(sign-up) 성공 시 - db로부터 user login 성공 데이터를 받아와
 export const authOptions: NextAuthOptions = {
-    session: {
-        strategy: 'jwt',
-    },
-    pages: {
-        signIn: '/login',
-    },
-    providers: [
-        GoogleProvider({
-            clientId: process.env.GOOGLE_CLIENT_ID!,
-            clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
-        }),
-    ],
-    callbacks: {
-        async session({ token, session }) {
-            if (token) {
-                session.user.id = token.id;
-                session.user.name = token.name;
-                session.user.email = token.email;
-                session.user.image = token.picture;
-                session.user.username = token.username;
-            }
+  secret: process.env.NEXTAUTH_SECRET,
 
-            return session;
-        },
+  session: {
+    strategy: 'jwt',
+  },
+  pages: {
+    signIn: '/login' || '/join',
+  },
+  providers: [
+    GoogleProvider({
+      name: 'google',
+      clientId: clientId,
+      clientSecret: clientSecret,
 
-        async jwt({ token, user }) {
-            // user 정보를 반환할 때, db에서 가져온 값을 반환해야 할 듯.
-            return { ...token, ...user };
+      async profile(profile, tokens) {
+        // NOTE: Check TOKENSET and PROFILE before the process!
+        console.info(
+          '[INFO] Processing...\nTokenSet from OAuth 2.0 GoogleProvider\n',
+          tokens,
+        );
+        console.log(
+          '[INFO] Processing...\nProfile form OAuth 2.0 GoogleProvider\n',
+          profile,
+        );
+
+        const logInBody = {
+          email: profile.email,
+          token: tokens.access_token,
+        };
+
+        const response = await fetch(
+          baseUrl + endpointPrefix + '/users/login',
+          {
+            method: 'POST',
+            headers: {
+              'Content-type': 'application/json',
+            },
+            body: JSON.stringify(logInBody),
+          },
+        );
+        const dbUser = await response.json();
+        console.info(
+          '[INFO] Check DBUser: User Infomation from TubePlus Database\n',
+          dbUser,
+        );
+
+        if (
+          dbUser.message == '로그인 실패' ||
+          dbUser.message == 'Internal Server Error' ||
+          dbUser.message == '해당 회원이 존재하지 않습니다.'
+        ) {
+          console.error(
+            "[ERROR] Log in Failed: User Data isn't exists in tubePlus Database...\n",
+          );
+
+          // redirect('/join'); //NOTE: redirect 안됨
+        }
+
+        tokens.user = {
+          id: profile.sub as string,
+          name: profile.name,
+          email: profile.email,
+          image: profile.picture,
+          locale: profile.locale,
+
+          //   uuid: dbUser.data.uuid,
+          username: dbUser.data.username,
+          role: dbUser.data.role,
+          is_creator: dbUser.data.isCreator,
+          darkmode: dbUser.data.darkMode,
+        };
+
+        console.log(
+          '[INFO] GoogleProvider Profile is setted by tokens.',
+          tokens,
+          '\n\n\n',
+        );
+
+        return {
+          id: profile.sub as string,
+          name: profile.name,
+          email: profile.email,
+          image: profile.picture,
+          locale: profile.locale,
+
+          //   uuid: dbUser.data.uuid,
+          username: dbUser.data.username,
+          role: dbUser.data.role,
+          is_creator: dbUser.data.isCreator,
+          darkmode: dbUser.data.darkMode,
+        };
+      },
+
+      authorization: {
+        params: {
+          scope: scope,
         },
-        redirect() {
-            return '/';
-        },
+      },
+    }),
+  ],
+  callbacks: {
+    async jwt({ token, user, trigger, session }) {
+      console.info('[INFO] Callback JWT is Processing...\n');
+      if (trigger === 'update') return { ...token, ...session.user };
+
+      return { ...token, ...user };
     },
+    async session({ token, session, user }) {
+      console.info('[INFO] Check user session: User Session\n');
+      session.user = token;
+      return session;
+    },
+    async signIn({ credentials }) {
+      if (credentials) {
+        console.log(credentials);
+      }
+      return true;
+    },
+    // async redirect({ url, baseUrl }) {
+    //   // Allows relative callback URLs
+    //   if (url.startsWith('/')) return `${baseUrl}${url}`;
+    //   // Allows callback URLs on the same origin
+    //   else if (new URL(url).origin === baseUrl) return url;
+    //   return baseUrl;
+    // },
+  },
 };
 
 export const getAuthSession = () => getServerSession(authOptions);
