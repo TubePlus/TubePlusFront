@@ -35,7 +35,7 @@ const UnauthenticatedUserDropdown = () => {
       key: 'join',
       label: 'Log In/Sign Up',
       icon: EnterIcon,
-      href: '/login-no-modal',
+      href: '/login_m',
     },
     {
       key: 'about',
@@ -61,8 +61,8 @@ const UnauthenticatedUserDropdown = () => {
         </NavbarItem>
 
         <NavbarItem>
-          <Button as={Link} href="/signup">
-            Sign up
+          <Button as={Link} href="/join">
+            Join Us
           </Button>
         </NavbarItem>
 

@@ -64,7 +64,7 @@ const Post = () => {
 
         </div>
       </CardHeader>
-        <Link href={`/comments/${item.id}`}>
+        <Link href={`/tube///posting/${item.id}`}>
       <CardBody>
           <div className='flex flex-nowrap gap-4 overflow-hidden'>
             {item.contents}

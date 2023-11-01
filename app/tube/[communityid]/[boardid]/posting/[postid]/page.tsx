@@ -19,8 +19,6 @@ import {
 } from '@radix-ui/react-icons';
 import { useQuery } from '@tanstack/react-query';
 import { CommentProps } from '@/types/comments';
-import Sidebar from '@/components/sidebar/Sidebar';
-import MainSidebar from '@/components/sidebar/MainSidebar';
 
 const fetchPosts = async (postId : string) => {
   const res = await fetch(`https://652c497bd0d1df5273ef56a5.mockapi.io/api/v1/post/${postId}`);
@@ -38,7 +36,7 @@ const fetchComments = async (postId: string) => {
   return res.json();
 };
 
-function Comment({ params }: { params: { postid: string } }) {
+function Posting({ params }: { params: { postid: string } }) {
   const {
     data: postcontents,
     isLoading: isLoadingPost,
@@ -194,4 +192,4 @@ function Comment({ params }: { params: { postid: string } }) {
     </>
   ) 
 }
-export default Comment
+export default Posting

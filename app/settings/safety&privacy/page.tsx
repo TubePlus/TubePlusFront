@@ -16,13 +16,8 @@ function page() {
         <h2 className='pt-2 pl-3 border-b-2 w-full border-black text-xl'>Privacy</h2>
       </div>
 
-      <div className='flex w-full justify-between'>
-        <h5 className='pl-2 pt-2 pb-10 text-gray-400'> Personalized ads based on your activities <Switch defaultSelected aria-label="Automatic updates"/> </h5>
-      </div>
-
-      <div className='flex w-full justify-between'>
-        <h5 className='pl-2 text-gray-400'> Personalize recommendations based on your activities with our partners <Switch defaultSelected aria-label="Automatic updates"/> </h5>
-      </div>
+        <h5 className='flex pl-2 pt-2 pb-10 w-full justify-between text-gray-400'> Personalized ads based on your activities <Switch defaultSelected aria-label="Automatic updates"/> </h5>
+        <h5 className='flex w-full justify-between pl-2 text-gray-400'> Personalize recommendations based on your activities with our partners <Switch defaultSelected aria-label="Automatic updates"/> </h5>
     
     </div>
   )

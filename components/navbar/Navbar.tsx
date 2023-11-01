@@ -24,10 +24,10 @@ const Navbar = async () => {
       <BrandBox />
 
       <NavbarContent
-        className="basis-[750px] tablet:flex mobileL:hidden mobileM:hidden"
+        className="basis-[750px] desktop:flex mobileL:hidden mobileM:hidden"
         justify="center"
       >
-        <NavbarItem className="w-full">
+        <NavbarItem className="w-full max-w-[600px]">
           <SearchBox type="input" />
         </NavbarItem>
       </NavbarContent>
@@ -37,10 +37,10 @@ const Navbar = async () => {
         justify="end"
         className="w-fit !flex-grow-0 gap-2"
       >
-        <NavbarItem className="tablet:hidden mobileL:flex">
+        <NavbarItem className="desktop:hidden tablet:flex">
           <SearchBox type="button" />
         </NavbarItem>
-        {/* TODO: 아래 코드를 컴포넌트로 분리해야 될까? */}
+
         {session?.user ? (
           <>
             <UserPushBox />

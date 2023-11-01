@@ -6,7 +6,7 @@ import { User } from '@nextui-org/user';
 import { signIn, useSession } from 'next-auth/react';
 import React, { useState } from 'react';
 
-const UserAuthForm = () => {
+const LoginButton = () => {
   const { data: session } = useSession();
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
@@ -14,18 +14,21 @@ const UserAuthForm = () => {
     setIsLoading(true);
 
     try {
+      // for login
       await signIn('google');
     } catch (error) {
       // toast notification
+      alert('Err: Login Failure!');
     } finally {
       setIsLoading(false);
     }
   };
 
   return (
-    <div className="py-unit-md">
+    <form className="flex flex-col gap-4 py-unit-md">
       <Button
-        className="px-unit-xs h-unit-13 dark:bg-zinc-200/20 hover:-translate-y-1"
+        className="px-unit-xs h-unit-13 dark:bg-zinc-200/20 hover:scale-[1.01]"
+        type="submit"
         radius="full"
         fullWidth
         isLoading={isLoading}
@@ -65,8 +68,8 @@ const UserAuthForm = () => {
       >
         {!session && 'Continue with Google'}
       </Button>
-    </div>
+    </form>
   );
 };
 
-export default UserAuthForm;
+export default LoginButton;

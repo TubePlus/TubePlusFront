@@ -3,9 +3,9 @@ import { Divider } from '@nextui-org/divider';
 import { Link } from '@nextui-org/link';
 import NextLink from 'next/link';
 import Image from 'next/image';
-import LogInButton from './LogInButton';
+import JoinButton from './JoinButton';
 
-const SignIn = () => {
+const SignUp = () => {
   return (
     <>
       <Image
@@ -16,7 +16,7 @@ const SignIn = () => {
         height={100}
       />
 
-      <h1 className="text-3xl pb-unit-xl">Log In</h1>
+      <h1 className="text-3xl pb-unit-xl">Welcome!</h1>
 
       <div className="pb-unit-xl">
         <p className="text-md">
@@ -28,17 +28,17 @@ const SignIn = () => {
       <Divider />
 
       {/* client */}
-      <LogInButton />
+      <JoinButton />
 
       <Divider />
       <div className="pt-unit-xl">
-        New to TubePlus?{' '}
-        <Link as={NextLink} className="ml-1" href="/join">
-          Sign Up
+        Already a member of TubePlus?{' '}
+        <Link as={NextLink} className="ml-1" href="/login">
+          Log In
         </Link>
       </div>
     </>
   );
 };
 
-export default SignIn;
+export default SignUp;
