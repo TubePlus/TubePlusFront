@@ -25,7 +25,7 @@ const fetchCommunity = async (communityId: string) => {
   return res.json()
 };
 
-function tube({ params } : { params : { communityid : string }}) {
+function Tube({ params } : { params : { communityid : string }}) {
   
   const {
     data : communitycontents,
@@ -59,7 +59,7 @@ function tube({ params } : { params : { communityid : string }}) {
         </div>
 
         <div>
-          
+
 
 
         <div>
@@ -97,4 +97,4 @@ function tube({ params } : { params : { communityid : string }}) {
   )
 }
 
-export default tube
+export default Tube

@@ -50,7 +50,7 @@ const colors = [
 ];
 
 
-function page() {
+function Page() {
 
   const { data: session } = useSession()
 
@@ -149,4 +149,4 @@ function page() {
     </div>
   )
 }
-export default page
+export default Page

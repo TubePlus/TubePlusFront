@@ -3,7 +3,7 @@
 import { Switch } from '@nextui-org/react'
 import React from 'react'
 
-function page() {
+function Page() {
   return (
     <div>
 
@@ -23,4 +23,4 @@ function page() {
   )
 }
 
-export default page
+export default Page

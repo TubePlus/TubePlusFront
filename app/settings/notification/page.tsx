@@ -1,6 +1,6 @@
 import React from 'react'
 
-function page() {
+function Page() {
   return (
     <div>
       <div className='pt-5 flex w-full flex-wrap gap-4'>
@@ -15,4 +15,4 @@ function page() {
   )
 }
 
-export default page
+export default Page

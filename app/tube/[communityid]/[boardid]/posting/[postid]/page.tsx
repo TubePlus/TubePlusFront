@@ -36,7 +36,7 @@ const fetchComments = async (postId: string) => {
   return res.json();
 };
 
-function Posting({ params }: { params: { postid: string } }) {
+function Posting({ params } : { params: { postid: string } }) {
   const {
     data: postcontents,
     isLoading: isLoadingPost,

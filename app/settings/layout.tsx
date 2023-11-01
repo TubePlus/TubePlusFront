@@ -10,7 +10,7 @@ interface MenuTabBar {
   link: string;
 }
 
-export default function settingLayout({children}: {children: ReactNode}) {
+export default function SettingLayout({children}: {children: ReactNode}) {
 
   const pathName = usePathname()
 
