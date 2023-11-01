@@ -1,9 +1,10 @@
 'use client'
 
 import React from 'react'
-import { Button } from '@nextui-org/react'
+import { Button, Chip, Input } from '@nextui-org/react'
 import { TrashIcon } from '@radix-ui/react-icons'
 import { Select, SelectItem } from '@nextui-org/react'
+import { useSession } from 'next-auth/react'
 
 //Todo : 카테고리 데이터 패칭
 const animals = [
@@ -34,6 +35,11 @@ const animals = [
   {label: "Crocodile", value: "crocodile", description: "A large semiaquatic reptile"},
 ];
 
+const languages = [
+  {label: "English", value: "en", description: "English"},
+  {label: "Korean", value: "ko", description: "한국어"},
+]
+
 const colors = [
   "default",
   "primary",
@@ -45,6 +51,9 @@ const colors = [
 
 
 function page() {
+
+  const { data: session } = useSession()
+
   return (
     <div>
       
@@ -52,19 +61,53 @@ function page() {
           <h1 className='pl-3 text-3xl'>Account Settings</h1>
           <br/>
           <h2 className='pt-2 pl-3 border-b-2 w-full border-black text-xl'>Account Preferences</h2>
-        <div>
-          <h5 className='pl-2 pt-2 pb-10 text-gray-400'>Email Address</h5>
-          <h5 className='pl-2 text-gray-400'> Display Language </h5>
+        
+        <div className='w-full'>
+
+          <div className='flex flex-nowrap w-full justify-between'>
+            <h5 className='pl-2 pt-2 pb-10 text-gray-400'>Email Address</h5>
+            { session ? <p>{session.user.email}</p> : <p>Loading...</p> }
+            <Chip color='success' className='text-white'>Authenticated</Chip>
+          </div>
+            
+
+          <div className='flex flex-nowrap gap-12'>
+            <h5 className='pl-2 whitespace-nowrap text-gray-400'> Display Language </h5>
+            <Select
+              label="Select a Language"
+              placeholder="Select a language"
+              // description="언어를 선택해주세요."
+              defaultSelectedKeys={[""]}
+              className="w-[200px]"
+              color='primary'
+            >
+              {languages.map((language) => (
+                <SelectItem key={language.value} value={language.value}>
+                  {language.label}
+                </SelectItem>
+              ))}    
+            </Select>
+          </div>
+
         </div>
       </div>
 
       <div className='flex flex-nowrap pt-28'>
         <div className='pt-5 flex w-full flex-wrap gap-4'>
             <h2 className='pl-3 border-b-2 w-full border-black text-xl'>Profile Preferences</h2>
-          <div>
+
+        <div className='whitespace-normal'>
+          <div className='flex flex-nowrap gap-5'>
             <h5 className='pl-2 pt-2 pb-10 text-gray-400'>Display Name(Optional)</h5>
-            <h5 className='pl-2 text-gray-400'> About(Optional) </h5>
+            <Input placeholder="Display Name" className='w-[200px]'/>
           </div>
+
+          <div className='flex flex-nowrap gap-5'>
+            <h5 className='pl-2 text-gray-400'> About(Optional) </h5>
+            <Input size='lg' placeholder="About" description='200 Characters remaining.' className='w-[200px]'/>
+          </div>
+        </div>
+
         </div>
       </div>
 
@@ -79,7 +122,7 @@ function page() {
               description="크리에이터 등록을 위한 카테고리를 선택해주세요."
               defaultSelectedKeys={[""]}
               className="max-w-xs"
-              color='default'
+              color='primary'
             >
               {animals.map((animal) => (
                 <SelectItem key={animal.value} value={animal.value}>

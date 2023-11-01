@@ -15,12 +15,8 @@ export default function settingLayout({children}: {children: ReactNode}) {
   const pathName = usePathname()
 
   return (
-    <div className='col-start-2 col-end-12'>
-    <div className="top-[56px] opacity-[1]">
-        
-      <div className="flex w-full overflow-auto pt-5">
-        
-        <ul className="scrollbar flex w-full whitespace-nowrap overflow-x-auto [-ms-overflow-style:none;]">
+    <div className='col-start-1 col-end-12'>
+        <ul className="flex fixed w-[1400px] whitespace-nowrap">
           {
             settingtabmenubar.map((item: MenuTabBar) => (
               <li key={item.id} className={ pathName === `/settings${item.link}` ? 'settings-tab active' : 'settings-tab'}>
@@ -29,9 +25,9 @@ export default function settingLayout({children}: {children: ReactNode}) {
             ))
           }
         </ul>
-      </div>
+        <div className='pt-5'>
       {children}
-    </div>
+      </div>
     </div>
   )
 }
