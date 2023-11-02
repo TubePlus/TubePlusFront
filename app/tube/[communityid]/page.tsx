@@ -2,9 +2,8 @@
 import Post from '@/components/Post'
 import React from 'react'
 import { useQuery } from '@tanstack/react-query'
-import { Image } from '@nextui-org/react'
-import NextImage from 'next/image'
-
+import { Image , Card , Button } from '@nextui-org/react'
+import CommunityTabBar from '@/components/CommunityTabBar'
 
 interface communityType {
   communityId: string
@@ -15,6 +14,10 @@ interface communityType {
   createdAt: string
   isJoined: boolean
   communitySize: number
+}
+
+interface TabsProps {
+  activeTab: string;
 }
 
 const fetchCommunity = async (communityId: string) => {
@@ -58,41 +61,38 @@ function Tube({ params } : { params : { communityid : string }}) {
           />
         </div>
 
-        <div>
+          <Card className='pl-3 pr-3 pt-4 pb-1 min-h-[200px]'>
 
-
-
-        <div>
           <div className='flex flex-col gap-unit-md'>
             <div className='flex flex-row items-center gap-unit-md'>
+              <Image src={communitycontents.communityImage}/>
+                <div>
+                  <h1 className='text-3xl font-bold'>{communitycontents.title}</h1>
+                  <p className='text-xl font-bold'>{communitycontents.communitySize} Members</p>
+                  <p className='text-xl'>{communitycontents.createdAt}</p>
+                </div>
+              <Button color='primary'>Join</Button>
               
-              
-              <h1 className='text-3xl font-bold'>{communitycontents.title}</h1>
-              <button className='flex items-center justify-center w-20 h-10 text-white bg-blue-500 rounded-md'>Join</button>
-            </div>
-            <div className='flex flex-row items-center gap-unit-md'>
-              <p className='text-xl font-bold'>{communitycontents.communitySize} Members</p>
+              <div className='flex flex-col gap-unit-md'>
+                <div className='flex flex-row items-center gap-unit-md'>
+                  <h2 className='text-2xl font-bold'>About</h2>
+                </div>
+
+                <div className='flex flex-row items-center gap-unit-md'>
+                  <p className='text-xl'>{communitycontents.description}</p>
+                </div>
+              </div>
             </div>
           </div>
-        </div>
-      
-        <div className='flex flex-col gap-unit-md'>
-        <div className='flex flex-row items-center gap-unit-md'>
-          <h2 className='text-2xl font-bold'>About</h2>
-        </div>
-        <div className='flex flex-row items-center gap-unit-md'>
-          <p className='text-xl font-bold'>{communitycontents.description}</p>
-        </div>
+        </Card>
+
+          <CommunityTabBar communityId={communitycontents.id}/>
+
+        <div className='gap-y-10'>
+          <Post/>
         </div>
 
-
         </div>
-      
-
-        <div>
-            <Post />
-        </div>
-      </div>
     </> 
   )
 }

@@ -11,13 +11,12 @@ const fetchPosts = async () => {
     method : 'GET',
     headers : { 'Content-Type' : 'application/json'}
   });
-
   if (!res.ok) {
     throw new Error("Network response was not ok");
   }
-
   return res.json();
 }
+
 
 const Post = () => {
   const { data: postcontents, error, isLoading } = useQuery(['posts'], fetchPosts);
@@ -43,8 +42,8 @@ const Post = () => {
 
     {postcontents && postcontents.map((item:PostType) => (
         <div key={item.id}>
-    <Card>
-      <CardHeader>
+      <Card>
+        <CardHeader>
         <div className='flex flex-nowrap gap-[700px]'>
         <div className='flex flex-nowrap gap-4'>
         <Avatar src={item.avatar} />
@@ -63,7 +62,7 @@ const Post = () => {
         </div>
 
         </div>
-      </CardHeader>
+        </CardHeader>
         <Link href={`/tube///posting/${item.id}`}>
       <CardBody>
           <div className='flex flex-nowrap gap-4 overflow-hidden'>

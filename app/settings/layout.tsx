@@ -3,19 +3,15 @@ import React, { ReactNode } from 'react'
 import { settingtabmenubar } from '../../data/tabmenubar'
 import { usePathname } from 'next/navigation';
 import Link from 'next/link'
+import { MenuTabBar } from '@/types/menutabbar';
 
-interface MenuTabBar {
-  id: number;
-  name: string;
-  link: string;
-}
 
 export default function SettingLayout({children}: {children: ReactNode}) {
 
   const pathName = usePathname()
 
   return (
-    <div className='col-start-1 col-end-12'>
+    <div className='col-start-1 col-end-12 h-screen'>
         <ul className="flex fixed w-[1400px] whitespace-nowrap">
           {
             settingtabmenubar.map((item: MenuTabBar) => (

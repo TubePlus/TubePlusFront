@@ -70,7 +70,6 @@ function Page() {
             <Chip color='success' className='text-white'>Authenticated</Chip>
           </div>
             
-
           <div className='flex flex-nowrap gap-12'>
             <h5 className='pl-2 whitespace-nowrap text-gray-400'> Display Language </h5>
             <Select
@@ -145,7 +144,6 @@ function Page() {
         </div>
       </div>
 
-    
     </div>
   )
 }
