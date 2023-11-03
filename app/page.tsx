@@ -3,7 +3,6 @@ import Sidebar from '@/components/sidebar/Sidebar';
 
 import MainTop from '@/components/mainpage/MainTop';
 import MainBottom from '@/components/mainpage/MainBottom';
-import { Desktop, Tablet, Mobile } from '../components/Responsive';
 import { Chip } from '@nextui-org/chip';
 import CommunityRecommend from '@/components/CommunityRecommend';
 import Post from '@/components/Post';
@@ -13,10 +12,23 @@ export default function Home() {
   return (
     <>
       <div
-        className={`desktop:col-start-4 desktop:col-end-13
-                    tablet:col-start-2 tablet:col-end-9
-                    mobileL:col-span-full mobileM:col-span-full gap-unit-md
-                    flex flex-col gap-y-10 pt-4
+        className="-ml-4 z-20
+          lg:col-span-3
+          md:col-span-1 md:min-w-[60px]"
+      >
+        <Sidebar //TODO: sidebar
+          className={`md:bg-transparent x:bg-zinc-50 dark:x:bg-zinc-900`}
+        >
+          <MainSidebar />
+        </Sidebar>
+      </div>
+
+      <div
+        className={`lg:col-start-4 lg:col-end-13  lg:pl-0 
+                    md:col-start-2 md:col-end-11  md:pl-0
+                    x:col-span-full
+                    overflow-y-auto
+                    flex flex-col gap-y-10 gap-unit-md pt-4 
                     scrollbar-thin`}
       >
         <MainTop />
@@ -33,14 +45,6 @@ export default function Home() {
           </div>
         </div>
       </div>
-
-      <Sidebar
-        className={`desktop:block desktop:col-span-3
-                    tablet:block tablet:col-span-1 tablet:min-w-[60px]
-                  `}
-      >
-        <MainSidebar />
-      </Sidebar>
     </>
   );
 }

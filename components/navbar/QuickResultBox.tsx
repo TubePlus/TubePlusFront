@@ -7,6 +7,7 @@ import {
   CardBody,
   CardHeader,
   Spacer,
+  Spinner,
 } from '@nextui-org/react';
 import { useQuery } from '@tanstack/react-query';
 import React, { Key } from 'react';
@@ -51,8 +52,13 @@ export const QuickResultBox = ({
     // TODO: isLoading 대응
     <div className="relative w-full">
       <div className="hidden group-focus-within:block duration-200">
-        <div className="absolute flex flex-col z-[999] bg-zinc-100 dark:bg-zinc-900 w-full min-h-[150px] max-h-60 shadow-medium overflow-y-auto">
-          <div className="flex flex-col gap-2 whitespace-break-spaces px-5 py-2">
+        <div
+          className="absolute flex flex-col w-full z-[999]
+                      bg-zinc-100 dark:bg-zinc-800
+                      min-h-[150px] max-h-60
+                      shadow-medium overflow-y-auto"
+        >
+          <div className="flex flex-col justify-center gap-2 whitespace-break-spaces px-5 py-2">
             {searchValue ? (
               <>
                 <p className="flex text-[12px]">
@@ -74,58 +80,58 @@ export const QuickResultBox = ({
                 />
               </>
             ) : !isError ? (
-              data &&
-              data.map((row: ResultProps) => (
-                // TODO: tablet 일 때, 구성요소의 사이즈 대응 필요
-                <Card
-                  key={row.id}
-                  isPressable
-                  shadow="none"
-                  onPress={
-                    () => console.log('item pressed') // useRouter()
-                  }
-                >
-                  <CardHeader className="justify-between">
-                    <div className="flex gap-5">
-                      {displaySelectValue === 'creator' && (
-                        <Avatar
-                          isBordered
-                          radius="full"
-                          size="md"
-                          src={row.image}
-                        />
-                      )}
-                      <div className="flex flex-col gap-1 items-start justify-center">
-                        <p className="flex text-small leading-none text-default-600">
-                          <span className="font-semibold">{row.name}</span>
-                          <Spacer />
-                          <span className="text-zinc-600">{row.username}</span>
-                        </p>
-                        <p className="text-small tracking-tight text-default-400">
-                          <span>{row.email}</span>
-                        </p>
+              Array.isArray(data) ? (
+                data.map((row: ResultProps) => (
+                  <Card
+                    key={row.id}
+                    isPressable
+                    shadow="none"
+                    onPress={
+                      () => console.log('item pressed') // useRouter()
+                    }
+                  >
+                    <CardHeader className="justify-between">
+                      <div className="flex gap-5">
+                        {displaySelectValue === 'creator' && (
+                          <Avatar
+                            isBordered
+                            radius="full"
+                            size="md"
+                            src={row.image}
+                          />
+                        )}
+                        <div className="flex flex-col gap-1 items-start justify-center">
+                          <p className="flex text-small leading-none text-default-600">
+                            <span className="font-semibold">{row.name}</span>
+                            <Spacer />
+                            <span className="text-zinc-600">
+                              {row.username}
+                            </span>
+                          </p>
+                          <p className="text-small tracking-tight text-default-400">
+                            <span>{row.email}</span>
+                          </p>
+                        </div>
                       </div>
-                    </div>
-                    <Button
-                      className={
-                        row.id
-                          ? 'bg-transparent text-foreground border-default-200'
-                          : ''
-                      }
-                      color="primary"
-                      radius="full"
-                      size="sm"
-                      variant={'solid'} // 가입 여부에 따라 변경: bordered
-                      //   onPress={() => setIsFollowed(!isFollowed)}
-                    >
-                      {
-                        'Follow' // 가입 여부에 따라 변경
-                      }
-                    </Button>
-                  </CardHeader>
-                  <CardBody></CardBody>
-                </Card>
-              ))
+                      <Button
+                        className={row.id ? '' : ''}
+                        color="primary"
+                        radius="full"
+                        size="sm"
+                        variant={'solid'} // 가입 여부에 따라 변경: bordered
+                        //   onPress={() => setIsFollowed(!isFollowed)}
+                      >
+                        {
+                          'Follow' // 가입 여부에 따라 변경
+                        }
+                      </Button>
+                    </CardHeader>
+                    <CardBody></CardBody>
+                  </Card>
+                ))
+              ) : (
+                <div className="flex">{data}</div>
+              )
             ) : (
               <>
                 <h3>Error</h3>

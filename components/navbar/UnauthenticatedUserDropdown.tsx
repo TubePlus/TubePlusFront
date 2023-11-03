@@ -15,7 +15,7 @@ import {
 } from '@radix-ui/react-icons';
 import { useEffect, useState } from 'react';
 import { Skeleton } from '@nextui-org/skeleton';
-import { Mobile, Tablet } from '../Responsive';
+import { Sm, Md, X } from '../Responsive';
 import { ThemeSwitcher } from '../ThemeSwitcher';
 import { NavbarItem } from '@nextui-org/navbar';
 import Link from 'next/link';
@@ -53,27 +53,46 @@ const UnauthenticatedUserDropdown = () => {
 
   return mounted ? (
     <>
-      <Tablet>
+      <Md>
         <NavbarItem>
-          <Button as={Link} href={'/login'}>
+          <Button
+            variant="light"
+            className="text-default-600 hover:text-default-900"
+            as={Link}
+            href={'/login'}
+          >
             Log In
           </Button>
         </NavbarItem>
 
         <NavbarItem>
-          <Button as={Link} href="/join">
+          <Button
+            variant="light"
+            className="text-default-600 hover:text-default-900"
+            as={Link}
+            href="/join"
+          >
             Join Us
           </Button>
         </NavbarItem>
 
         <ThemeSwitcher type="button" />
-      </Tablet>
+      </Md>
 
       <NavbarItem>
-        <Mobile>
-          <Dropdown size="sm">
+        <X>
+          <Dropdown
+            size="sm"
+            classNames={{ base: 'bg-default-100' }}
+            trigger="longPress"
+          >
             <DropdownTrigger>
-              <Button className="bg-default-200" isIconOnly>
+              <Button
+                radius="full"
+                className="text-default-600 hover:text-default-900"
+                variant="light"
+                isIconOnly
+              >
                 <DotsHorizontalIcon />
               </Button>
             </DropdownTrigger>
@@ -86,6 +105,7 @@ const UnauthenticatedUserDropdown = () => {
                   <DropdownItem
                     key={item.key}
                     as={Link}
+                    className="text-default-600 hover:text-default-900"
                     href={item.href || ''}
                     startContent={<item.icon />}
                   >
@@ -101,22 +121,19 @@ const UnauthenticatedUserDropdown = () => {
               </DropdownSection>
             </DropdownMenu>
           </Dropdown>
-        </Mobile>
+        </X>
       </NavbarItem>
     </>
   ) : (
     <>
-      <div className="mobileM:hidden tablet:flex gap-2">
+      <div className="sm:hidden md:flex gap-2">
         <Skeleton className="w-20 h-10 rounded-xl" />
         <Skeleton className="w-20 h-10 rounded-xl" />
         <Skeleton className="w-10 h-10 rounded-xl" />
       </div>
 
-      <div className="mobileM:flex tablet:hidden">
-        <Skeleton className="w-10 h-10 rounded-xl" />
-      </div>
+      <div className="sm:flex md:hidden"></div>
     </>
   );
 };
-
 export default UnauthenticatedUserDropdown;

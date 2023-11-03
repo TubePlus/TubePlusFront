@@ -19,17 +19,19 @@ const MainSidebar = () => {
   const { data: session } = useSession();
   const username = session?.user.name; // TODO: 현재 google에서 전체 이름을 불러오고 있음. 기본값 별명(: young1ll)
 
+  // TODO: static top-0
   return (
     <div
-      className={`flex flex-col gap-2 pt-4 pl-2 h-[calc(100vh-3rem-1px)] overflow-y-scroll scrollbar-thin scrollbar-thumb-zinc-400 scrollbar-rounded-full`}
+      className={`flex flex-col gap-2 pt-4 h-full
+                  scrollbar-thin scrollbar-thumb-zinc-400 scrollbar-rounded-full`}
     >
-      <SidebarMenu menuItem={defaultMenuItem} startContentType="icon" />
+      <SidebarMenu menuItem={defaultMenuItem} startContentType="icon" isMain />
 
       <Divider />
 
       {session?.user ? (
         <>
-          <Accordion className="px-0 tablet:hidden desktop:block" isCompact>
+          <Accordion className="px-2 lg:block md:hidden" isCompact>
             <AccordionItem
               title="My Subscription"
               classNames={{
@@ -40,6 +42,7 @@ const MainSidebar = () => {
               <SidebarMenu
                 menuItem={subscribeMenuItem}
                 startContentType="avatar"
+                isMain
               />
             </AccordionItem>
           </Accordion>
@@ -49,7 +52,7 @@ const MainSidebar = () => {
               variant="light"
               as={Link}
               href={`/user/${username}/subscription`}
-              className="flex w-full desktop:hidden"
+              className=" flex w-[90%] mx-auto lg:hidden md:flex x:hidden"
               fullWidth
               isIconOnly
             >
@@ -70,12 +73,12 @@ const MainSidebar = () => {
         </>
       )}
 
-      <SidebarMenu menuItem={resourceMenuItem} startContentType="icon" />
+      <SidebarMenu menuItem={resourceMenuItem} startContentType="icon" isMain />
 
       <Divider />
 
-      <div className="grid grid-cols-2 gap-1 tablet:hidden desktop:grid">
-        <SidebarMenu menuItem={languages} />
+      <div className="grid grid-cols-2 gap-1 px-1 md:hidden lg:grid">
+        <SidebarMenu menuItem={languages} isMain />
       </div>
     </div>
   );

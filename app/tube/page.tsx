@@ -1,23 +1,21 @@
-import Post from '@/components/Post'
-import React from 'react'
-
+import Post from '@/components/Post';
+import React from 'react';
 
 function page() {
   return (
     <>
       <div
-        className={`desktop:col-start-2 desktop:col-end-12
-                    tablet:col-start-1 tablet:col-end-10
-                    mobileL:col-span-full mobileM:col-span-full gap-unit-md
-                    flex flex-col pt-4
+        className={`lg:col-start-2  lg:col-end-12
+                    md:col-start-1  md:col-end-10
+                    sm:col-span-full
+                    xs:col-span-full
+                    flex flex-col gap-unit-md pt-4
                     scrollbar-thin`}
       >
-      
-      <Post />
-      
+        <Post />
       </div>
-    </> 
-  )
+    </>
+  );
 }
 
-export default page
+export default page;

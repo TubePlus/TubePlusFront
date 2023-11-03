@@ -1,17 +1,19 @@
 'use client';
 import { useEffect, useState } from 'react';
-import { MobileValue } from '../Responsive';
+import { Md, MdValue, Sm, SmValue, X } from '../Responsive';
 import useGlobalState from '@/hooks/use-global-state';
 
 const Sidebar = ({
   children,
   className,
+  isMobileOnly = false,
 }: {
   children: React.ReactNode;
   className?: string;
+  isMobileOnly?: boolean;
 }) => {
   // TODO: mounted Skeleton 추가 필요?
-  const isMobile = MobileValue(); // for Rerender this component
+
   const [isOpen, setIsOpen] = useGlobalState('sidebarStatus');
   const [mounted, setMounted] = useState(false);
 
@@ -19,38 +21,52 @@ const Sidebar = ({
     setMounted(true);
   }, []);
 
-  return isMobile ? (
-    <>
-      <div
-        className={`${className}
-                    ${
-                      isOpen
-                        ? 'mobileL:left-0 mobileM:!left-0'
-                        : 'mobileL:-left-full mobileM:!-left-full'
-                    } duration-300 mobileM:absolute
-                    overflow-hidden order-first isolate
-                    border-r border-solid border-divider dark:border-zinc-200/20
-                    bg-zinc-100 dark:bg-zinc-800 z-50
-                    `}
-      >
-        {children}
-      </div>
+  const handleSidebar = () => {
+    setIsOpen(!isOpen);
+  };
 
-      <div
-        className={`${
-          isOpen ? 'absolute w-full h-full bg-black opacity-30' : 'opacity-0'
-        } duration-300 z-40`}
-        onClick={() => setIsOpen(!isOpen)}
-      />
+  useEffect(() => {
+    document.body.style.overflow = isOpen ? 'hidden' : 'auto';
+  }, [isOpen]);
+
+  return (
+    <>
+      {!MdValue() && (
+        <X>
+          <div
+            className={`${className} fixed !top-[3rem] inset-0 isolate
+                    sm:w-[60%] x:w-[100%]
+                    border-r border-solid border-divider
+                    overflow-hidden order-first z-50 duration-300
+                    ${isOpen ? 'left-0' : '-left-full'}
+                    `}
+          >
+            {children}
+          </div>
+
+          <div // sidebar background
+            className={`${
+              isOpen ? 'absolute w-full h-full opacity-30' : 'hidden opacity-0'
+            } duration-300 z-40 bg-black`}
+            onClick={handleSidebar}
+          />
+        </X>
+      )}
+
+      {!isMobileOnly ? (
+        <Md>
+          <div
+            className={`${className} sticky top-[3rem] overflow-hidden order-first
+                  isolate w-full h-[calc(100vh-3rem)]
+                  border-r border-solid border-divider
+                  
+                  ${!mounted ? 'sm:hidden' : ''}`}
+          >
+            {children}
+          </div>
+        </Md>
+      ) : null}
     </>
-  ) : (
-    <div
-      className={`${className} ${
-        !mounted ? 'mobileM:hidden' : ''
-      } overflow-hidden order-first isolate border-r border-solid border-divider dark:border-zinc-200/20 bg-zinc-100 dark:bg-zinc-800`}
-    >
-      {children}
-    </div>
   );
 };
 

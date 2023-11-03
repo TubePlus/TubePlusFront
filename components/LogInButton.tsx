@@ -27,7 +27,7 @@ const LoginButton = () => {
   return (
     <form className="flex flex-col gap-4 py-unit-md">
       <Button
-        className="px-unit-xs h-unit-13 dark:bg-zinc-200/20 hover:scale-[1.01]"
+        className="px-unit-xs h-unit-13 hover:scale-[1.01] duration-300"
         type="submit"
         radius="full"
         fullWidth

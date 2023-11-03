@@ -4,6 +4,9 @@ import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import { Providers } from './providers';
 
+import 'swiper/swiper-bundle.css';
+import 'swiper/modules';
+
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
@@ -21,22 +24,25 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body
-        className={`${inter.className} h-full w-screen bg-zinc-100 dark:bg-zinc-800 scrollbar-none`}
+        className={`${inter.className} bg-zinc-50 dark:bg-zinc-900
+                    min-h-screen h-full w-screen
+                    overflow-y-auto scrollbar-none`}
       >
         <Providers>
           {modal}
           <Navbar />
+          {/* <SubNavbar /> */}
 
           <div
-            className={`grid mx-auto overflow-y-auto scrollbar-thin
-                        desktop:gap-unit-lg tablet:gap-unit-md mobileL:gap-unit-md mobileM:gap-unit-sm
-                        desktop:max-w-[1524px] tablet:max-w-[1024px] mobileL:max-w-[640px] mobileM:max-w-[640px]
-                        desktop:grid-cols-12 tablet:grid-cols-10 mobileL:grid-cols-8 mobileM:grid-cols-4
-                        desktop:pr-unit-lg desktop:pl-0 tablet:pr-unit-md tablet:pl-0 mobileM:px-unit-md`}
+            className={`relative grid mx-auto max-w-[1524px] px-4 scrollbar-thin
+                        lg:gap-[.8rem]  lg:grid-cols-12
+                        md:gap-unit-md  md:grid-cols-10
+                        sm:gap-unit-sm  sm:grid-cols-8
+                        x:gap-unit-xs   x:grid-cols-4
+                        `}
           >
             {children}
           </div>
-
         </Providers>
       </body>
     </html>

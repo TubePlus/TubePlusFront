@@ -1,47 +1,34 @@
-import { Card, CardBody, CardFooter } from '@nextui-org/card';
-import { Chip } from '@nextui-org/chip';
-import { Divider } from '@nextui-org/divider';
-import { Avatar } from '@nextui-org/avatar';
 import React from 'react';
 import SignUp from '@/components/SignUp';
-import { memebers } from '@/data/members';
-import Link from 'next/link';
+import { ArrowLeftIcon } from '@radix-ui/react-icons';
+import { Card, CardHeader, CardBody, CardFooter } from '@nextui-org/card';
+import { Button } from '@nextui-org/button';
 
 const JoinPage = async () => {
   return (
-    <div className="absolute inset-0">
-      <div className="flex flex-col items-center justify-center h-full max-w-xl gap-20 mx-auto">
-        <Card classNames={{ base: 'bg-white dark:bg-zinc-700' }} shadow="none">
+    <div
+      className="relative col-span-full
+                  flex justify-center h-[calc(100vh-3rem)]"
+    >
+      <div className="flex flex-col items-center justify-center">
+        <Card
+          className="max-w-lg"
+          classNames={{ base: 'border border-default' }}
+          shadow="none"
+        >
+          <CardHeader className="justify-between">
+            <Button size="sm" variant="flat">
+              <ArrowLeftIcon />
+
+              <h2>Home</h2>
+            </Button>
+          </CardHeader>
+
           <CardBody>
             <SignUp />
           </CardBody>
 
-          <Divider />
-          <CardFooter>
-            <p>
-              Wellcom to tubePlus! This Project created by{' '}
-              {memebers.map((mem, index) => (
-                <Chip
-                  as={Link}
-                  variant="flat"
-                  classNames={{
-                    base: 'duration-200 hover:-translate-y-1',
-                    content: 'text-xs flex items-center gap-1',
-                  }}
-                  size="sm"
-                  key={index}
-                  href={`https://github.com/${mem.githubName}`}
-                >
-                  <Avatar
-                    className="h-unit-lg w-unit-lg"
-                    name={mem.githubName}
-                    src={mem.avatar}
-                  />
-                  {mem.githubName}
-                </Chip>
-              ))}
-            </p>
-          </CardFooter>
+          <CardFooter></CardFooter>
         </Card>
       </div>
     </div>
