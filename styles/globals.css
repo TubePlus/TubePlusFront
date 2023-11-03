@@ -68,3 +68,39 @@
   vertical-align: middle;
   margin-bottom: 1px;
 }
+
+/* settings tab */
+.settings-tab {
+  padding-left: 20px;
+  padding-right: 20px;
+  position: relative;
+  width: 100%;
+  height: 36px;
+  border-bottom: 1px solid #e8e8e8;
+  box-sizing: border-box;
+  background: #eeeeee;
+  font-size: 15px;
+  line-height: 21px;
+  color: #767676;
+  text-align: center;
+  align-items: center;
+  padding-top: 5px;
+}
+
+.settings-tab.active {
+  color: #000000;
+  font-weight: 500;
+  position: relative;
+  background-color: white;
+}
+
+.active-link::after {
+  content: '';
+  position: absolute;
+  width: 70%;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: 0;
+  height: 2px;
+  background: #ffffff;
+}

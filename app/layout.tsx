@@ -3,6 +3,7 @@ import '@/styles/globals.css';
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import { Providers } from './providers';
+import ScrollToTop from '@/components/ui/ScrollToTop';
 
 import 'swiper/swiper-bundle.css';
 import 'swiper/modules';
@@ -43,6 +44,8 @@ export default function RootLayout({
           >
             {children}
           </div>
+
+          <ScrollToTop />
         </Providers>
       </body>
     </html>

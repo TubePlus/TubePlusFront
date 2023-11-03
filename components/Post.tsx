@@ -11,13 +11,12 @@ const fetchPosts = async () => {
     method : 'GET',
     headers : { 'Content-Type' : 'application/json'}
   });
-
   if (!res.ok) {
     throw new Error("Network response was not ok");
   }
-
   return res.json();
 }
+
 
 const Post = () => {
   const { data: postcontents, error, isLoading } = useQuery(['posts'], fetchPosts);
@@ -43,12 +42,12 @@ const Post = () => {
 
     {postcontents && postcontents.map((item:PostType) => (
         <div key={item.id}>
-    <Card>
-      <CardHeader>
+      <Card>
+        <CardHeader>
         <div className='flex flex-nowrap gap-[700px]'>
         <div className='flex flex-nowrap gap-4'>
         <Avatar src={item.avatar} />
-          <Chip color='default'> {item.authorname} </Chip>
+          <Chip color='default'> {item.authorName} </Chip>
           <Chip color='default'> {item.title} </Chip>
         </div>
 
@@ -56,15 +55,15 @@ const Post = () => {
           <button>
           <ThickArrowUpIcon className='w-8 h-8' />
           </button>
-            <b>{item.votecounts}</b>
+            <b>{item.voteCounts}</b>
           <button>
           <ThickArrowDownIcon className='w-8 h-8' />
           </button>
         </div>
 
         </div>
-      </CardHeader>
-        <Link href={`/comments/${item.id}`}>
+        </CardHeader>
+        <Link href={`/tube///posting/${item.id}`}>
       <CardBody>
           <div className='flex flex-nowrap gap-4 overflow-hidden'>
             {item.contents}
