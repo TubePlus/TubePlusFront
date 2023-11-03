@@ -15,7 +15,8 @@ const Navbar = async () => {
 
   return (
     <NextNavbar
-      className="bg-zinc-100 dark:bg-zinc-800 z-[999]"
+      className="border-b border-zinc-500/50 z-30
+              bg-zinc-50 dark:bg-zinc-900"
       classNames={{ base: 'min-w-[360px]', wrapper: 'px-4 max-w-[1524px]' }}
       isBordered
       isBlurred
@@ -24,7 +25,7 @@ const Navbar = async () => {
       <BrandBox />
 
       <NavbarContent
-        className="basis-[750px] desktop:flex mobileL:hidden mobileM:hidden"
+        className="basis-[750px] md:flex x:hidden"
         justify="center"
       >
         <NavbarItem className="w-full max-w-[600px]">
@@ -37,7 +38,7 @@ const Navbar = async () => {
         justify="end"
         className="w-fit !flex-grow-0 gap-2"
       >
-        <NavbarItem className="desktop:hidden tablet:flex">
+        <NavbarItem className="md:hidden x:flex">
           <SearchBox type="button" />
         </NavbarItem>
 

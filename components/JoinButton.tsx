@@ -22,6 +22,7 @@ interface FormElements extends HTMLFormControlsCollection {
 const JoinButton = () => {
   const [username, setUsername] = useState('');
   const [isInvalid, setIsInvalid] = useState(false);
+  const [invalidMsg, setInvalidMsg] = useState('');
   const { data: session } = useSession();
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const router = useRouter();
@@ -32,30 +33,35 @@ const JoinButton = () => {
 
     try {
       // 중복 검사
-      const response = await fetch(
+      const url = new URL(
         baseUrl + endpointPrefix + '/users/' + username + '/duplicate',
-        {
-          headers: {
-            'Content-type': 'application/json',
-          },
-        },
       );
+      const response = await fetch(url, {
+        method: 'GET',
+        // mode: 'no-cors',
+        headers: {
+          'Content-type': 'application/json',
+        },
+      });
       const isDuplicate = await response.json();
+      console.log(isDuplicate);
 
       if (isDuplicate.code == 'S001') {
         setIsInvalid(false);
-        localStorage.setItem('username', username);
+        // localStorage.setItem('username', username);
         console.log('중복검사완료');
 
         signUp();
       } else {
         // TODO: toast invalid(duplicated) error
+        console.log(isDuplicate);
         setIsInvalid(true);
+        setInvalidMsg(`${username}은 중복되거나 유효하지 않습니다!`);
       }
       // await signIn('google', { redirect: false });
     } catch (error) {
       // toast notification
-      alert('Err: Login Failure!');
+      alert(`${error}\n API is not working...`);
     } finally {
       setIsLoading(false);
     }
@@ -147,7 +153,7 @@ const JoinButton = () => {
     <form className="flex flex-col gap-4 py-unit-md">
       <Input
         classNames={{
-          inputWrapper: 'h-unit-14 dark:bg-zinc-600',
+          inputWrapper: 'h-unit-14',
           input: 'text-xl',
         }}
         type="text"
@@ -157,11 +163,11 @@ const JoinButton = () => {
         value={username}
         onValueChange={setUsername}
         isInvalid={isInvalid}
-        errorMessage={isInvalid && 'Please enter a valid username'}
+        errorMessage={isInvalid && invalidMsg}
         required
       />
       <Button
-        className="px-unit-xs h-unit-13 dark:bg-zinc-200/20 hover:scale-[1.01]"
+        className="px-unit-xs h-unit-13 hover:scale-[1.01]"
         type="submit"
         radius="full"
         fullWidth

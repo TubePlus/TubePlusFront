@@ -70,22 +70,28 @@ const SearchBox = ({
   switch (type) {
     case 'input':
       return mounted ? (
-        <div className="flex gap-[-1px]">
+        <div className="flex gap-[1px]">
           <Select
-            className="max-w-[120px] mx-[-1px]"
+            className="max-w-[120px] mx-[-1px] z-0"
             classNames={{
-              trigger: 'rounded-se-none rounded-ee-none',
+              trigger: [
+                'rounded-full rounded-se-none rounded-ee-none',
+                'border border-1 dark:border-default-600/20 pl-4',
+                'bg-zinc-200/50 dark:bg-zinc-800',
+                'text-default-500',
+              ],
               label: '!text-[11px]',
               value: 'leading-1',
-              mainWrapper: 'h-10',
-              innerWrapper: 'pt-3',
+              mainWrapper: ['h-10'],
+              innerWrapper: ['pt-0'],
+              popover: 'dark:bg-default-100',
             }}
+            label
             selectedKeys={selectValue}
             onSelectionChange={setSelectValue}
             size="sm"
             variant="faded"
             items={SearchFilter}
-            label="Search Filter"
           >
             {filterItem => (
               <SelectItem key={filterItem.value}>{filterItem.label}</SelectItem>
@@ -93,7 +99,6 @@ const SearchBox = ({
           </Select>
 
           <SearchInput
-            variant="bordered"
             placeholder="Search TubePlus"
             value={searchValue}
             onValueChange={setSearchValue}
@@ -107,9 +112,10 @@ const SearchBox = ({
         </div>
       ) : (
         <div>
-          <Skeleton className="min-w-[150px] w-full h-10 rounded-xl" />
+          <Skeleton className="min-w-[150px] w-full h-10 rounded-full" />
         </div>
       );
+
     case 'button':
       return mounted ? (
         <>
@@ -122,10 +128,11 @@ const SearchBox = ({
           >
             <MagnifyingGlassIcon tabIndex={-1} />
           </Button>
+
           <Modal
             classNames={{
               wrapper: 'absolute z-[9999]',
-              base: 'dark:bg-zinc-800 border border-zinc-400 dark:border-zinc-700 min-h-[280px]',
+              base: ['min-h-[280px]'],
               backdrop: 'z-[999]',
             }}
             isOpen={isOpen}
@@ -192,7 +199,7 @@ const SearchBox = ({
         </>
       ) : (
         <div>
-          <Skeleton className="w-10 h-10 rounded-full" />
+          <Skeleton className="w-10 h-10 rounded-full " />
         </div>
       );
   }
@@ -201,38 +208,30 @@ const SearchBox = ({
 export default SearchBox;
 
 // Custom Input: SearchInput
+const className = 'border-l-0 bg-opacity-50 transition-all';
 const styles = {
+  base: [],
+  // mainWrapper: [''],
   // label: 'text-black/50 dark:text-white/90',
-  input: [
-    'bg-transparent',
-    'text-black/90 dark:text-white/90',
-    'placeholder:text-default-700/50 dark:placeholder:text-white/60',
-  ],
-  innerWrapper: 'bg-transparent',
+  innerWrapper: ['focus-within:rounded:ee-none'],
+  input: [''],
   inputWrapper: [
-    'shadow-none',
-    'bg-default-200/50',
-    'dark:bg-default/60',
-    // 'backdrop-blur-xl',
-    // 'backdrop-saturate-200',
-    'rounded-ss-none rounded-es-none focus-within:rounded-ee-none',
-    'hover:bg-default-200/70',
-    'focus-within:!bg-default-200/50',
-    'dark:hover:bg-default/70',
-    'dark:focus-within:!bg-default/60',
-    '!cursor-text',
+    'h-10 transition-colors motion-reduce:transition-none',
+    'border border-1 border-l-0',
+    'rounded-full rounded-ss-none rounded-es-none',
+    'focus-within:rounded-se-[20px] focus-within:rounded-ee-none',
+    'border-default-200 hover:border-default-400',
+    'bg-opacity-10 hover:bg-transparent focus-within:!bg-transparent',
   ],
 };
 
 export const SearchInput = forwardRef(
   ({
-    variant,
     children,
     // TODO: warning ref(Warning: forwardRef render functions accept exactly two parameters: props and ref. Did you forget to use the ref parameter?)
     // NOTE: https://deepscan.io/docs/rules/react-useless-forward-ref
     ...props
   }: {
-    variant: 'bordered' | 'flat';
     value: string;
     onValueChange: Dispatch<SetStateAction<string>>;
     placeholder: string;
@@ -258,7 +257,7 @@ export const SearchInput = forwardRef(
       ...props,
       classNames: { ...styles },
       startContent: (
-        <MagnifyingGlassIcon className="flex-shrink-0 pointer-events-none text-black/50 dark:text-white/90 text-slate-400" />
+        <MagnifyingGlassIcon className="flex-shrink-0 pointer-events-none" />
       ),
     });
     const [showQuickResult, setShowQuickResult] = useState(false);

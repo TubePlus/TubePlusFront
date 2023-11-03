@@ -17,9 +17,10 @@ import {
 } from '@radix-ui/react-icons';
 import { signOut, useSession } from 'next-auth/react';
 import { User } from '@nextui-org/user';
-import { MobileValue } from '../Responsive';
+import { Md, Sm, SmValue } from '../Responsive';
 import { Avatar, Skeleton, useSkeleton } from '@nextui-org/react';
 import { Suspense } from 'react';
+import Link from 'next/link';
 
 const userItems = [
   {
@@ -67,26 +68,25 @@ const etcItems = [
 ];
 
 const AuthenticatedUserDropdown = () => {
-  const isMobile = MobileValue();
-  const { data: session } = useSession();
+  const { data: session } = useSession(); //TODO: session 정보가 확인 되면, userInfo fetching 데이터로 세션을 수정. next-auth 내 profile(), signIn을 수정하거나 세션 갱신할 것.
 
   return (
     <Dropdown>
       <DropdownTrigger>
-        {isMobile ? (
+        <div>
           <Suspense fallback={<Skeleton className="h-8 w-8 rounded-full" />}>
             <Avatar
               as="button"
-              className="flex transition-transform"
+              className="md:hidden x:flex transition-transform"
               src={session?.user.image!}
               color="secondary"
               size="sm"
             />
           </Suspense>
-        ) : (
+
           <User
             as="button"
-            className="transition-transform flex box-border"
+            className="md:flex x:hidden transition-transform box-border"
             avatarProps={{
               src: session?.user.image!,
               isBordered: true,
@@ -96,17 +96,31 @@ const AuthenticatedUserDropdown = () => {
             name={session?.user.name}
             description={session?.user.email}
           />
-        )}
+        </div>
       </DropdownTrigger>
 
-      <DropdownMenu closeOnSelect={false} variant="faded">
+      <DropdownMenu
+        aria-label="User Dropdown Menu"
+        variant="faded"
+        closeOnSelect={false}
+      >
         <DropdownSection
           title={'User'}
           showDivider
           aria-label="User Items Section"
         >
           {userItems.map(item => (
-            <DropdownItem key={item.key}>{item.label}</DropdownItem>
+            <DropdownItem key={item.key}>
+              <Link
+                href={
+                  item.key === 'profile'
+                    ? item.href + `/${session?.user.username}`
+                    : item.href
+                }
+              >
+                {item.label}
+              </Link>
+            </DropdownItem>
           ))}
         </DropdownSection>
 
@@ -115,7 +129,10 @@ const AuthenticatedUserDropdown = () => {
           showDivider
           aria-label="User Theme Section"
         >
-          <DropdownItem endContent={<ThemeSwitcher type="toggle" />}>
+          <DropdownItem
+            endContent={<ThemeSwitcher type="toggle" />}
+            closeOnSelect={false}
+          >
             Dark Mode
           </DropdownItem>
         </DropdownSection>

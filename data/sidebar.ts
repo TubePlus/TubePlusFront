@@ -3,6 +3,7 @@ import {
   GlobeIcon,
   HomeIcon,
   IdCardIcon,
+  PersonIcon,
   VideoIcon,
 } from '@radix-ui/react-icons';
 
@@ -16,6 +17,19 @@ export const defaultMenuItem = [
     name: 'Community',
     icon: GlobeIcon,
     href: '/community',
+  },
+];
+
+export const profileMemusStatic = [
+  {
+    name: 'User Agreements',
+    icon: PersonIcon,
+    href: '/user-agreements',
+  },
+  {
+    name: 'Privacy Policy',
+    icon: IdCardIcon,
+    href: '/privacy-policy',
   },
 ];
 

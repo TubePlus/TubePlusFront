@@ -12,10 +12,12 @@ module.exports = {
   ],
   theme: {
     screens: {
-      mobileM: '360px',
-      mobileL: '480px',
-      tablet: '640px',
-      desktop: '1024px',
+      x: '0px',
+      xs: '480px',
+      sm: '640px',
+      md: '992px',
+      lg: '1200px',
+      xl: '1400px',
     },
   },
   plugins: [

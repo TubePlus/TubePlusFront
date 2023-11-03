@@ -27,6 +27,29 @@ export const getAUserByEmail = (email: string) => {
 };
 
 /**
+ * @warning     tubePlus Server API
+ * @description get a user from server
+ * @param       uuid
+ * @returns     json body
+ */
+export const getUserByUuid = (uuid: string) => {
+  const body = {
+    uuid: uuid,
+  };
+
+  const result = fetch(baseUrl + endpointPrefix + '/users/info', {
+    method: 'POST',
+    headers: { 'content-type': 'application/json' },
+    body: JSON.stringify(body),
+  })
+    .then(res => {
+      return res.json();
+    })
+    .catch(e => console.log(e));
+  return result;
+};
+
+/**
  * @warning     MockAPI
  * @description get a user from server
  * @param       tags
@@ -98,5 +121,79 @@ export const searchCreator = (query: string) => {
     method: 'GET',
     headers: { 'content-type': 'application/json' },
   }).then(result => result.json());
+  return result;
+};
+
+/**
+ * @warning       MockAPI
+ * @param   uuid  user uuid
+ * @returns Post[]
+ */
+export const getPostsByUuid = (uuid: string) => {
+  const url = new URL(`${mockUrl}${endpointPrefix}/post`);
+  url.searchParams.append('authorUuid', uuid);
+
+  const result = fetch(url, {
+    method: 'GET',
+    headers: { 'content-type': 'application/json' },
+  })
+    .then(res => {
+      if (res.ok) {
+        return res.json();
+      }
+    })
+    .catch(e => {
+      console.log(e);
+    });
+  return result;
+};
+
+/**
+ * @warning       MockAPI
+ * @param   uuid  user uuid
+ * @returns Community[]
+ */
+export const getCommunitiesByUuid = (uuid: string) => {
+  // const url = `${mockUrl}${endpointPrefix}/users/me/${uuid}`;
+  const url = new URL(`${mockUrl}${endpointPrefix}/post`);
+  url.searchParams.append('authorUuid', uuid);
+
+  const result = fetch(url, {
+    method: 'GET',
+    headers: { 'content-type': 'application/json' },
+  })
+    .then(res => {
+      if (res.ok) {
+        return res.json();
+      }
+    })
+    .catch(e => {
+      console.log(e);
+    });
+  return result;
+};
+
+/**
+ * @warning       MockAPI
+ * @param   uuid  user uuid
+ * @returns Community[]
+ */
+export const getFavoritesByUuid = (uuid: string) => {
+  // const url = `${mockUrl}${endpointPrefix}/users/me/${uuid}`;
+  const url = new URL(`${mockUrl}${endpointPrefix}/post`);
+  url.searchParams.append('authorUuid', uuid);
+
+  const result = fetch(url, {
+    method: 'GET',
+    headers: { 'content-type': 'application/json' },
+  })
+    .then(res => {
+      if (res.ok) {
+        return res.json();
+      }
+    })
+    .catch(e => {
+      console.log(e);
+    });
   return result;
 };

@@ -1,31 +1,24 @@
-import SignIn from '@/components/SignIn';
-import { Card, CardBody, CardFooter, CardHeader } from '@nextui-org/card';
-import { ChevronLeftIcon } from '@radix-ui/react-icons';
 import Link from 'next/link';
 import { Divider } from '@nextui-org/divider';
 import { Chip } from '@nextui-org/chip';
 import { Avatar } from '@nextui-org/avatar';
 import { memebers } from '@/data/members';
 import InterceptingModal from '@/components/InterceptingModal';
-import {
-  ModalHeader,
-  ModalContent,
-  ModalBody,
-  ModalFooter,
-} from '@nextui-org/modal';
+import { ModalBody, ModalFooter } from '@nextui-org/modal';
+import SignUp from '@/components/SignUp';
 
-const LogInModalPage = () => {
+const SignUpModalPage = () => {
   return (
     <InterceptingModal>
       <ModalBody>
-        <SignIn />
+        <SignUp />
       </ModalBody>
 
       <Divider />
 
       <ModalFooter>
+        Wellcom to tubePlus! This Project created by{' '}
         <p>
-          Wellcom to tubePlus! This Project created by{' '}
           {memebers.map((mem, index) => (
             <Chip
               as={Link}
@@ -52,4 +45,4 @@ const LogInModalPage = () => {
   );
 };
 
-export default LogInModalPage;
+export default SignUpModalPage;

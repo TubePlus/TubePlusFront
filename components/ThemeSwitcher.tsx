@@ -12,6 +12,14 @@ export const ThemeSwitcher = ({ type }: { type: 'toggle' | 'button' }) => {
   const { theme, setTheme, systemTheme } = useTheme(); // TODO: user를 위한 setThme() 사용 시 Handler 안에 넣어서 session 확인, 확인 후 post fetch
   const { data: session } = useSession();
 
+  const toggleTheme = () => {
+    if (theme === 'light') {
+      setTheme('dark');
+    } else {
+      setTheme('light');
+    }
+  };
+
   useEffect(() => {
     setMounted(true);
     if (!session?.user) {
@@ -26,9 +34,7 @@ export const ThemeSwitcher = ({ type }: { type: 'toggle' | 'button' }) => {
           <Switch
             size="sm"
             isSelected={theme === 'light'}
-            onChange={() =>
-              theme === 'light' ? setTheme('dark') : setTheme('light')
-            }
+            onChange={toggleTheme}
             startContent={<SunIcon />}
             endContent={<MoonIcon />}
           />
@@ -38,21 +44,22 @@ export const ThemeSwitcher = ({ type }: { type: 'toggle' | 'button' }) => {
     case 'button':
       return mounted ? (
         <Button
+          className="text-default-600"
+          variant="light"
+          radius="full"
           isIconOnly
-          onClick={() =>
-            theme === 'light' ? setTheme('dark') : setTheme('light')
-          }
+          onClick={toggleTheme}
         >
           {theme === 'system' ? (
             systemTheme === 'light' ? (
-              <SunIcon />
+              <MoonIcon width={20} height={20} />
             ) : (
-              <MoonIcon />
+              <SunIcon width={20} height={20} />
             )
           ) : theme === 'light' ? (
-            <SunIcon />
+            <MoonIcon width={20} height={20} />
           ) : (
-            <MoonIcon />
+            <SunIcon width={20} height={20} />
           )}
         </Button>
       ) : (

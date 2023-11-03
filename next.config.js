@@ -14,15 +14,23 @@ const nextConfig = {
         port: '',
         pathname: '**',
       },
+      {
+        protocol: 'https',
+        hostname: 'yt3.ggpht.com',
+        port: '',
+        pathname: '**',
+      },
     ],
   },
   async rewrites() {
-    return [
-      {
-        source: '/login_m',
-        destination: '/login',
-      },
-    ];
+    console.log('Rewrites called');
+    return process.env.NODE_ENV === 'development'
+      ? [
+          {
+            source: '/login_m',
+            destination: '/login',
+          },
+        ]
+      : [];
   },
 };
-

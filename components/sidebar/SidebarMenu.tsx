@@ -15,11 +15,20 @@ interface SidebarMenuItemProps {
 
 //TODO: onClick이 필요하다면 어떻게 해야 하나?(Subscription 같은 경우 endContent로 star 등이 추가될 수 있음)
 const SidebarMenu = ({
+  classNames,
   menuItem,
   startContentType,
+  isMain = false,
 }: {
+  classNames?: {
+    wrapper?: string;
+    defaultBgColor?: string;
+    activeBgColor?: string;
+    startIcon?: string;
+  };
   menuItem: SidebarMenuItemProps[];
   startContentType?: 'icon' | 'avatar';
+  isMain?: boolean;
 }) => {
   const pathname = usePathname();
   const [mounted, setMounted] = useState(false);
@@ -33,14 +42,22 @@ const SidebarMenu = ({
       <>
         <Button
           key={`${item.name}-${index}`} //Error: Key Props error 표시되지만 문제 없음
+          className={`${classNames?.wrapper} lg:flex lg:justify-start
+                     ${isMain && 'md:hidden'}
+                     x:flex x:justify-start
+                     min-h-unit-10 mx-auto w-[95%] bg-opacity-50
+                     ${
+                       pathname === item.href
+                         ? `${classNames?.activeBgColor || ''}`
+                         : `${classNames?.defaultBgColor || ''}`
+                     }
+                    `}
           variant={pathname === item.href ? 'solid' : 'light'}
           as={Link || ''}
           href={item.href || ''} // TODO:onClick Router로 이동
-          fullWidth
-          className="justify-start min-h-unit-10 mobileM:flex tablet:hidden desktop:flex"
           startContent={
             startContentType == 'icon' ? (
-              <item.icon />
+              <item.icon className={classNames?.startIcon} />
             ) : startContentType == 'avatar' ? (
               <Avatar size="sm" src={item.src} />
             ) : (
@@ -50,22 +67,30 @@ const SidebarMenu = ({
         >
           {item.name}
         </Button>
-        <Tooltip radius="sm" placement="right" content={item.name}>
-          <Button
-            key={`${item.name}-${index}`} //Error: Key Props error 표시되지만 문제 없음
-            variant={pathname === item.href ? 'solid' : 'light'}
-            className="mobileM:hidden tablet:flex tablet:w-full desktop:hidden"
-            as={Link || ''}
-            href={item.href || ''} // TODO:onClick Router로 이동
-            isIconOnly
-          >
-            {item.icon && <item.icon />}
-          </Button>
-        </Tooltip>
+
+        {isMain && (
+          <Tooltip radius="sm" placement="right" content={item.name}>
+            <Button
+              key={`${item.name}-${index}`} //Error: Key Props error 표시되지만 문제 없음
+              className={`w-[90%] bg-opacity-50
+                      lg:hidden
+                      md:flex md:w-[90%] md:mx-auto
+                      x:hidden
+                      ${pathname === item.href ? '' : ''}
+                      `}
+              variant={pathname === item.href ? 'solid' : 'light'}
+              as={Link || ''}
+              href={item.href || ''} // TODO:onClick Router로 이동
+              isIconOnly
+            >
+              {item.icon && <item.icon />}
+            </Button>
+          </Tooltip>
+        )}
       </>
     ) : (
       <div>
-        <Skeleton key={index} className="h-8 rounded-lg my-1" />
+        <Skeleton key={index} className="h-8 rounded-lg my-1 w-[90%]" />
       </div>
     );
   });

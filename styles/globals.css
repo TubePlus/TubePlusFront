@@ -2,19 +2,19 @@
 @tailwind components;
 @tailwind utilities;
 
-
 /* swiper 관련 css */
-.swiper-scrollbar {
+
+/* .swiper-scrollbar {
   position: absolute;
   left: 30px !important;
   bottom: 8px !important;
   width: 90% !important;
   height: 2px !important;
   z-index: 1 !important;
-  background: rgba(0,0,0,.1);
-}
+  background: rgba(0, 0, 0, 0.1);
+} */
 
-.swiper-scrollbar-drag {
+/* .swiper-scrollbar-drag {
   width: 100%;
   transform: translate3d(91.25px, 0px, 0px);
   transition-duration: 0ms;
@@ -25,9 +25,9 @@
   border-radius: 10px;
   left: 0;
   top: 0;
-}
+} */
 
-.swiper-pagination {
+/* .swiper-pagination {
   position: absolute;
   right: 3px !important;
   bottom: 12px !important;
@@ -38,22 +38,17 @@
   font-size: 12px;
   letter-spacing: -1.5px;
   line-height: 14px;
-  font-family: Inter,Noto Sans KR,sans-serif;
+  font-family: Inter, Noto Sans KR, sans-serif;
   display: block;
   width: 100%;
   text-align: right !important;
   padding-right: 35px;
-}
+} */
 
-.swiper-pagination-current {
+/* .swiper-pagination-current {
   color: #000;
   font-weight: 700;
-}
-
-.swiper-slide {
-  width: 100%;
-  height: 100%;
-}
+} */
 
 /* grid 관련 css */
 .grid-container {
@@ -63,7 +58,7 @@
 }
 
 .cate::after {
-  content: "";
+  content: '';
   clear: both;
   display: inline-block;
   width: 1px;
@@ -93,19 +88,19 @@
 }
 
 .settings-tab.active {
-color: #000000;
-font-weight: 500;
-position: relative;
-background-color: white;
+  color: #000000;
+  font-weight: 500;
+  position: relative;
+  background-color: white;
 }
 
 .active-link::after {
-content: "";
-position: absolute;
-width: 70%;
-left: 50%;
-transform: translateX(-50%); 
-bottom: 0;
-height: 2px;
-background: #ffffff;
+  content: '';
+  position: absolute;
+  width: 70%;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: 0;
+  height: 2px;
+  background: #ffffff;
 }

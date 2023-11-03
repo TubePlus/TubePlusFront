@@ -71,10 +71,10 @@ export const authOptions: NextAuthOptions = {
           id: profile.sub as string,
           name: profile.name,
           email: profile.email,
-          image: profile.picture,
           locale: profile.locale,
 
-          //   uuid: dbUser.data.uuid,
+          image: dbUser.picture,
+          uuid: dbUser.data.uuid,
           username: dbUser.data.username,
           role: dbUser.data.role,
           is_creator: dbUser.data.isCreator,
@@ -91,10 +91,10 @@ export const authOptions: NextAuthOptions = {
           id: profile.sub as string,
           name: profile.name,
           email: profile.email,
-          image: profile.picture,
           locale: profile.locale,
 
-          //   uuid: dbUser.data.uuid,
+          image: dbUser.picture,
+          uuid: dbUser.data.uuid,
           username: dbUser.data.username,
           role: dbUser.data.role,
           is_creator: dbUser.data.isCreator,
@@ -121,9 +121,9 @@ export const authOptions: NextAuthOptions = {
       session.user = token;
       return session;
     },
-    async signIn({ account }) {
-      if (account) {
-        console.log(account);
+    async signIn({ user }) {
+      if (user) {
+        console.log('user', user);
       }
       return true;
     },
