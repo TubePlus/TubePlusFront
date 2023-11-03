@@ -12,7 +12,9 @@ import SidebarMenu from '@/components/sidebar/SidebarMenu';
 import { profileMemusStatic } from '@/data/sidebar';
 import Link from 'next/link';
 import { GlobeIcon, HomeIcon } from '@radix-ui/react-icons';
-import { Card } from '@nextui-org/react';
+import { Card } from '@nextui-org/card';
+import { Badge } from '@nextui-org/badge';
+import { Tooltip } from '@nextui-org/tooltip';
 
 const MyPageSidebar = () => {
   const session = useSession();
@@ -34,6 +36,21 @@ const MyPageSidebar = () => {
   }, [refetch, user]);
 
   const fromUser = data?.data;
+  const userRole =
+    fromUser?.role == 'ADMIN'
+      ? fromUser.role
+      : fromUser?.isCreator
+      ? 'CREATOR'
+      : fromUser?.role;
+
+  const roleColor =
+    fromUser?.role == 'ADMIN'
+      ? 'danger'
+      : fromUser?.isCreator
+      ? 'warning'
+      : fromUser?.role === 'MEMBER'
+      ? 'success'
+      : 'default';
 
   const profileMemusDynamic = [
     {
@@ -58,16 +75,41 @@ const MyPageSidebar = () => {
       {!isError ? (
         <div className="flex flex-col gap-4 w-full">
           <div className="flex gap-3">
-            <Avatar
-              classNames={{ base: 'min-w-[85px] min-h-[85px]' }}
-              src={fromUser?.profileImage! || user?.image}
-              radius="lg"
-              size="lg"
-              isBordered={fromUser?.isCreator}
-            />
+            <Badge
+              className="md:hidden sm:flex x:hidden"
+              content={
+                userRole && (
+                  <Tooltip
+                    content={userRole}
+                    color={roleColor}
+                    size="sm"
+                    delay={5}
+                  >
+                    <span>
+                      {fromUser?.role == 'ADMIN'
+                        ? 'A'
+                        : fromUser?.isCreator
+                        ? 'C'
+                        : fromUser?.role === 'MEMBER'
+                        ? 'M'
+                        : fromUser?.role}
+                    </span>
+                  </Tooltip>
+                )
+              }
+              color={roleColor}
+            >
+              <Avatar
+                classNames={{ base: 'min-w-[85px] min-h-[85px]' }}
+                src={fromUser?.profileImage! || user?.image}
+                radius="lg"
+                size="lg"
+                isBordered={fromUser?.isCreator}
+              />
+            </Badge>
 
-            <div className="flex flex-col gap-1 text-xs w-full">
-              <div>
+            <div className="flex flex-col gap-1 text-xs w-full overflow-hidden">
+              <div className="box-border">
                 <div
                   className="flex gap-1 items-center
                               justify-between"
@@ -78,6 +120,7 @@ const MyPageSidebar = () => {
 
                   <Button
                     className={`h-6 min-w-[60px] w-[60px] text-[.6rem] leading-3
+                                md:flex sm:hidden x:flex
                             ${
                               fromUser?.role == 'ADMIN'
                                 ? 'border-danger-700 text-danger-700'
@@ -89,17 +132,14 @@ const MyPageSidebar = () => {
                     radius="full"
                     disabled
                   >
-                    {fromUser?.role == 'ADMIN'
-                      ? fromUser.role
-                      : fromUser?.isCreator
-                      ? 'CREATOR'
-                      : fromUser?.role}
+                    {userRole}
                   </Button>
                 </div>
 
                 <span
-                  className="text-zinc-600 dark:text-zinc-300
-                            max-w-full overflow-hidden text-ellipsis"
+                  className="text-zinc-600 dark:text-zinc-300 italic
+                            max-w-[180px] overflow-hidden text-ellipsis
+                            "
                 >
                   {fromUser?.email || user?.email}
                 </span>
