@@ -18,17 +18,17 @@ const SidebarMenu = ({
   classNames,
   menuItem,
   startContentType,
-  isMain = false,
+  isRoot = false,
 }: {
   classNames?: {
-    wrapper?: string;
+    button?: string;
     defaultBgColor?: string;
     activeBgColor?: string;
     startIcon?: string;
   };
   menuItem: SidebarMenuItemProps[];
   startContentType?: 'icon' | 'avatar';
-  isMain?: boolean;
+  isRoot?: boolean;
 }) => {
   const pathname = usePathname();
   const [mounted, setMounted] = useState(false);
@@ -42,8 +42,8 @@ const SidebarMenu = ({
       <>
         <Button
           key={`${item.name}-${index}`} //Error: Key Props error 표시되지만 문제 없음
-          className={`${classNames?.wrapper} lg:flex lg:justify-start
-                     ${isMain && 'md:hidden'}
+          className={`${classNames?.button} lg:flex lg:justify-start
+                     ${isRoot && 'md:hidden'}
                      x:flex x:justify-start
                      min-h-unit-10 mx-auto w-[95%] bg-opacity-50
                      ${
@@ -68,10 +68,10 @@ const SidebarMenu = ({
           {item.name}
         </Button>
 
-        {isMain && (
+        {isRoot && (
           <Tooltip radius="sm" placement="right" content={item.name}>
             <Button
-              key={`${item.name}-${index}`} //Error: Key Props error 표시되지만 문제 없음
+              key={`${item.name}-${index}`}
               className={`w-[90%] bg-opacity-50
                       lg:hidden
                       md:flex md:w-[90%] md:mx-auto
@@ -90,7 +90,10 @@ const SidebarMenu = ({
       </>
     ) : (
       <div>
-        <Skeleton key={index} className="h-8 rounded-lg my-1 w-[90%]" />
+        <Skeleton
+          key={index}
+          className={`h-8 rounded-lg my-1${isRoot ? 'w-[90%]' : 'w-full'}`}
+        />
       </div>
     );
   });

@@ -15,7 +15,7 @@ import { Tooltip } from '@nextui-org/tooltip';
 import { LightningBoltIcon } from '@radix-ui/react-icons';
 import { Accordion, AccordionItem } from '@nextui-org/accordion';
 
-const MainSidebar = () => {
+const MainSidebar = ({ isRoot = false }: { isRoot?: boolean }) => {
   const { data: session } = useSession();
   const username = session?.user.name; // TODO: 현재 google에서 전체 이름을 불러오고 있음. 기본값 별명(: young1ll)
 
@@ -25,13 +25,20 @@ const MainSidebar = () => {
       className={`flex flex-col gap-2 pt-4 h-full
                   scrollbar-thin scrollbar-thumb-zinc-400 scrollbar-rounded-full`}
     >
-      <SidebarMenu menuItem={defaultMenuItem} startContentType="icon" isMain />
+      <SidebarMenu
+        menuItem={defaultMenuItem}
+        startContentType="icon"
+        isRoot={isRoot}
+      />
 
       <Divider />
 
       {session?.user ? (
         <>
-          <Accordion className="px-2 lg:block md:hidden" isCompact>
+          <Accordion
+            className={`px-2 ${isRoot ? 'lg:block md:hidden' : 'block'}`}
+            isCompact
+          >
             <AccordionItem
               title="My Subscription"
               classNames={{
@@ -42,7 +49,7 @@ const MainSidebar = () => {
               <SidebarMenu
                 menuItem={subscribeMenuItem}
                 startContentType="avatar"
-                isMain
+                isRoot={isRoot}
               />
             </AccordionItem>
           </Accordion>
@@ -52,7 +59,9 @@ const MainSidebar = () => {
               variant="light"
               as={Link}
               href={`/user/${username}/subscription`}
-              className=" flex w-[90%] mx-auto lg:hidden md:flex x:hidden"
+              className={`flex w-[90%] mx-auto ${
+                isRoot ? 'lg:hidden md:flex x:hidden' : 'hidden'
+              }`}
               fullWidth
               isIconOnly
             >
@@ -73,12 +82,16 @@ const MainSidebar = () => {
         </>
       )}
 
-      <SidebarMenu menuItem={resourceMenuItem} startContentType="icon" isMain />
+      <SidebarMenu
+        menuItem={resourceMenuItem}
+        startContentType="icon"
+        isRoot={isRoot}
+      />
 
       <Divider />
 
       <div className="grid grid-cols-2 gap-1 px-1 md:hidden lg:grid">
-        <SidebarMenu menuItem={languages} isMain />
+        <SidebarMenu menuItem={languages} isRoot={isRoot} />
       </div>
     </div>
   );

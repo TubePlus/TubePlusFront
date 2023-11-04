@@ -6,11 +6,11 @@ import useGlobalState from '@/hooks/use-global-state';
 const Sidebar = ({
   children,
   className,
-  isMobileOnly = false,
+  isDrawerOnly = false,
 }: {
   children: React.ReactNode;
   className?: string;
-  isMobileOnly?: boolean;
+  isDrawerOnly?: boolean;
 }) => {
   // TODO: mounted Skeleton 추가 필요?
 
@@ -31,13 +31,13 @@ const Sidebar = ({
 
   return (
     <>
-      {!MdValue() && (
-        <X>
+      {(!MdValue() || isDrawerOnly) && (
+        <>
           <div
             className={`${className} fixed !top-[3rem] inset-0 isolate
-                    sm:w-[60%] x:w-[100%]
+                    lg:w-[30%] md:w-[40%] sm:w-[60%] x:w-[100%]
                     border-r border-solid border-divider
-                    overflow-hidden order-first z-50 duration-300
+                    overflow-hidden order-first z-[25] duration-300
                     ${isOpen ? 'left-0' : '-left-full'}
                     `}
           >
@@ -47,13 +47,13 @@ const Sidebar = ({
           <div // sidebar background
             className={`${
               isOpen ? 'absolute w-full h-full opacity-30' : 'hidden opacity-0'
-            } duration-300 z-40 bg-black`}
+            } duration-300 z-[24] bg-black`}
             onClick={handleSidebar}
           />
-        </X>
+        </>
       )}
 
-      {!isMobileOnly ? (
+      {!isDrawerOnly ? (
         <Md>
           <div
             className={`${className} sticky top-[3rem] overflow-hidden order-first
