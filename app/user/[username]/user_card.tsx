@@ -16,7 +16,7 @@ import { Card } from '@nextui-org/card';
 import { Badge } from '@nextui-org/badge';
 import { Tooltip } from '@nextui-org/tooltip';
 
-const MyPageSidebar = () => {
+const UserBox = () => {
   const session = useSession();
   const user = session.data?.user;
 
@@ -67,7 +67,7 @@ const MyPageSidebar = () => {
 
   return (
     <Card
-      className={`flex flex-col gap-2
+      className={`relative flex flex-col gap-2
                   py-4 px-4 h-fit rounded-2xl shadow-small
                   border border-zinc-400/50
                 `}
@@ -75,52 +75,29 @@ const MyPageSidebar = () => {
       {!isError ? (
         <div className="flex flex-col gap-4 w-full">
           <div className="flex gap-3">
-            <Badge
-              className="md:hidden sm:flex x:hidden"
-              content={
-                userRole && (
-                  <Tooltip
-                    content={userRole}
-                    color={roleColor}
-                    size="sm"
-                    delay={5}
-                  >
-                    <span>
-                      {fromUser?.role == 'ADMIN'
-                        ? 'A'
-                        : fromUser?.isCreator
-                        ? 'C'
-                        : fromUser?.role === 'MEMBER'
-                        ? 'M'
-                        : fromUser?.role}
-                    </span>
-                  </Tooltip>
-                )
-              }
-              color={roleColor}
-            >
-              <Avatar
-                classNames={{ base: 'min-w-[85px] min-h-[85px]' }}
-                src={fromUser?.profileImage! || user?.image}
-                radius="lg"
-                size="lg"
-                isBordered={fromUser?.isCreator}
-              />
-            </Badge>
+            <Avatar
+              classNames={{
+                base: ['md:basis-24 x:basis-36 h-full shrink-0'],
+              }}
+              name={fromUser?.username || user?.username}
+              src={fromUser?.profileImage! || user?.image}
+              radius="lg"
+              isBordered={fromUser?.isCreator}
+            />
 
-            <div className="flex flex-col gap-1 text-xs w-full overflow-hidden">
-              <div className="box-border">
+            <div className="flex flex-col justify-between gap-2 w-full text-xs overflow-hidden">
+              <div className="flex flex-col gap-2">
                 <div
-                  className="flex gap-1 items-center
-                              justify-between"
+                  className="flex gap-4 items-center
+                            justify-between"
                 >
-                  <span className="text-lg font-semibold max-w-[180px] whitespace-nowrap overflow-hidden text-ellipsis">
+                  <span className="text-lg font-semibold whitespace-nowrap overflow-hidden text-ellipsis">
                     {fromUser?.username || user?.username}
                   </span>
 
                   <Button
                     className={`h-6 min-w-[60px] w-[60px] text-[.6rem] leading-3
-                                md:flex sm:hidden x:flex
+                              flex
                             ${
                               fromUser?.role == 'ADMIN'
                                 ? 'border-danger-700 text-danger-700'
@@ -137,19 +114,33 @@ const MyPageSidebar = () => {
                 </div>
 
                 <span
+                  //TODO: Box 사이즈에 따라 ellipsis 적용되어야 함.
                   className="text-zinc-600 dark:text-zinc-300 italic
-                            max-w-[180px] overflow-hidden text-ellipsis
+                            whitespace-nowrap overflow-hidden text-ellipsis
                             "
                 >
                   {fromUser?.email || user?.email}
                 </span>
               </div>
 
-              <span className="mt-1">Locale: {fromUser?.locale}</span>
+              <div className="flex flex-col gap-2">
+                <span className="mt-1">Locale: {fromUser?.locale}</span>
+
+                <span className="md:hidden x:line-clamp-2 text-ellipsis text-sm">
+                  {fromUser?.bio ||
+                    'this area is for user bio. this area is for user bio. this area is for user bio.'}
+                </span>
+              </div>
             </div>
           </div>
 
-          {fromUser?.bio && <div className="px-1">{fromUser.bio}</div>}
+          {
+            // fromUser?.bio &&
+            <div className="md:flex x:hidden px-1 text-sm">
+              {fromUser?.bio ||
+                'this area is for user bio. this area is for user bio. this area is for user bio.'}
+            </div>
+          }
 
           <Button
             className="flex items-center h-10 leading-10
@@ -177,11 +168,13 @@ const MyPageSidebar = () => {
           <div className="flex flex-col gap-2">
             <SidebarMenu
               classNames={{
+                button: '!w-full',
                 defaultBgColor: '',
                 activeBgColor: '',
               }}
               menuItem={profileMemusDynamic}
               startContentType="icon"
+              isRoot={false}
             />
           </div>
 
@@ -190,11 +183,13 @@ const MyPageSidebar = () => {
           <div className="flex flex-col gap-2">
             <SidebarMenu
               classNames={{
+                button: '!w-full',
                 defaultBgColor: '',
                 activeBgColor: '',
               }}
               menuItem={profileMemusStatic}
               startContentType="icon"
+              isRoot={false}
             />
           </div>
         </div>
@@ -205,4 +200,4 @@ const MyPageSidebar = () => {
   );
 };
 
-export default MyPageSidebar;
+export default UserBox;
