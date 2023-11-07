@@ -1,10 +1,9 @@
 'use client';
-import { getAuthSession } from '@/lib/auth';
+
 import { Button, Skeleton, Spinner, Switch } from '@nextui-org/react';
 import { MoonIcon, SunIcon } from '@radix-ui/react-icons';
 import { useSession } from 'next-auth/react';
 import { useTheme } from 'next-themes';
-import { usePathname } from 'next/navigation';
 import React, { Suspense, useEffect, useState } from 'react';
 
 export const ThemeSwitcher = ({ type }: { type: 'toggle' | 'button' }) => {
@@ -25,6 +24,9 @@ export const ThemeSwitcher = ({ type }: { type: 'toggle' | 'button' }) => {
     if (!session?.user) {
       setTheme('system');
     }
+    // else {
+    //   session.user.darkmode
+    // }
   }, []); // TODO: Warning 의존성 배열에 setTheme 필요 - "mount 시에만 실행되어야 하기 때문에 추가하면 안됨"
 
   switch (type) {
