@@ -10,7 +10,7 @@ export default function CommunityRecommend() {
 
   return communitydata.map((item)=>( // TODO: fetch communitydata here
     
-    <Card className="max-w-[340px]" key={item.id}>
+    <Card className="min-w-[340px]" key={item.id}>
       <CardHeader className="justify-between">
         <div className="flex gap-5">
           <Avatar isBordered radius="full" size="md" src={item.creatorimg} />

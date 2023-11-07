@@ -4,6 +4,8 @@ import React from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { Image , Card , Button } from '@nextui-org/react'
 import CommunityTabBar from '@/components/CommunityTabBar'
+import SideBlock from '@/components/SideBlock'
+import Rules from '@/components/Rules'
 
 interface communityType {
   communityId: string
@@ -28,6 +30,17 @@ const fetchCommunity = async (communityId: string) => {
   return res.json()
 };
 
+const fetchBoard = async (communityId: string) => {
+  const res = await fetch(`https://652c497bd0d1df5273ef56a5.mockapi.io/api/v1/tube/${communityId}/boards`)
+  if (!res.ok) {
+    throw new Error('Network response was not ok')
+  }
+  return res.json()
+};
+
+
+
+
 function Tube({ params } : { params : { communityid : string }}) {
   
   const {
@@ -36,14 +49,21 @@ function Tube({ params } : { params : { communityid : string }}) {
     isError : isErrorCommunity,
   } = useQuery (['communitycontents', params.communityid] , () => fetchCommunity(params.communityid));
 
-  if (isLoadingCommunity) {
-    return <span>Loading...</span>
+  const {
+    data : boardcontents,
+    isLoading : isLoadingBoard,
+    isError : isErrorBoard,
+  } = useQuery (['boardcontents', params.communityid] , () => fetchBoard(params.communityid));
+  if (isLoadingCommunity || isLoadingBoard) {
+    return <span>Loading...</span>;
   }
-
-  if (isErrorCommunity) {
-    return <span>Error!</span>
+  // 에러 상태 처리
+  if (isErrorCommunity || isErrorBoard) {
+    return <span>Error!</span>;
   }
-
+  console.log(boardcontents)
+  console.log(communitycontents)
+  
   return (
     <>
       <div className=
@@ -61,18 +81,18 @@ function Tube({ params } : { params : { communityid : string }}) {
           />
         </div>
 
-          <Card className='pl-3 pr-3 pt-4 pb-1 min-h-[200px]'>
-
+        <div className='col-start-1 pl-3 pr-3 pt-4 pb-1 min-h-[200px]'>
           <div className='flex flex-col gap-unit-md'>
             <div className='flex flex-row items-center gap-unit-md'>
-              <Image src={communitycontents.communityImage}/>
+              <Image src={communitycontents.communityImage} alt='creator' width='350px' height='100px' />
                 <div>
-                  <h1 className='text-3xl font-bold'>{communitycontents.title}</h1>
-                  <p className='text-xl font-bold'>{communitycontents.communitySize} Members</p>
-                  <p className='text-xl'>{communitycontents.createdAt}</p>
+                  <h1 className='text-3xl font-bold whitespace-nowrap'>{communitycontents.title}</h1>
+                  <p className='text-xl font-bold whitespace-nowrap'>{communitycontents.communitySize} Members</p>
+                  <p className='text-xl whitespace-nowrap'>{communitycontents.createdAt}</p>
                 </div>
-              <Button color='primary'>Join</Button>
-              
+                <div className='pl-5 pr-5'>
+                  <Button color='primary'>Join</Button>
+                </div>
               <div className='flex flex-col gap-unit-md'>
                 <div className='flex flex-row items-center gap-unit-md'>
                   <h2 className='text-2xl font-bold'>About</h2>
@@ -84,12 +104,29 @@ function Tube({ params } : { params : { communityid : string }}) {
               </div>
             </div>
           </div>
-        </Card>
+        </div>
+        
+        <div className='w-full border-b-4 border-black'>
+        {
+          boardcontents !== 'undefined' && communitycontents !== 'undefined' ?
+          <CommunityTabBar communityId={communitycontents.communityId} boardContents={boardcontents} />
+          : null
+        }
+        </div>
+        
+        <div className='flex flex-row flex-nowrap gap-5'>
 
-          <CommunityTabBar communityId={communitycontents.id}/>
+          <div className='flex col-start-1 col-end-7'>
+          <div className='flex flex-col pt-4 pb-16 pr-1 gap-6'>
+            <Post/>
+          </div>
+          </div>
 
-        <div className='gap-y-10'>
-          <Post/>
+          <div className='flex flex-col pt-32 gap-5 whitespace-nowrap'> 
+            <SideBlock/>
+            <Rules/>
+          </div>
+
         </div>
 
         </div>

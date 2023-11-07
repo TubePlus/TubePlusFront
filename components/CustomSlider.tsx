@@ -8,10 +8,10 @@ import 'swiper/css/pagination';
 import 'swiper/css';
 import { Pagination, Navigation } from 'swiper/modules';
 import Link from 'next/link';
-import { slidebanner } from '@/types/banner';
+import { Slidebanner } from '@/types/banner';
 
 
-function CustomSlider({data}: {data: slidebanner[] | null}) {
+function CustomSlider({data}: {data: Slidebanner[] | null}) {
   console.log('props data:', data)
 
   return (
@@ -58,7 +58,7 @@ function CustomSlider({data}: {data: slidebanner[] | null}) {
       // onSlideChange={() => console.log('slide change')}
       // onSwiper={(swiper) => console.log(swiper)}
     >
-      {data && data.map((item:slidebanner) => (
+      {data && data.map((item:Slidebanner) => (
         <div key={item.id}>
           <SwiperSlide>
             <div className='w-full h-[auto]'>

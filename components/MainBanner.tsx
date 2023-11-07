@@ -1,8 +1,9 @@
 'use client'
-import React from 'react'
+import React, { Suspense } from 'react'
 import CustomSlider from '@/components/CustomSlider';
 import { useState , useEffect } from 'react';
-import { slidebanner } from '@/types/banner';
+import { Slidebanner } from '@/types/banner';
+import { Skeleton } from '@nextui-org/react';
 
 const dummydata = [
   {
@@ -25,8 +26,8 @@ const dummydata = [
   }
 ]
 
-const MainTop = () => {
-  const [banner , setBanner] = useState<slidebanner[] | null>(null);
+const MainBanner = () => {
+  const [banner , setBanner] = useState<Slidebanner[] | null>(null);
 
   useEffect(() => {
     const fetchBanner = async () => {
@@ -57,9 +58,11 @@ const MainTop = () => {
   return (
     <>
         <div className='pt-5'>
-          <CustomSlider data={dummydata} />
+          <Skeleton >
+            <CustomSlider data={dummydata} />
+          </Skeleton>
         </div>
     </>
   )
 }
-export default MainTop
+export default MainBanner

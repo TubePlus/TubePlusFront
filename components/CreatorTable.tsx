@@ -21,13 +21,13 @@ import {
   ChipProps,
   SortDescriptor
 } from "@nextui-org/react";
-import {PlusIcon} from "../../data/table/PlusIcon"
-import {VerticalDotsIcon} from "../../data/table/VerticalDotsIcon";
-import {ChevronDownIcon} from "../../data/table/ChevronDownIcon";
-import {SearchIcon} from "../../data/table/SearchIcon";
-import {columns, users, categoryOptions} from "../../data/table/data";
-import {capitalize} from "../../data/table/utils";
-import FavoriteButton from "../FavoriteButton";
+import {PlusIcon} from "../data/table/PlusIcon"
+import {VerticalDotsIcon} from "../data/table/VerticalDotsIcon";
+import {ChevronDownIcon} from "../data/table/ChevronDownIcon";
+import {SearchIcon} from "../data/table/SearchIcon";
+import {columns, users, categoryOptions} from "../data/table/data";
+import {capitalize} from "../data/table/utils";
+import FavoriteButton from "./FavoriteButton";
 import { useEffect } from "react";
 
 const statusColorMap: Record<string, ChipProps["color"]> = {
@@ -40,7 +40,7 @@ const INITIAL_VISIBLE_COLUMNS = ["bookmark", "name", "category", "favorites", "r
 
 type User = typeof users[0];
 
-const MainBottom = () => {
+const CreatorTable = () => {
 
 const [creatordata, setcreatordata] = React.useState([]); // 크리에이터 데이터 저장
 
@@ -385,4 +385,4 @@ useEffect(() => {
   );
 }
 
-export default MainBottom
+export default CreatorTable
