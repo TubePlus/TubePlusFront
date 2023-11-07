@@ -14,6 +14,16 @@ export default function UserLayout({
   params: UserPageProps;
   children: React.ReactNode;
 }) {
+  const { username } = params;
+
+  // FIXME: Access by User Role
+  // useEffect(() => {
+  //   if (!user) {
+  //     alert('접근 권한이 없습니다!');
+  //     redirect('/');
+  //   }
+  // }, [user]);
+
   const dir = [
     { id: 1, label: 'Overview', href: `/user/${params.username}` },
     { id: 2, label: 'History', href: `/user/${params.username}/history` },

@@ -6,8 +6,6 @@ import {
   getPostsByUuid,
 } from '@/lib/fetcher';
 import { useQuery } from '@tanstack/react-query';
-import { useSession } from 'next-auth/react';
-import OverviewTableCard from '@/components/OverviewTableCard';
 import { renderCell } from '@/hooks/use-render-cell';
 import {
   Table,
@@ -71,19 +69,6 @@ export default function UserPage({ params }: UserPageProps) {
     // return getPostsByUuid(user?.uuid as string);
     return getFavoritesByUuid('7a424347-b903-4abb-b97b-90ece0821e6f');
   });
-
-  const session = useSession();
-  const user = session.data?.user;
-
-  const { username } = params;
-
-  // FIXME: Access by User Role
-  // useEffect(() => {
-  //   if (!user) {
-  //     alert('접근 권한이 없습니다!');
-  //     redirect('/');
-  //   }
-  // }, [user]);
 
   return (
     <div

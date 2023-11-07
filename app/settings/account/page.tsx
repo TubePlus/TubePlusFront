@@ -1,152 +1,265 @@
-'use client'
+'use client';
 
-import React from 'react'
-import { Button, Chip, Input } from '@nextui-org/react'
-import { TrashIcon } from '@radix-ui/react-icons'
-import { Select, SelectItem } from '@nextui-org/react'
-import { useSession } from 'next-auth/react'
-
-//Todo : 카테고리 데이터 패칭
-const animals = [
-  {label: "Cat", value: "cat", description: "The second most popular pet in the world"},
-  {label: "Dog", value: "dog", description: "The most popular pet in the world"},
-  {label: "Elephant", value: "elephant", description: "The largest land animal"},
-  {label: "Lion", value: "lion", description: "The king of the jungle"},
-  {label: "Tiger", value: "tiger", description: "The largest cat species"},
-  {label: "Giraffe", value: "giraffe", description: "The tallest land animal"},
-  {
-    label: "Dolphin",
-    value: "dolphin",
-    description: "A widely distributed and diverse group of aquatic mammals",
-  },
-  {label: "Penguin", value: "penguin", description: "A group of aquatic flightless birds"},
-  {label: "Zebra", value: "zebra", description: "A several species of African equids"},
-  {
-    label: "Shark",
-    value: "shark",
-    description: "A group of elasmobranch fish characterized by a cartilaginous skeleton",
-  },
-  {
-    label: "Whale",
-    value: "whale",
-    description: "Diverse group of fully aquatic placental marine mammals",
-  },
-  {label: "Otter", value: "otter", description: "A carnivorous mammal in the subfamily Lutrinae"},
-  {label: "Crocodile", value: "crocodile", description: "A large semiaquatic reptile"},
-];
-
-const languages = [
-  {label: "English", value: "en", description: "English"},
-  {label: "Korean", value: "ko", description: "한국어"},
-]
-
-const colors = [
-  "default",
-  "primary",
-  "secondary",
-  "success",
-  "warning",
-  "danger",
-];
-
+import React, { useState } from 'react';
+import { Avatar } from '@nextui-org/avatar';
+import { Chip } from '@nextui-org/chip';
+import { CardHeader } from '@nextui-org/card';
+import { Button } from '@nextui-org/button';
+import { Input, Textarea } from '@nextui-org/input';
+import { Select, SelectItem } from '@nextui-org/react';
+import { useSession } from 'next-auth/react';
+import { languages } from '@/data/sidebar';
+import SimpleCard from '@/components/SimpleCard';
 
 function Page() {
+  const { data: session } = useSession();
+  const userLang = languages.find(lang =>
+    lang.locale.includes(session?.user.locale as string),
+  );
 
-  const { data: session } = useSession()
+  const [selectedLangValue, setSelectedLangValue] = useState<
+    (typeof languages)[0]
+  >(userLang!);
+  const [bio, setBio] = useState('');
+
+  const userRole =
+    session?.user.role == 'ADMIN'
+      ? session.user.role
+      : session?.user.is_creator
+      ? 'CREATOR'
+      : session?.user.role;
+
+  const handleSelectionChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const selectedLanguage = languages.find(lang =>
+      lang.name.includes(e.target.value),
+    );
+
+    if (selectedLanguage) {
+      setSelectedLangValue(selectedLanguage);
+    }
+  };
 
   return (
-    <div>
-      
-      <div className='pt-5 flex w-full flex-wrap gap-4'>
-          <h1 className='pl-3 text-3xl'>Account Settings</h1>
-          <br/>
-          <h2 className='pt-2 pl-3 border-b-2 w-full border-black text-xl'>Account Preferences</h2>
-        
-        <div className='w-full'>
+    <section className="flex flex-col gap-8 min-h-[800px]">
+      <SimpleCard classNames={{ card: '!p-0' }}>
+        <CardHeader className="px-4 py-2 bg-default-200 border-b-1 border-default-300 rounded-none mb-4">
+          <h2 className="px-2">Account Preferences</h2>
+        </CardHeader>
 
-          <div className='flex flex-nowrap w-full justify-between'>
-            <div className='flex flex-nowrap gap-16'>
-            <h5 className='pl-2 pt-2 pb-10 text-gray-400'>Email Address</h5>
-            { session ? <p>{session.user.email}</p> : <p>Loading...</p> }
+        <div className="px-6 pb-6 flex flex-col gap-2 items-center border-b-1 border-default-300">
+          <div className="grid grid-cols-5 flex-row gap-16 w-full text-sm">
+            <h5 className="col-span-1 font-semibold whitespace-nowrap">
+              Email
+            </h5>
+
+            <div className="col-span-4 flex justify-between">
+              {session ? (
+                <p className="pl-1">{session.user.email}</p>
+              ) : (
+                <p>Loading...</p>
+              )}
+              <Chip
+                className="text-[.6rem] "
+                color={
+                  userRole === 'MEMBER'
+                    ? 'success'
+                    : userRole === 'ADMIN'
+                    ? 'danger'
+                    : 'warning'
+                }
+                variant="bordered"
+              >
+                {userRole}
+              </Chip>
             </div>
-            <Chip color='success' className='text-white'>Authenticated</Chip>
           </div>
-            
-          <div className='flex flex-nowrap gap-12'>
-            <h5 className='pl-2 whitespace-nowrap text-gray-400'> Display Language </h5>
+
+          <div className="grid grid-cols-5 flex-row gap-16 items-center w-full text-sm">
+            <h5 className="col-span-1 min-w-unit-24 font-semibold whitespace-nowrap overflow-hidden text-ellipsis">
+              <span className="md:inline x:hidden">Display</span> Language
+            </h5>
+
+            <div className="col-span-4 flex justify-between">
+              <Select
+                classNames={{ trigger: 'h-[28px]', innerWrapper: 'py-0' }}
+                // userLang.name의 타입이 string | undefined 여서 확정적이지 않을 경우의 타입에러 발생
+                defaultSelectedKeys={[userLang?.name || '한국어']}
+                value={selectedLangValue?.name}
+                onChange={handleSelectionChange}
+                selectionMode="single"
+                className="w-[200px]"
+                variant="bordered"
+                disallowEmptySelection
+                startContent={
+                  <span>
+                    <Avatar
+                      alt={selectedLangValue?.name || userLang?.name}
+                      className="h-6 w-6"
+                      isBordered={
+                        selectedLangValue?.locale.includes('ja' || 'ko')
+                          ? true
+                          : false
+                      }
+                      src={selectedLangValue?.src || userLang?.src}
+                    />
+                  </span>
+                }
+              >
+                {languages.map(lang => (
+                  <SelectItem
+                    key={lang.name}
+                    value={lang.locale}
+                    startContent={
+                      <Avatar
+                        alt={lang.name}
+                        className="w-6 h-6"
+                        src={lang.src}
+                      />
+                    }
+                  >
+                    {lang.name}
+                  </SelectItem>
+                ))}
+              </Select>
+            </div>
+          </div>
+        </div>
+
+        <CardHeader className="px-4 py-2 bg-default-200 border-b-1 border-default-300 rounded-none mb-4">
+          <h2 className="px-2">Profile Preferences</h2>
+        </CardHeader>
+
+        <div className="px-6 pb-6 flex flex-col gap-2 items-center border-b-1 border-default-300">
+          <div className="grid grid-cols-4 flex-row items-center gap-10 w-full text-sm">
+            <h5 className="col-span-1 min-w-unit-24 font-semibold whitespace-nowrap overflow-hidden text-ellipsis">
+              <span className="md:inline x:hidden">Display Name(</span>
+              Username
+              <span className="md:inline x:hidden">)</span>
+            </h5>
+
+            <div className="col-span-2 flex justify-between">
+              <Input
+                isReadOnly
+                type="text"
+                variant="bordered"
+                value={session?.user.username}
+              />
+            </div>
+          </div>
+
+          <div className="grid grid-cols-4 flex-row items-center gap-10 w-full text-sm">
+            <h5 className="col-span-1 font-semibold whitespace-nowrap">
+              About(Bio)
+            </h5>
+
+            <div className="relative col-span-3 flex flex-col">
+              <Textarea
+                classNames={{ input: 'mb-4' }}
+                // isReadOnly
+                minRows={2}
+                variant="bordered"
+                value={bio || 'Add a bio'}
+                onValueChange={setBio}
+                isInvalid={bio.length > 255}
+              />
+              <p className="absolute right-2 bottom-1 text-default-500 text-small">
+                {bio.length}/255
+              </p>
+            </div>
+          </div>
+        </div>
+      </SimpleCard>
+
+      <SimpleCard classNames={{ card: '!p-0' }}>
+        <CardHeader className="px-4 py-2 bg-default-200 border-b-1 border-default-300 rounded-none mb-4">
+          <h2 className="px-2">Creator Registration</h2>
+        </CardHeader>
+        <div className="px-6 pb-6 flex flex-col gap-2 items-center border-b-1 border-default-300">
+          <div className="grid grid-cols-4 flex-row items-start gap-10 w-full text-sm">
             <Select
-              label="Select a Language"
-              placeholder="Select a language"
-              // description="언어를 선택해주세요."
-              defaultSelectedKeys={[""]}
+              classNames={{
+                base: 'col-span-3 !w-full',
+                // trigger: 'h-[28px]',
+                // innerWrapper: 'py-0',
+              }}
+              // userLang.name의 타입이 string | undefined 여서 확정적이지 않을 경우의 타입에러 발생
+              defaultSelectedKeys={[userLang?.name || '한국어']}
+              value={selectedLangValue?.name}
+              label="Community Category"
+              description="Select a category for the community"
+              onChange={handleSelectionChange}
+              selectionMode="single"
               className="w-[200px]"
-              color='default'
+              variant="bordered"
+              disallowEmptySelection
+              startContent={
+                <span>
+                  <Avatar
+                    alt={selectedLangValue?.name || userLang?.name}
+                    className="h-6 w-6"
+                    isBordered={
+                      selectedLangValue?.locale.includes('ja' || 'ko')
+                        ? true
+                        : false
+                    }
+                    src={selectedLangValue?.src || userLang?.src}
+                  />
+                </span>
+              }
             >
-              {languages.map((language) => (
-                <SelectItem key={language.value} value={language.value}>
-                  {language.label}
-                </SelectItem>
-              ))}    
-            </Select>
-          </div>
-
-        </div>
-      </div>
-
-      <div className='flex flex-nowrap pt-28'>
-        <div className='pt-5 flex w-full flex-wrap gap-4'>
-            <h2 className='pl-3 border-b-2 w-full border-black text-xl'>Profile Preferences</h2>
-
-        <div className='whitespace-normal'>
-          <div className='flex flex-nowrap gap-5'>
-            <h5 className='pl-2 pt-2 pb-10 text-gray-400'>Display Name(Optional)</h5>
-            <Input placeholder="Display Name" className='w-[200px]'/>
-          </div>
-
-          <div className='flex flex-nowrap gap-5'>
-            <h5 className='pl-2 text-gray-400'> About(Optional) </h5>
-            <Input size='lg' placeholder="About" description='200 Characters remaining.' className='w-[200px]'/>
-          </div>
-        </div>
-
-        </div>
-      </div>
-
-      <div className='flex flex-nowrap pt-28'>
-        <div className='pt-5 flex w-full flex-wrap gap-4'>
-            <h2 className='pl-3 border-b-2 w-full border-black text-xl'>Creator Registration</h2>
-          <div className='flex flex-nowrap gap-5 items-center'>
-
-            <Select
-              label="Creator Category"
-              placeholder="Select a category"
-              description="크리에이터 등록을 위한 카테고리를 선택해주세요."
-              defaultSelectedKeys={[""]}
-              className="max-w-xs"
-              color='default'
-            >
-              {animals.map((animal) => (
-                <SelectItem key={animal.value} value={animal.value}>
-                  {animal.label}
+              {languages.map(lang => (
+                <SelectItem
+                  key={lang.name}
+                  value={lang.locale}
+                  startContent={
+                    <Avatar
+                      alt={lang.name}
+                      className="w-6 h-6"
+                      src={lang.src}
+                    />
+                  }
+                >
+                  {lang.name}
                 </SelectItem>
               ))}
             </Select>
-            <Button color='primary' className='mt-1'>Register</Button>
 
+            <div className="flex h-14 items-center w-full">
+              <Button fullWidth variant="solid">
+                Register
+              </Button>
+            </div>
           </div>
         </div>
-      </div>
+      </SimpleCard>
 
-      <div className='flex flex-nowrap pt-28 pb-20'>
-        <div className='pt-5 flex w-full flex-wrap gap-4'>
-            <h2 className='pl-3 border-b-2 w-full border-black text-xl'>Delete Account</h2>
-          <div className='pl-2'>
-            <Button startContent={<TrashIcon/>} color='danger' className='mt-1'>Delete Account</Button>
-          </div>
+      <SimpleCard
+        classNames={{
+          base: '!border-danger-300',
+          card: '!p-0',
+        }}
+      >
+        <CardHeader className="px-4 py-2 bg-danger-200 border-b-1 border-danger-300 rounded-none mb-4">
+          <h2 className="px-2 text-danger font-semibold text-xl">
+            Delete account
+          </h2>
+        </CardHeader>
+        <div className="px-6 pb-6 grid grid-cols-4 gap-2 items-center">
+          <p className="col-span-3">
+            If you press the Delete button, your account will be completely
+            removed from the tubePlus. Even if your account is deleted from
+            tubePlus, it will not be deleted from YouTube.
+          </p>
+          <Button
+            className="opacity-60 hover:opacity-100"
+            color="danger"
+            variant="ghost"
+          >
+            Delete your account
+          </Button>
         </div>
-      </div>
-
-    </div>
-  )
+      </SimpleCard>
+    </section>
+  );
 }
-export default Page
+export default Page;

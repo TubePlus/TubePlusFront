@@ -77,17 +77,28 @@ export const resourceMenuItem = [
 export const languages = [
   {
     name: '한국어',
+    locale: 'ko-KR',
+    src: 'https://flagcdn.com/kr.svg',
   },
   {
     name: 'English',
+    locale: 'en-US',
+    src: 'https://flagcdn.com/us.svg',
   },
   {
     name: '日本語',
+    locale: 'ja-JP',
+    src: 'https://flagcdn.com/jp.svg',
   },
   {
     name: '中国话',
+    value: 'chinese',
+    locale: 'zh-TW',
+    src: 'https://flagcdn.com/cn.svg',
   },
   {
     name: 'Español',
+    locale: 'es-ES',
+    src: 'https://flagcdn.com/es.svg',
   },
 ];

@@ -124,7 +124,9 @@ const UserBox = () => {
               </div>
 
               <div className="flex flex-col gap-2">
-                <span className="mt-1">Locale: {fromUser?.locale}</span>
+                <span className="mt-1">
+                  Display Language: {fromUser?.locale}
+                </span>
 
                 <span className="md:hidden x:line-clamp-2 text-ellipsis text-sm">
                   {fromUser?.bio ||

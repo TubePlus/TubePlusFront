@@ -1,29 +1,81 @@
-'use client'
-import React, { ReactNode } from 'react'
-import { settingtabmenubar } from '../../data/tabmenubar'
-import { usePathname } from 'next/navigation';
-import Link from 'next/link'
-import { MenuTabBar } from '@/types/menutabbar';
+import React from 'react';
 
+import Sidebar from '@/components/sidebar/Sidebar';
+import MainSidebar from '@/components/sidebar/MainSidebar';
+import SubNavbar from '@/components/navbar/SubNavbar';
+import SimpleCard from '@/components/SimpleCard';
 
-export default function SettingLayout({children}: {children: ReactNode}) {
+interface UserPageProps {
+  username: string;
+}
 
-  const pathName = usePathname()
+const settingtabmenubar = [
+  {
+    id: 1,
+    name: 'Account',
+    link: '/account',
+  },
+  {
+    id: 2,
+    name: 'Notification',
+    link: '/notification',
+  },
+  {
+    id: 3,
+    name: 'Safety & Privacy',
+    link: '/safety-privacy',
+  },
+];
+
+export default function SettingLayout({
+  params,
+  children,
+}: {
+  params: UserPageProps;
+  children: React.ReactNode;
+}) {
+  const dir = [
+    { id: 1, label: 'Account', href: `/settings/account` },
+    { id: 2, label: 'Notification', href: `/settings/notification` },
+    {
+      id: 3,
+      label: 'Safety & Privacy',
+      href: `/settings/safety-privacy`,
+    },
+  ];
 
   return (
-    <div className='col-start-1 col-end-12 h-screen'>
-        <ul className="flex fixed w-[1400px] whitespace-nowrap">
-          {
-            settingtabmenubar.map((item: MenuTabBar) => (
-              <li key={item.id} className={ pathName === `/settings${item.link}` ? 'settings-tab active' : 'settings-tab'}>
-                <Link href={`/settings${item.link}`} className={`pt-[12px] pb-[12px] ${pathName === `/settings${item.link}` ? 'active-link' : ''}`}>{item.name}</Link>
-              </li>
-            ))
-          }
-        </ul>
-        <div className='pt-5'>
-      {children}
+    <>
+      <Sidebar className={`x:bg-zinc-50 dark:x:bg-zinc-900`} isDrawerOnly>
+        <MainSidebar />
+      </Sidebar>
+
+      <div className="fixed top-[3rem] left-0 w-full z-20">
+        <SubNavbar dir={dir} />
       </div>
-    </div>
-  )
+
+      <div
+        className=" pb-8
+                    lg:col-span-9
+                    md:col-span-7     md:mt-12
+                    sm:col-span-full
+                    x:col-span-full   x:mt-0"
+      >
+        {children}
+      </div>
+
+      <div
+        className="relative mt-12
+                  md:col-span-3
+                  sm:col-span-full
+                  x:col-span-full"
+      >
+        <div className="sticky top-[6.08rem] mb-8">
+          <SimpleCard title="Settings Summary">
+            <span className="px-2">My Settings...</span>
+          </SimpleCard>
+        </div>
+      </div>
+    </>
+  );
 }

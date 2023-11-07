@@ -6,9 +6,9 @@ const TubePlusLogo = ({
   classNames?: { base?: string; logo?: string };
 }) => {
   return (
-    <div className={`${classNames?.base}`}>
+    <div className={`${classNames?.base || ''}`}>
       <svg
-        className={`${classNames?.logo}`}
+        className={`${classNames?.logo || ''} w-full`}
         width="115"
         height="93"
         viewBox="0 0 115 93"

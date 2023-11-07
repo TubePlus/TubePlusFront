@@ -47,7 +47,7 @@ const Sidebar = ({
           <div // sidebar background
             className={`${
               isOpen
-                ? 'absolute w-full h-full min-h-screen opacity-30'
+                ? 'fixed left-0 w-full h-full min-h-screen opacity-30'
                 : 'hidden opacity-0'
             } duration-300 z-[24] bg-black`}
             onClick={handleSidebar}

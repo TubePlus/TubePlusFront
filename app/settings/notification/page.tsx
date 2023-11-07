@@ -1,21 +1,38 @@
-'use client'
-import { Switch } from '@nextui-org/react'
-import React from 'react'
+'use client';
+import SimpleCard from '@/components/SimpleCard';
+import { CardHeader } from '@nextui-org/react';
+import { Switch } from '@nextui-org/switch';
+import React, { useState } from 'react';
+
+const notifi = {
+  label: 'Community Alert',
+  value: true,
+};
 
 function Page() {
+  const [isAlert, setIsAlert] = useState(true);
+
   return (
-    <div>
-      <div className='pt-5 flex w-full flex-wrap gap-4'>
-          <h1 className='pl-3 text-3xl'>Nofitication Settings</h1>
-          <br/>
-          <h2 className='pt-2 pl-3 border-b-2 w-full border-black text-xl'>Activity</h2>
-        <div className='flex w-[30%] justify-between'>
-          <h5 className='pl-2 pt-2 pb-10 text-gray-400'>Community Alert</h5>
-          <Switch className='pb-5' defaultSelected aria-label="Automatic updates"/>
+    <section className="flex flex-col gap-8 min-h-[800px]">
+      <SimpleCard classNames={{ card: '!p-0' }}>
+        <CardHeader className="px-4 py-2 bg-default-200 border-b-1 border-default-300 rounded-none mb-4">
+          <h2 className="px-2">Notification Setting</h2>
+        </CardHeader>
+
+        <div className="flex flex-col px-6 pb-6 ">
+          <div className="flex items-center gap-4">
+            <span>Community Alert</span>
+            <Switch size="sm" isSelected={isAlert} onValueChange={setIsAlert}>
+              {isAlert ? 'ON' : 'OFF'}
+            </Switch>
+          </div>
+          <p className="text-default-500 text-sm mt-2">
+            Controls notifications from the communities you join.
+          </p>
         </div>
-      </div>
-    </div>
-  )
+      </SimpleCard>
+    </section>
+  );
 }
 
-export default Page
+export default Page;
