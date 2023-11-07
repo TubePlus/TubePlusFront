@@ -4,24 +4,22 @@ import React from 'react';
 
 interface TabsProps {
   communityId: string;
+  boardContents: any;
 }
 
-const CommunityTabsBar = ({ communityId }: TabsProps) => {
+const CommunityTabsBar = ({ communityId, boardContents }: TabsProps) => {
   const pathname = usePathname();
+  console.log(pathname);
+  console.log(communityId, boardContents);
 
   return (
     <nav>
-      <ul>
-        <li className={pathname === `/tube/${communityId}/overview` ? 'active' : ''}>
-          <Link href={`/community/${communityId}/overview`}>Overview</Link>
+      <ul className='flex w-full gap-10 whitespace-nowrap text-[24px] font-bold '>
+        {boardContents.map((board: any) => (
+        <li key={board.id} className={pathname === `/tube/${communityId}/${board.id}` ? 'bg-white' : ''}>
+          <Link href={`/tube/${communityId}/${board.id}`}>{board.name}</Link>
         </li>
-        <li className={pathname === `/community/${communityId}/members` ? 'active' : ''}>
-          <Link href={`/community/${communityId}/members`}>Members</Link>
-        </li>
-        <li className={pathname === `/community/${communityId}/settings` ? 'active' : ''}>
-          <Link href={`/community/${communityId}/settings`}>Settings</Link>
-        </li>
-        {/* 필요에 따라 여기에 더 많은 탭을 추가할 수 있습니다. */}
+        ))}
       </ul>
     </nav>
   );

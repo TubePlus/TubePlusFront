@@ -65,8 +65,10 @@ function Page() {
         <div className='w-full'>
 
           <div className='flex flex-nowrap w-full justify-between'>
+            <div className='flex flex-nowrap gap-16'>
             <h5 className='pl-2 pt-2 pb-10 text-gray-400'>Email Address</h5>
             { session ? <p>{session.user.email}</p> : <p>Loading...</p> }
+            </div>
             <Chip color='success' className='text-white'>Authenticated</Chip>
           </div>
             
@@ -78,7 +80,7 @@ function Page() {
               // description="언어를 선택해주세요."
               defaultSelectedKeys={[""]}
               className="w-[200px]"
-              color='primary'
+              color='default'
             >
               {languages.map((language) => (
                 <SelectItem key={language.value} value={language.value}>
@@ -121,7 +123,7 @@ function Page() {
               description="크리에이터 등록을 위한 카테고리를 선택해주세요."
               defaultSelectedKeys={[""]}
               className="max-w-xs"
-              color='primary'
+              color='default'
             >
               {animals.map((animal) => (
                 <SelectItem key={animal.value} value={animal.value}>

@@ -2,9 +2,21 @@
 import React from 'react'
 import { Card, CardHeader, CardBody, CardFooter, Avatar, Chip, Button } from "@nextui-org/react"
 import { BookmarkIcon, ChatBubbleIcon, ThickArrowDownIcon, ThickArrowUpIcon } from '@radix-ui/react-icons'
-import { post as PostType } from '@/types/post'
 import Link from 'next/link'
 import { useQuery } from '@tanstack/react-query'
+
+interface PostType {
+  id: number;
+  isVoted: boolean;
+  boardId: number;
+  title: string;
+  contents: string;
+  voteCounts: number;
+  authorUuid: string;
+  authorName: string;
+  avatar: string;
+}
+
 
 const fetchPosts = async () => {
   const res = await fetch('https://652c497bd0d1df5273ef56a5.mockapi.io/api/v1/post', {

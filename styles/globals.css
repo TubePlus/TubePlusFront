@@ -95,6 +95,7 @@
 }
 
 .active-link::after {
+<<<<<<< Updated upstream
   content: '';
   position: absolute;
   width: 70%;
@@ -103,4 +104,18 @@
   bottom: 0;
   height: 2px;
   background: #ffffff;
+=======
+content: "";
+position: absolute;
+width: 70%;
+left: 50%;
+transform: translateX(-50%); 
+bottom: 0;
+height: 2px;
+background: #ffffff;
+}
+
+.full-width-border {
+  grid-column: -1 / 13; /* 그리드의 처음부터 끝까지 확장 */
+>>>>>>> Stashed changes
 }

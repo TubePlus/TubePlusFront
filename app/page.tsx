@@ -1,8 +1,7 @@
 import MainSidebar from '@/components/sidebar/MainSidebar';
 import Sidebar from '@/components/sidebar/Sidebar';
-
-import MainTop from '@/components/mainpage/MainTop';
-import MainBottom from '@/components/mainpage/MainBottom';
+import MainBanner from '@/components/MainBanner';
+import CreatorTable from '@/components/CreatorTable';
 import { Chip } from '@nextui-org/chip';
 import CommunityRecommend from '@/components/CommunityRecommend';
 import Post from '@/components/Post';
@@ -31,12 +30,12 @@ export default function Home() {
                     flex flex-col gap-y-10 gap-unit-md pt-4 
                     scrollbar-thin`}
       >
-        <MainTop />
-        <MainBottom />
 
+        <MainBanner />
+        <CreatorTable />
         <div>
           <Chip color="default">Trending Today</Chip>
-          <div className="flex flex-row pt-4 gap-6">
+          <div className="flex flex-wrap pt-4 gap-6">
             <CommunityRecommend />
           </div>
 
@@ -44,6 +43,7 @@ export default function Home() {
             <Post />
           </div>
         </div>
+
       </div>
     </>
   );

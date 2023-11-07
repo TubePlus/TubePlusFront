@@ -12,7 +12,7 @@ export const settingtabmenubar = [
   {
     id:3,
     name:'Safety & Privacy',
-    link:'/safety&privacy'
+    link:'/safety-privacy'
   }
 ]
 
