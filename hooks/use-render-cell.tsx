@@ -27,7 +27,7 @@ const renderCell = (row: any, columnKey: Key) => {
 
     case 'contents':
       return (
-        <div className="md:table-cell sm:hidden x:table-cell">
+        <div>
           <span className="max-w-lg overflow-hidden text-ellipsis line-clamp-2">
             {row.contents}
           </span>

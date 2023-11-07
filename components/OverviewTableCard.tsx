@@ -28,6 +28,12 @@ interface OverviewCardProps {
   updatedAt: string;
 }
 
+/**
+ *
+ * @warning nextui의 테이블과 결합도가 생겨 폐기합니다.
+ * @warning SimpleCard 컴포넌트 사용을 고려해주세요.
+ * @returns
+ */
 const OverviewTableCard = ({
   cardTitle,
   cardLink,
@@ -81,7 +87,7 @@ const OverviewTableCard = ({
                 <TableColumn
                   className={`${
                     column.key === 'contents' || column.key === 'voteCounts'
-                      ? 'md:table-cell sm:hidden x:table-cell'
+                      ? 'sm:table-cell x:hidden'
                       : ''
                   }`}
                 >
@@ -97,7 +103,7 @@ const OverviewTableCard = ({
                     <TableCell
                       className={`text-xs ${
                         columnKey === 'contents' || columnKey === 'voteCounts'
-                          ? 'md:table-cell sm:hidden x:table-cell'
+                          ? 'sm:table-cell x:hidden'
                           : ''
                       }`}
                     >

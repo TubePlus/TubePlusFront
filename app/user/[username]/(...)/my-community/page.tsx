@@ -10,7 +10,18 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import { Image } from '@nextui-org/image';
 import { Spinner } from '@nextui-org/spinner';
 import { LgValue, MdValue, SmValue } from '@/components/Responsive';
-import { DotsVerticalIcon } from '@radix-ui/react-icons';
+import { DotsVerticalIcon, ExternalLinkIcon } from '@radix-ui/react-icons';
+import SimpleCard from '@/components/SimpleCard';
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableColumn,
+  TableHeader,
+  TableRow,
+} from '@nextui-org/table';
+import { renderCell } from '@/hooks/use-render-cell';
+import { Key } from 'react';
 
 const myPostColumns = [
   // { key: 'id', label: 'Id' },
@@ -57,7 +68,7 @@ export default function MyCommunityPage() {
         loop
       >
         {!isPostsError &&
-          myPosts.map((post: TrendingsCardProps) => (
+          myPosts?.map((post: TrendingsCardProps) => (
             <SwiperSlide key={post.id}>
               <Card
                 classNames={{
@@ -112,30 +123,113 @@ export default function MyCommunityPage() {
       </Swiper>
 
       <div
-        // TODO: grid 변경 필요
         className={`lg:col-start-4   lg:col-end-13  lg:pl-0 
       md:col-start-4   md:col-end-9   md:pl-0 
       sm:col-span-full
       xs:col-span-full
       flex flex-col gap-y-10 gap-unit-md z-0 scrollbar-thin`}
       >
-        <OverviewTableCard
-          cardTitle="My Communities"
-          cardLink=""
-          isError={isPostsError}
-          isLoading={isPostsLoading}
-          tableColumns={myPostColumns}
-          tableRows={myPosts}
-        />
+        <SimpleCard
+          title={`My Communities(${myPosts?.length || 0})`}
+          externalLink={``}
+        >
+          {isPostsLoading ? (
+            <Spinner size="lg" color="default" />
+          ) : (
+            <Table // NOTE: graph가 있으면 좋을 듯...
+              classNames={{}}
+              checkboxesProps={{ classNames: { wrapper: 'mx-auto' } }}
+              selectionMode="multiple"
+              removeWrapper
+            >
+              <TableHeader
+                className="" // background
+                columns={myPostColumns}
+              >
+                {(column: { key: string; label: string }) => (
+                  <TableColumn
+                    className={`${
+                      column.key === 'contents' || column.key === 'voteCounts'
+                        ? 'sm:table-cell x:hidden'
+                        : ''
+                    }`}
+                  >
+                    {column.label}
+                  </TableColumn>
+                )}
+              </TableHeader>
 
-        <OverviewTableCard
-          cardTitle="Top Posts"
-          cardLink=""
-          isError={isPostsError}
-          isLoading={isPostsLoading}
-          tableColumns={myPostColumns}
-          tableRows={myPosts}
-        />
+              <TableBody>
+                {myPosts.map((row: { key: Key }) => (
+                  <TableRow key={row.key}>
+                    {columnKey => (
+                      <TableCell
+                        className={`text-xs ${
+                          columnKey === 'contents' || columnKey === 'voteCounts'
+                            ? 'sm:table-cell x:hidden'
+                            : ''
+                        }`}
+                      >
+                        {renderCell(row, columnKey)}
+                      </TableCell>
+                    )}
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          )}
+        </SimpleCard>
+
+        <SimpleCard
+          title={`My Communities(${myPosts?.length || 0})`}
+          externalLink={``}
+        >
+          {isPostsLoading ? (
+            <Spinner size="lg" color="default" />
+          ) : (
+            <Table
+              classNames={{}}
+              checkboxesProps={{ classNames: { wrapper: 'mx-auto' } }}
+              selectionMode="multiple"
+              removeWrapper
+            >
+              <TableHeader
+                className="" // background
+                columns={myPostColumns}
+              >
+                {(column: { key: string; label: string }) => (
+                  <TableColumn
+                    className={`${
+                      column.key === 'contents' || column.key === 'voteCounts'
+                        ? 'sm:table-cell x:hidden'
+                        : ''
+                    }`}
+                  >
+                    {column.label}
+                  </TableColumn>
+                )}
+              </TableHeader>
+
+              <TableBody>
+                {myPosts.map((row: { key: Key }) => (
+                  <TableRow key={row.key}>
+                    {columnKey => (
+                      <TableCell
+                        className={`text-xs ${
+                          columnKey === 'contents' || columnKey === 'voteCounts'
+                            ? 'sm:table-cell x:hidden'
+                            : ''
+                        }`}
+                      >
+                        {renderCell(row, columnKey)}
+                      </TableCell>
+                    )}
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          )}
+        </SimpleCard>
       </div>
     </>
   );

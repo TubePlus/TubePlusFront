@@ -19,7 +19,7 @@ export default function Home() {
         <Sidebar //TODO: sidebar
           className={`md:bg-transparent x:bg-zinc-50 dark:x:bg-zinc-900`}
         >
-          <MainSidebar />
+          <MainSidebar isRoot />
         </Sidebar>
       </div>
 

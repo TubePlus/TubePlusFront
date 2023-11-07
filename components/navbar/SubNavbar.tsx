@@ -8,26 +8,18 @@ import {
 import { Link } from '@nextui-org/link';
 import { useParams, usePathname } from 'next/navigation';
 
-interface UserPageProps {
-  params: {
-    username: string;
-  };
+interface DirProps {
+  id: number;
+  label: string;
+  href: string;
 }
 
-const SubNavbar = () => {
-  const params = useParams();
+const SubNavbar = ({ dir }: { dir: DirProps[] }) => {
   const pathname = usePathname();
-
-  const dir = [
-    { id: 1, name: 'Overview', path: `/user/${params.username}` },
-    { id: 2, name: 'History', path: `/user/${params.username}/history` },
-    { id: 3, name: 'Comments', path: `/user/${params.username}/comments` },
-    { id: 4, name: 'Report', path: `/user/${params.username}/report` },
-  ];
 
   return (
     <NextNavbar
-      className="sticky top-0 bg-default/50
+      className="sticky top-0 bg-default/80
               col-span-full w-full"
       classNames={{ base: 'min-w-[360px]', wrapper: 'px-4 max-w-[1524px]' }}
       isBordered
@@ -35,15 +27,17 @@ const SubNavbar = () => {
       height={'2.25rem'}
     >
       <NavbarContent as={'div'} justify="center" className="w-full gap-4">
-        {dir.map(link => (
+        {dir.map((link: DirProps) => (
           <NavbarItem key={link.id}>
             <Link
               className={`text-sm ${
-                pathname === link.path ? 'text-default-900' : 'text-default-500'
+                pathname === link.href
+                  ? 'font-semibold text-default-foreground dark:text-default-900'
+                  : 'text-default-500'
               }`}
-              href={link.path}
+              href={link.href}
             >
-              {link.name}
+              {link.label}
             </Link>
           </NavbarItem>
         ))}

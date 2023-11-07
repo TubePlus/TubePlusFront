@@ -17,8 +17,8 @@ const SignUpModalPage = () => {
       <Divider />
 
       <ModalFooter>
-        Wellcom to tubePlus! This Project created by{' '}
-        <p>
+        <p className="leading-5">
+          Wellcom to tubePlus! This Project created by{' '}
           {memebers.map((mem, index) => (
             <Chip
               as={Link}

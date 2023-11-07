@@ -154,7 +154,7 @@ const JoinButton = () => {
       <Input
         classNames={{
           inputWrapper: 'h-unit-14',
-          input: 'text-xl',
+          input: 'text-lg',
         }}
         type="text"
         variant="bordered"

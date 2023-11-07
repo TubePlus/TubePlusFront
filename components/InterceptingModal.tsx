@@ -42,7 +42,10 @@ const InterceptingModal = ({ children }: { children: React.ReactNode }) => {
 
   return (
     <Modal
-      classNames={{ closeButton: 'flex gap-2 items-center' }}
+      classNames={{
+        wrapper: 'min-w-[512px]',
+        closeButton: 'flex gap-2 items-center',
+      }}
       size="lg"
       backdrop="blur"
       isOpen={isOpen}

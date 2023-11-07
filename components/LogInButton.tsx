@@ -48,8 +48,8 @@ const LoginButton = () => {
           ) : (
             <Image
               alt="google"
-              width={36}
-              height={36}
+              width={28}
+              height={28}
               src="/images/logo_google.svg"
             />
           )
@@ -58,8 +58,8 @@ const LoginButton = () => {
           session ? (
             <Image
               alt="google"
-              width={36}
-              height={36}
+              width={28}
+              height={28}
               src="/images/logo_google.svg"
             />
           ) : null

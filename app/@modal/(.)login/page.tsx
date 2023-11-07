@@ -24,7 +24,7 @@ const LogInModalPage = () => {
       <Divider />
 
       <ModalFooter>
-        <p>
+        <p className="leading-5">
           Wellcom to tubePlus! This Project created by{' '}
           {memebers.map((mem, index) => (
             <Chip

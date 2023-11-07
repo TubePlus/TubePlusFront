@@ -9,6 +9,17 @@ import { useQuery } from '@tanstack/react-query';
 import { useSession } from 'next-auth/react';
 import OverviewTableCard from '@/components/OverviewTableCard';
 import { renderCell } from '@/hooks/use-render-cell';
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableColumn,
+  TableHeader,
+  TableRow,
+} from '@nextui-org/table';
+import { Spinner } from '@nextui-org/spinner';
+import SimpleCard from '@/components/SimpleCard';
+import { Key } from 'react';
 
 interface UserPageProps {
   params: {
@@ -82,35 +93,155 @@ export default function UserPage({ params }: UserPageProps) {
                   xs:col-span-full
                   flex flex-col gap-y-10 gap-unit-md z-0 scrollbar-thin`}
     >
-      <OverviewTableCard
-        cardTitle="My Posts"
-        cardLink={`/user/${username}/history`}
-        isError={isPostsError}
-        isLoading={isPostsLoading}
-        tableColumns={latestPostColumns}
-        tableRows={myPosts}
-        renderCell={renderCell}
-      />
+      <SimpleCard title={`My Posts(${myPosts?.length || 0})`} externalLink={``}>
+        {isPostsLoading ? (
+          <Spinner size="lg" color="default" />
+        ) : (
+          <Table
+            classNames={{}}
+            checkboxesProps={{ classNames: { wrapper: 'mx-auto' } }}
+            selectionMode="multiple"
+            removeWrapper
+          >
+            <TableHeader
+              className="" // background
+              columns={latestPostColumns}
+            >
+              {(column: { key: string; label: string }) => (
+                <TableColumn
+                  className={`${
+                    column.key === 'contents' || column.key === 'voteCounts'
+                      ? 'sm:table-cell x:hidden'
+                      : ''
+                  }`}
+                >
+                  {column.label}
+                </TableColumn>
+              )}
+            </TableHeader>
 
-      <OverviewTableCard
-        cardTitle="My Communities"
-        cardLink={`/user/${username}/my-community`}
-        isError={isPostsError}
-        isLoading={isPostsLoading}
-        tableColumns={latestPostColumns}
-        tableRows={myPosts}
-        renderCell={renderCell}
-      />
+            <TableBody>
+              {myPosts.map((row: { key: Key }) => (
+                <TableRow key={row.key}>
+                  {columnKey => (
+                    <TableCell
+                      className={`text-xs ${
+                        columnKey === 'contents' || columnKey === 'voteCounts'
+                          ? 'sm:table-cell x:hidden'
+                          : ''
+                      }`}
+                    >
+                      {renderCell(row, columnKey)}
+                    </TableCell>
+                  )}
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        )}
+      </SimpleCard>
 
-      <OverviewTableCard
-        cardTitle="My Favorites"
-        cardLink={`/user/${username}/favorites`}
-        isError={isPostsError}
-        isLoading={isPostsLoading}
-        tableColumns={latestPostColumns}
-        tableRows={myPosts}
-        renderCell={renderCell}
-      />
+      <SimpleCard
+        title={`My Communities(${myPosts?.length || 0})`}
+        externalLink={``}
+      >
+        {isPostsLoading ? (
+          <Spinner size="lg" color="default" />
+        ) : (
+          <Table
+            classNames={{}}
+            checkboxesProps={{ classNames: { wrapper: 'mx-auto' } }}
+            selectionMode="multiple"
+            removeWrapper
+          >
+            <TableHeader
+              className="" // background
+              columns={latestPostColumns}
+            >
+              {(column: { key: string; label: string }) => (
+                <TableColumn
+                  className={`${
+                    column.key === 'contents' || column.key === 'voteCounts'
+                      ? 'sm:table-cell x:hidden'
+                      : ''
+                  }`}
+                >
+                  {column.label}
+                </TableColumn>
+              )}
+            </TableHeader>
+
+            <TableBody>
+              {myPosts.map((row: { key: Key }) => (
+                <TableRow key={row.key}>
+                  {columnKey => (
+                    <TableCell
+                      className={`text-xs ${
+                        columnKey === 'contents' || columnKey === 'voteCounts'
+                          ? 'sm:table-cell x:hidden'
+                          : ''
+                      }`}
+                    >
+                      {renderCell(row, columnKey)}
+                    </TableCell>
+                  )}
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        )}
+      </SimpleCard>
+
+      <SimpleCard
+        title={`My Favorites(${myPosts?.length || 0})`}
+        externalLink={``}
+      >
+        {isPostsLoading ? (
+          <Spinner size="lg" color="default" />
+        ) : (
+          <Table
+            classNames={{}}
+            checkboxesProps={{ classNames: { wrapper: 'mx-auto' } }}
+            selectionMode="multiple"
+            removeWrapper
+          >
+            <TableHeader
+              className="" // background
+              columns={latestPostColumns}
+            >
+              {(column: { key: string; label: string }) => (
+                <TableColumn
+                  className={`${
+                    column.key === 'contents' || column.key === 'voteCounts'
+                      ? 'sm:table-cell x:hidden'
+                      : ''
+                  }`}
+                >
+                  {column.label}
+                </TableColumn>
+              )}
+            </TableHeader>
+
+            <TableBody>
+              {myPosts.map((row: { key: Key }) => (
+                <TableRow key={row.key}>
+                  {columnKey => (
+                    <TableCell
+                      className={`text-xs ${
+                        columnKey === 'contents' || columnKey === 'voteCounts'
+                          ? 'sm:table-cell x:hidden'
+                          : ''
+                      }`}
+                    >
+                      {renderCell(row, columnKey)}
+                    </TableCell>
+                  )}
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        )}
+      </SimpleCard>
     </div>
   );
 }
