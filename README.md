@@ -10,6 +10,7 @@
 ![nextui](https://img.shields.io/badge/nextui-2.1.13-000000?style=for-the-badge&logo=nextui&logoColor=fff)
 ![radixicon](https://img.shields.io/badge/radixicon-2.1.13-161618?style=for-the-badge&logo=radixui&logoColor=fff)
 ![framer](https://img.shields.io/badge/framer-10.16.4-0055FF?style=for-the-badge&logo=framer&logoColor=fff)
+![reactquery](https://img.shields.io/badge/reactquery-4.36.1-FF4154.svg?&style=for-the-badge&logo=ReactQuery&logoColor=white)
 
 </center>
 
