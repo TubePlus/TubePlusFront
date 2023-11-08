@@ -35,7 +35,11 @@ const SubNavbar = ({ dir }: { dir: DirProps[] }) => {
             <NavbarItem key={link.id}>
               <Link
                 className={`text-sm ${
-                  pathname.startsWith(link.href)
+                  link.label === 'Overview'
+                    ? link.href === pathname
+                      ? 'font-semibold text-default-foreground dark:text-default-900'
+                      : 'text-default-500'
+                    : pathname.startsWith(link.href)
                     ? 'font-semibold text-default-foreground dark:text-default-900'
                     : 'text-default-500'
                 }`}
@@ -48,7 +52,11 @@ const SubNavbar = ({ dir }: { dir: DirProps[] }) => {
             <NavbarItem key={link.id}>
               <Link
                 className={`text-sm ${
-                  pathname.startsWith(link.href)
+                  link.label === 'Overview'
+                    ? link.href === pathname
+                      ? 'font-semibold text-default-foreground dark:text-default-900'
+                      : 'text-default-500'
+                    : pathname.startsWith(link.href)
                     ? 'font-semibold text-default-foreground dark:text-default-900'
                     : 'text-default-500'
                 }`}

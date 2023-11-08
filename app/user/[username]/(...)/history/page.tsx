@@ -40,7 +40,7 @@ export default function HistoryPage() {
   });
 
   return (
-    <div className="flex flex-col gap-8">
+    <section className="flex flex-col gap-8">
       <SimpleCard //TODO: 시간 순 모든 활동(이게 가능하면 아래 다른 card 필요 없음)
         title={`My Activities`}
         externalLink={``}
@@ -156,6 +156,6 @@ export default function HistoryPage() {
           </Table>
         )}
       </SimpleCard>
-    </div>
+    </section>
   );
 }

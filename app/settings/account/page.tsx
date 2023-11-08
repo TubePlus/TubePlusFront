@@ -7,27 +7,11 @@ import { CardHeader } from '@nextui-org/card';
 import { Button } from '@nextui-org/button';
 import { Input, Textarea } from '@nextui-org/input';
 import { Select, SelectItem } from '@nextui-org/select';
+import { Selection } from '@nextui-org/table';
 import { useSession } from 'next-auth/react';
-import { languages } from '@/data/sidebar';
+import { communityCategory, languages } from '@/data/sidebar';
 import SimpleCard from '@/components/SimpleCard';
 import Link from 'next/link';
-
-const communityCategory = [
-  { code: 'MOVIE', label: '영화/애니메이션' },
-  { code: 'CAR', label: '자동차' },
-  { code: 'MUSIC', label: '음악' },
-  { code: 'ANIMAL', label: '반려동물/동물' },
-  { code: 'SPORTS', label: '스포츠' },
-  { code: 'TRAVEL', label: '여행/이벤트' },
-  { code: 'GAME', label: '게임' },
-  { code: 'BLOG', label: '인물/블로그' },
-  { code: 'COMEDY', label: '코미디' },
-  { code: 'ENTERTAINMENT', label: '엔터테인먼트' },
-  { code: 'NEWS', label: '뉴스/정치' },
-  { code: 'STYLE', label: '노하우/스타일' },
-  { code: 'EDUCATION', label: '교육' },
-  { code: 'SCIENCE', label: '과학기술' },
-];
 
 export default function AccountPage() {
   const { data: session } = useSession();
@@ -38,7 +22,7 @@ export default function AccountPage() {
   const [selectedLangValue, setSelectedLangValue] = useState<
     (typeof languages)[0]
   >(userLang!);
-  const [category, setCategory] = useState<string[]>();
+  const [category, setCategory] = useState<Selection>(new Set([]));
   const [bio, setBio] = useState('');
 
   const userRole =
@@ -58,9 +42,9 @@ export default function AccountPage() {
     }
   };
 
-  const handleCategoryChange = (e: ChangeEvent<HTMLSelectElement>) => {
-    setCategory(e.target.value.split(','));
-  };
+  // const handleCategoryChange = (e: ChangeEvent<HTMLSelectElement>) => {
+  //   setCategory(e.target.value);
+  // };
 
   return (
     <section className="flex flex-col gap-8 min-h-[800px]">
@@ -212,7 +196,8 @@ export default function AccountPage() {
                 label="Community Category"
                 description="Select a category for the community"
                 selectedKeys={category}
-                onChange={handleCategoryChange}
+                onSelectionChange={setCategory}
+                // onChange={handleCategoryChange}
                 selectionMode="single"
                 className="w-[200px]"
                 variant="bordered"
@@ -234,7 +219,7 @@ export default function AccountPage() {
                   href={{
                     pathname: '/settings/community/new',
                     query: {
-                      category: category,
+                      category: Object.values(category),
                     },
                   }}
                 >

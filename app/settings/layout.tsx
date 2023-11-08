@@ -88,7 +88,8 @@ export default function SettingsLayout({
               <li>notification</li>
               <li>safetyPrivacy</li>
               <li>community name</li>
-              <li>community bio...등등</li>
+              <li>community bio</li>
+              <li>api key 인증 여부...등등</li>
             </ul>
           </SimpleCard>
         </div>
