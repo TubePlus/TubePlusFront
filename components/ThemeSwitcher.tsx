@@ -14,8 +14,10 @@ export const ThemeSwitcher = ({ type }: { type: 'toggle' | 'button' }) => {
   const toggleTheme = () => {
     if (theme === 'light') {
       setTheme('dark');
+      //TODO: fetch put here
     } else {
       setTheme('light');
+      //TODO: fetch put here
     }
   };
 
@@ -24,9 +26,7 @@ export const ThemeSwitcher = ({ type }: { type: 'toggle' | 'button' }) => {
     if (!session?.user) {
       setTheme('system');
     }
-    // else {
-    //   session.user.darkmode
-    // }
+    // session 있는 경우에는?
   }, []); // TODO: Warning 의존성 배열에 setTheme 필요 - "mount 시에만 실행되어야 하기 때문에 추가하면 안됨"
 
   switch (type) {

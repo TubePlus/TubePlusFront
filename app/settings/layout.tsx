@@ -27,7 +27,7 @@ const settingtabmenubar = [
   },
 ];
 
-export default function SettingLayout({
+export default function SettingsLayout({
   params,
   children,
 }: {
@@ -42,6 +42,12 @@ export default function SettingLayout({
       label: 'Safety & Privacy',
       href: `/settings/safety-privacy`,
     },
+    {
+      id: 4,
+      label: 'Community',
+      href: `/settings/community`,
+      forCreator: true,
+    },
   ];
 
   return (
@@ -55,11 +61,11 @@ export default function SettingLayout({
       </div>
 
       <div
-        className=" pb-8
+        className=" pb-8 mt-12
                     lg:col-span-9
-                    md:col-span-7     md:mt-12
+                    md:col-span-7
                     sm:col-span-full
-                    x:col-span-full   x:mt-0"
+                    x:col-span-full"
       >
         {children}
       </div>
@@ -73,6 +79,17 @@ export default function SettingLayout({
         <div className="sticky top-[6.08rem] mb-8">
           <SimpleCard title="Settings Summary">
             <span className="px-2">My Settings...</span>
+            <ul className="px-2">
+              <li>프로필</li>
+              <li>이메일</li>
+              <li>username</li>
+              <li>about(bio)</li>
+              <li>is_creator</li>
+              <li>notification</li>
+              <li>safetyPrivacy</li>
+              <li>community name</li>
+              <li>community bio...등등</li>
+            </ul>
           </SimpleCard>
         </div>
       </div>

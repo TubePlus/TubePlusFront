@@ -13,7 +13,7 @@ function Page() {
   const [isAlert, setIsAlert] = useState(true);
 
   return (
-    <section className="flex flex-col gap-8 min-h-[800px]">
+    <section className="flex flex-col gap-8">
       <SimpleCard classNames={{ card: '!p-0' }}>
         <CardHeader className="px-4 py-2 bg-default-200 border-b-1 border-default-300 rounded-none mb-4">
           <h2 className="px-2">Notification Setting</h2>

@@ -15,6 +15,7 @@ const clientSecret = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_SECRET!;
 const redirectUrl = 'http://localhost:3000/join';
 const scope = 'openid profile email https://www.googleapis.com/auth/youtube';
 
+// FIXME: 회원가입 직후 로그인 화면으로 이동시키기
 interface FormElements extends HTMLFormControlsCollection {
   username: HTMLInputElement;
 }
@@ -48,7 +49,7 @@ const JoinButton = () => {
 
       if (isDuplicate.code == 'S001') {
         setIsInvalid(false);
-        // localStorage.setItem('username', username);
+        localStorage.setItem('username', username);
         console.log('중복검사완료');
 
         signUp();
@@ -112,12 +113,12 @@ const JoinButton = () => {
 
     const saveUser = async (
       accessToken: string,
-      userInfo: { email: string; locale: string },
+      userInfo: { email: string; locale: string; username: string },
     ) => {
       const postBody = {
         username: localStorage.getItem('username'),
         email: userInfo.email,
-        token: accessToken,
+        token: accessToken, // token for YoutubeAPI
         locale: userInfo.locale,
       };
 
