@@ -3,9 +3,8 @@ import Post from '@/components/Post'
 import React from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { Image , Card , Button } from '@nextui-org/react'
-import CommunityTabBar from '@/components/CommunityTabBar'
+import BoardTabBar from '@/components/BoardTabBar'
 import SideBlock from '@/components/SideBlock'
-import Rules from '@/components/Rules'
 
 interface communityType {
   communityId: string
@@ -39,8 +38,6 @@ const fetchBoard = async (communityId: string) => {
 };
 
 
-
-
 function Tube({ params } : { params : { communityid : string }}) {
   
   const {
@@ -61,19 +58,23 @@ function Tube({ params } : { params : { communityid : string }}) {
   if (isErrorCommunity || isErrorBoard) {
     return <span>Error!</span>;
   }
+
+  
   console.log(boardcontents)
   console.log(communitycontents)
+
+
+
   
   return (
     <>
-      <div className=
-                  {`desktop:col-start-2 desktop:col-end-12
-                    tablet:col-start-1 tablet:col-end-10
-                    mobileL:col-span-full mobileM:col-span-full gap-unit-md
-                    flex flex-col pt-4
-                    scrollbar-thin`}>
+      <div className='grid
+                      desktop:col-start-1 desktop:col-end-12
+                      tablet:col-start-1 tablet:col-end-10
+                      mobileL:col-span-full mobileM:col-span-full
+                      gap-unit-md'>
       
-        <div className='flex w-full'>
+        <div className='flex w-full pt-5'>
           <Image
             style={{ objectFit: 'cover', height : '300px', width : '1500px' }}
             src={communitycontents.communityBanner}
@@ -81,20 +82,24 @@ function Tube({ params } : { params : { communityid : string }}) {
           />
         </div>
 
-        <div className='col-start-1 pl-3 pr-3 pt-4 pb-1 min-h-[200px]'>
+        <Card>
+
+        <div className='col-start-1 mr-5 pl-5 pr-3 pt-4 pb-3 min-h-[200px]'>
           <div className='flex flex-col gap-unit-md'>
-            <div className='flex flex-row items-center gap-unit-md'>
+            <div className='flex flex-row items-center gap-unit-xl '>
               <Image src={communitycontents.communityImage} alt='creator' width='350px' height='100px' />
-                <div>
-                  <h1 className='text-3xl font-bold whitespace-nowrap'>{communitycontents.title}</h1>
-                  <p className='text-xl font-bold whitespace-nowrap'>{communitycontents.communitySize} Members</p>
-                  <p className='text-xl whitespace-nowrap'>{communitycontents.createdAt}</p>
+                
+              <div className='flex w-[40%] flex-col gap-3'>
+                <div className='text-3xl font-bold'>{communitycontents.title}</div>
+                <div className='text-xl font-bold'>{communitycontents.communitySize} Members</div>
+                <div className='text-xl'>{communitycontents.createdAt}</div>
+                <div className=''>
+                <Button radius='full' size='lg' color='primary'>Join</Button>
                 </div>
-                <div className='pl-5 pr-5'>
-                  <Button color='primary'>Join</Button>
-                </div>
-              <div className='flex flex-col gap-unit-md'>
-                <div className='flex flex-row items-center gap-unit-md'>
+              </div>
+
+              <div className='flex w-[50%] flex-col gap-3'>
+                <div className='flex flex-col gap-unit-md'>
                   <h2 className='text-2xl font-bold'>About</h2>
                 </div>
 
@@ -105,31 +110,37 @@ function Tube({ params } : { params : { communityid : string }}) {
             </div>
           </div>
         </div>
+
+        </Card>
         
-        <div className='w-full border-b-4 border-black'>
+        <div className='w-full border-b-3 border-black'>
         {
           boardcontents !== 'undefined' && communitycontents !== 'undefined' ?
-          <CommunityTabBar communityId={communitycontents.communityId} boardContents={boardcontents} />
+          <BoardTabBar communityId={communitycontents.communityId} boardContents={boardcontents} />
           : null
         }
         </div>
         
-        <div className='flex flex-row flex-nowrap gap-5'>
 
+        <div className='flex flex-row flex-nowrap gap-5'>
+        {/* TODO: 게시판 아이디값을 통해 해당 게시판에 속해있는 게시물만 표시 할 수 있도록 포스트 컴포넌트에 커뮤니티아이디와 게시판아이디를 넘겨줄 예정 */}
+        
+          { 
           <div className='flex col-start-1 col-end-7'>
           <div className='flex flex-col pt-4 pb-16 pr-1 gap-6'>
             <Post/>
           </div>
           </div>
 
+          }
+
           <div className='flex flex-col pt-32 gap-5 whitespace-nowrap'> 
-            <SideBlock/>
-            <Rules/>
+            <SideBlock communityid={communitycontents.communityId} />
           </div>
 
         </div>
 
-        </div>
+      </div>
     </> 
   )
 }

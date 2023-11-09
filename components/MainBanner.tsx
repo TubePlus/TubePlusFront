@@ -49,7 +49,7 @@ const MainBanner = () => {
   }
   , [])
 
-  console.log('f d:' , banner)
+  // console.log('f d:' , banner)
 
   if (banner === null) {
     return null; // 데이터가 로딩 중일 때 렌더링을 방지
@@ -58,9 +58,10 @@ const MainBanner = () => {
   return (
     <>
         <div className='pt-5'>
-          <Skeleton >
-            <CustomSlider data={dummydata} />
-          </Skeleton>
+          {banner ? (<CustomSlider data={dummydata} />)
+          :
+          (<Skeleton className='rounded-lg h-[100%] w-full'/>)
+          }
         </div>
     </>
   )

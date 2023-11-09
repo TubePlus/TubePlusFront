@@ -44,6 +44,7 @@ const fetchPosts = async () => {
   return res.json();
 };
 
+
 const Post = () => {
   const {
     data: postcontents,
