@@ -10,7 +10,7 @@
 }
 
 .cate::after {
-  content: '';
+  content: "";
   clear: both;
   display: inline-block;
   width: 1px;

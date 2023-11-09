@@ -2,11 +2,10 @@
 import React from 'react'
 import Image from 'next/image';
 import { Swiper , SwiperSlide } from 'swiper/react'
-import { Scrollbar } from 'swiper/modules';
 import 'swiper/css/scrollbar';
 import 'swiper/css/pagination';
 import 'swiper/css';
-import { Pagination, Navigation } from 'swiper/modules';
+import { EffectCoverflow, Pagination, Navigation } from 'swiper/modules';
 import Link from 'next/link';
 import { Slidebanner } from '@/types/banner';
 
@@ -17,47 +16,21 @@ function CustomSlider({data}: {data: Slidebanner[] | null}) {
   return (
     <Swiper
       className='swiper relative w-full h-[auto]'
-      modules={[Scrollbar, Pagination, Navigation]}
-      pagination={{ 
-        clickable: true,
-        type: 'fraction'
-      }}
-      scrollbar={{
-        draggable: true,
-      }}
-      autoplay={{
-        delay: 2000,
-        disableOnInteraction: true,
-      }}
-      navigation={
-        {
-          nextEl: '.swiper-button-next',
-          prevEl: '.swiper-button-prev'
-        }
-      }
-      loop={true}
-      autoHeight={true}
-      spaceBetween={0}
-      slidesPerView={1}
-      keyboard={true}
-      mousewheel={true}
-      grabCursor={true}
-      effect={'creative'}
-      creativeEffect={{
-        prev: {
-          shadow: true,
-          translate: [0, 0, -400],
-        },
-        next: {
-          translate: ['100%', 0, 0],
-        },
-      }}
-
-
-
-      // onSlideChange={() => console.log('slide change')}
-      // onSwiper={(swiper) => console.log(swiper)}
-    >
+      effect={'coverflow'}
+        grabCursor={true}
+        centeredSlides={true}
+        slidesPerView={'auto'}
+        coverflowEffect={{
+          rotate: 100,
+          stretch: 0,
+          depth: 100,
+          modifier: 1,
+          slideShadows: true,
+        }}
+        navigation={true}
+        pagination={true}
+        modules={[EffectCoverflow, Pagination]}
+      >
       {data && data.map((item:Slidebanner) => (
         <div key={item.id}>
           <SwiperSlide>
