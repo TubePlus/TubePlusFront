@@ -1,20 +1,29 @@
-.scroll_container{
+.scroll_container {
   position: fixed;
-  right: 5%;
-  bottom: 5%;
-  z-index: 1;
+  right: 10%; /* 20px */
+  bottom: 7%; /* 20px */
+  z-index: 10;
 }
-.top{
-  font-weight: bold;
-  font-size: 15px;
-  padding :15px 10px;
-  background-color: #000;
-  color:#6d6868;
-  border: 1px solid rgb(121, 121, 120);
-  border-radius: 50%;
+
+.top {
+  font-weight: 700; /* bold */
+  font-size: 0.9375rem; /* 15px */
+  padding: 0.9375rem; /* 15px */
+  background-color: #1A202C;
+  color: rgb(233, 109, 85);
+  /* color: #CBD5E0; */
+  border: rgb(212, 212, 212) solid 1px;
+  border-radius: 9999px; /* Fully rounded */
   outline: none;
   cursor: pointer;
+  transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
+              0 2px 4px -1px rgba(0, 0, 0, 0.06);
 }
-.top:hover{
-  color :rgb(142, 26, 26);
+
+.top:hover {
+  background-color: #2D3748;
+  color: #E2E8F0;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1),
+              0 4px 6px -2px rgba(0, 0, 0, 0.05);
 }
