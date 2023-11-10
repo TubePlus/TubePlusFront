@@ -71,16 +71,17 @@ function Posting({ params }: { params: { postid: string } }) {
 
   return (
     <>
-      <div className="pl-40 pt-10 pb-5">
-        {/* TODO: 게시물 컴포넌트는 키값을 통해 불러오는식으로만 구성할지 페이지에 전체 코드를 구성할지 여부 결정 */}
-        <Card style={postStyle}>
-          <CardHeader>
-            <div className="flex flex-nowrap gap-[700px]">
-              <div className="flex flex-nowrap gap-4">
-                <Avatar src={postcontents.avatar} />
-                <Chip color="default"> {postcontents.authorName} </Chip>
-                <Chip color="default"> {postcontents.title} </Chip>
-              </div>
+    <div className="pl-40 pt-10 pb-5">
+
+    {/* TODO: 게시물 컴포넌트는 키값을 통해 불러오는식으로만 구성할지 페이지에 전체 코드를 구성할지 여부 결정 */}
+    <Card style={postStyle}> 
+      <CardHeader>
+        <div className='flex flex-nowrap gap-[700px]'>
+        <div className='flex flex-nowrap gap-4'>
+        <Avatar src={postcontents.avatar} />
+          <Chip color='default'> {postcontents.authorName} </Chip>
+          <Chip color='default'> {postcontents.title} </Chip>
+        </div>
 
               <div className="flex flex-nowrap items-center gap-4">
                 <button>
