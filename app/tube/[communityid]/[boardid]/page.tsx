@@ -28,6 +28,15 @@ interface communityType {
   updatedDate: string
 }
 
+interface boardType {
+    boardName: string;
+    boardType: string;
+    boardDescription: string;
+    visible: boolean;
+    limitTime: string;
+    erase?: boolean;
+} 
+
 interface TabsProps {
   activeTab: string;
 }
