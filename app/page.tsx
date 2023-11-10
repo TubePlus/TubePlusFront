@@ -1,11 +1,9 @@
 import MainSidebar from '@/components/sidebar/MainSidebar';
 import Sidebar from '@/components/sidebar/Sidebar';
-import MainBanner from '@/components/MainBanner';
-import CreatorTable from '@/components/CreatorTable';
-import { Chip } from '@nextui-org/chip';
-import CommunityRecommend from '@/components/CommunityRecommend';
-import Post from '@/components/Post';
-// import React , { useRef } from 'react'; Todo: 페이지 중간에 있는 community 컴포넌트로 이동하는 기능
+import MainSlider from '@/app/main_slider';
+import CreatorRanking from '@/app/creator_ranking';
+import { Card } from '@nextui-org/card';
+import MainShorts from './main_shorts';
 
 export default function Home() {
   return (
@@ -22,18 +20,21 @@ export default function Home() {
         </Sidebar>
       </div>
 
-      <div
+      <section
         className={`lg:col-start-4 lg:col-end-13  lg:pl-0 
                     md:col-start-2 md:col-end-11  md:pl-0
                     x:col-span-full
-                    overflow-y-auto
+                    overflow-y-auto pb-10
                     flex flex-col gap-y-10 gap-unit-md pt-4 
-                    scrollbar-thin`}
+                    scrollbar-thin min-h-screen`}
       >
+        {/* banner */}
+        <MainSlider />
 
-        <MainBanner />
-        <CreatorTable />
-        <div>
+        {/* recommended creator: ranking */}
+        <CreatorRanking />
+
+        {/* <div>
           <Chip color="default">Trending Today</Chip>
           <div className="flex flex-wrap pt-4 gap-6">
             <CommunityRecommend />
@@ -42,9 +43,20 @@ export default function Home() {
           <div className="flex flex-col pt-4 pb-16 pr-1 gap-6">
             <Post />
           </div>
-        </div>
+        </div> */}
 
-      </div>
+        <MainShorts />
+
+        {/* TODO: figma 참고 */}
+        <section className="grid grid-cols-5">
+          <div className="sm:col-span-2 x:col-span-full flex felx-col gap-4">
+            <Card>hello</Card>
+          </div>
+          <div className="sm:col-span-3 x:col-span-full">
+            <Card>h2llo</Card>
+          </div>
+        </section>
+      </section>
     </>
   );
 }

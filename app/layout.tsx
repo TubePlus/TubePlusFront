@@ -7,6 +7,11 @@ import ScrollToTop from '@/components/ui/ScrollToTop';
 
 import 'swiper/swiper-bundle.css';
 import 'swiper/modules';
+import 'swiper/css';
+import 'swiper/css/navigation';
+import 'swiper/css/pagination';
+import 'swiper/css/scrollbar';
+
 import TubePlusLogo from '@/components/TubePlusLogo';
 
 const inter = Inter({ subsets: ['latin'] });

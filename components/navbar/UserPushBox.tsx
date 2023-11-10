@@ -64,6 +64,7 @@ const UserPushBox = () => {
     setMounted(true);
   }, []);
 
+  // TODO: Badge 추가
   return mounted ? (
     <>
       <NavbarItem>

@@ -6,6 +6,69 @@ export const endpointPrefix = '/api/v1';
 
 /**
  * @warning     MockAPI
+ * @description get slides from server
+ * @param
+ * @returns     json body
+ */
+export const getSlides = () => {
+  // NOTE: body에 email
+  const url = new URL(mockUrl + endpointPrefix + 'banner');
+
+  const result = fetch(url, {
+    method: 'GET',
+    headers: { 'content-type': 'application/json' },
+  })
+    .then(res => {
+      if (res.ok) return res.json();
+    })
+    .catch(e => console.log(e));
+  return result;
+};
+
+/**
+ * @warning     MockAPI
+ * @description get hot creators from server
+ * @param
+ * @returns     json body
+ */
+export const getRanks = () => {
+  // NOTE: body에 email
+  const url = new URL(mockUrl + endpointPrefix + 'hotCreator');
+
+  const result = fetch(url, {
+    method: 'GET',
+    headers: { 'content-type': 'application/json' },
+  })
+    .then(res => {
+      if (res.ok) return res.json();
+    })
+    .catch(e => console.log(e));
+  return result;
+};
+
+/**
+ * @warning     MockAPI
+ * @description get hot creators from server
+ * @param
+ * @returns     json body
+ */
+export const getShorts = () => {
+  // NOTE: body에 email
+  const url = new URL(mockUrl + endpointPrefix + 'shorts');
+
+  const result = fetch(url, {
+    method: 'GET',
+    headers: { 'content-type': 'application/json' },
+  })
+    .then(res => {
+      if (res.ok) return res.json();
+    })
+    .catch(e => console.log(e));
+  return result;
+};
+
+/**
+ * @warning     MockAPI
  * @description get a user from server
  * @param       tags
  * @returns     json body

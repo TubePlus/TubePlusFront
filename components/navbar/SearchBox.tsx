@@ -87,8 +87,10 @@ const SearchBox = ({
               popover: 'dark:bg-default-100',
             }}
             label
+            isRequired
             selectedKeys={selectValue}
             onSelectionChange={setSelectValue}
+            selectionMode="single"
             size="sm"
             variant="faded"
             items={SearchFilter}
