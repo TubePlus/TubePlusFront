@@ -276,3 +276,21 @@ export const putTheme = async (uuid: string) => {
   });
   return result;
 };
+
+export const getBoardById = async (boardId: string) => {
+  const headers = new Headers({
+    'Content-Type': 'application/json',
+  });
+
+  const requestOptions = {
+    method: 'GET',
+    headers: headers,
+  };
+
+  const res = await fetch(`${baseUrl}${endpointPrefix}/boards/${boardId}/`, requestOptions);
+
+  if (!res.ok) {
+    throw new Error('Network response was not ok');
+  }
+  return res.json();
+};
