@@ -12,6 +12,14 @@ import Link from 'next/link';
 export default function Home() {
   return (
     <>
+    <main
+            className={`relative grid mx-auto max-w-[1524px] px-4 scrollbar-thin
+                        lg:gap-[.8rem]  lg:grid-cols-12
+                        md:gap-unit-md  md:grid-cols-10
+                        sm:gap-unit-sm  sm:grid-cols-8
+                        x:gap-unit-xs   x:grid-cols-4
+                        `}
+          >
       <div
         className="-ml-4 z-20
           lg:col-span-3
@@ -114,6 +122,7 @@ export default function Home() {
           <SuggestedCreator />
         </section>
       </section>
+      </main>
     </>
   );
 }

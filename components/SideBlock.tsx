@@ -36,7 +36,7 @@ const SideBlock = ( { communityid } : SideBlockProps ) => {
 console.log('커뮤니티 아이디:', communityid)
 
   const fetchSideBlock = async () => {
-    const res = await fetch(`https://tubeplus.duckdns.org/api/v1/communities/${communityid}/side/r`)
+    const res = await fetch(`https://34.64.88.166:8000/api/v1/communities/${communityid}/side/r`)
     return res.json()
   };
 

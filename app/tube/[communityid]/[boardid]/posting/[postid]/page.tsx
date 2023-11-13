@@ -19,41 +19,73 @@ import {
   ThickArrowUpIcon,
 } from '@radix-ui/react-icons';
 import { useQuery } from '@tanstack/react-query';
-import { CommentProps } from '@/types/comments';
+import { baseUrl , endpointPrefix } from '@/lib/fetcher';
 
-const fetchPosts = async (postId: string) => {
-  const res = await fetch(
-    `https://652c497bd0d1df5273ef56a5.mockapi.io/api/v1/post/${postId}`,
-  );
+interface PostProps {
+  postingId: string;
+  authorName: string;
+  avatar: string;
+  title: string;
+  contents: string;
+  votecounts: number;
+}
+
+interface CommentProps
+  {
+  commentId: number;
+  commenterUuid: string;
+  commenterName: string; // TODO: API정의서에 없어서 백에 요청 필요
+  childCoount: number;
+  parentId: string;
+  contents: string;
+  avatar: string;  // MEMO: 댓글 작성자 프로필이미지 넣을지 여부 상의 필요
+  }
+
+
+const fetchPosts = async (postingId: string) => {
+  const res = await fetch(`${baseUrl}${endpointPrefix}/postings/${postingId}`, {
+    headers: {
+      'Content-Type': 'application/json',
+    }
+});
+  
   if (!res.ok) {
     throw new Error('Network response was not ok');
   }
   return res.json();
 };
 
-const fetchComments = async (postId: string) => {
-  const res = await fetch(
-    `https://652c497bd0d1df5273ef56a5.mockapi.io/api/v1/post/${postId}/comments`,
-  );
+// `https://652c497bd0d1df5273ef56a5.mockapi.io/api/v1/post/${postId}/comments` 데이터패칭 되는것을 확인한 MOCK API 주소
+
+const fetchComments = async (postingId: string, parentId?: string) => {
+  let url = `https://tubeplus.duckdns.org/api/v1/comments?postingId=${postingId}`;
+  if (parentId) {
+    url += `&parentId=${parentId}`; // 대댓글 조회를 위한 parentId 추가
+  }
+
+  const res = await fetch(url, {
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  });
   if (!res.ok) {
     throw new Error('Network response was not ok');
   }
   return res.json();
 };
 
-function Posting({ params }: { params: { postid: string } }) {
+function Posting({ params }: { params: { postingId: string , parentId: string } }) {
   const {
     data: postcontents,
     isLoading: isLoadingPost,
     isError: isErrorPost,
-  } = useQuery(['postcontents', params.postid], () =>
-    fetchPosts(params.postid),
-  );
+  } = useQuery(['postcontents', params.postingId], () => fetchPosts(params.postingId));
+  
   const {
     data: comments,
     isLoading: isLoadingComments,
     isError: isErrorComments,
-  } = useQuery(['comments', params.postid], () => fetchComments(params.postid));
+  } = useQuery(['comments', params.postingId, params.parentId], () => fetchComments(params.postingId, params.parentId));
 
   const variants = ['flat', 'faded', 'bordered', 'underlined'];
   const postStyle = {
@@ -68,6 +100,9 @@ function Posting({ params }: { params: { postid: string } }) {
   if (isErrorPost || isErrorComments) {
     return <span>Error</span>;
   }
+
+  console.log(postcontents)
+  console.log(comments)
 
   return (
     <>
@@ -173,7 +208,7 @@ function Posting({ params }: { params: { postid: string } }) {
               {comments &&
                 comments.map((comment: CommentProps) => {
                   return (
-                    <div key={comment.id} className="pl-10 pr-6 pb-4">
+                    <div key={comment.commentId} className="pl-10 pr-6 pb-4">
                       <User
                         name={`${comment.commenterName}`}
                         description="Product Designer"
@@ -189,7 +224,7 @@ function Posting({ params }: { params: { postid: string } }) {
                         labelPlacement="outside"
                         // placeholder=
                         className="max-w-full"
-                        defaultValue={`${comment.replyContent}`}
+                        defaultValue={`${comment.contents}`}
                       />
                     </div>
                   );

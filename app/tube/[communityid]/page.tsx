@@ -5,7 +5,8 @@ import { useQuery } from '@tanstack/react-query'
 import { Image , Card , Button } from '@nextui-org/react'
 import BoardTabBar from '@/components/BoardTabBar'
 import SideBlock from '@/components/SideBlock'
-import { baseUrl , endpointPrefix } from '@/lib/fetcher'
+import { baseUrl , endpointPrefix, getBoardById } from '@/lib/fetcher'
+
 
 interface communityType {
   communityId: string
@@ -42,31 +43,23 @@ interface TabsProps {
 }
 
 const fetchCommunity = async (communityId: string) => {
-  const res = await fetch(`${baseUrl}${endpointPrefix}/communities/${communityId}/info`, {
-    headers: {
-      'Content-Type': 'application/json',
-    }
-})
+  const res = await fetch(`${baseUrl}${endpointPrefix}/communities/${communityId}/info`)
   if (!res.ok) {
     throw new Error('Network response was not ok')
   }
   return res.json()
 };
 
-const fetchBoard = async (boardId: string) => {
-  const res = await fetch(`http://34.64.88.166:8000/api/v1/boards/${boardId}/`, {
-    headers: {
-      'Content-Type': 'application/json',
-    }
-})
-  if (!res.ok) {
-    throw new Error('Network response was not ok')
-  }
-  return res.json()
-};
+// const fetchBoard = async (boardId: string) => {
+//   const res = await fetch(`${baseUrl}${endpointPrefix}/boards/${boardId}/`)
+//   if (!res.ok) {
+//     throw new Error('Network response was not ok')
+//   }
+//   return res.json()
+// };
 
 
-function Tube({ params } : { params : { communityid : string, boardid : string }}) {
+function Tube({ params } : { params : { communityid : string }}) {
   
   const {
     data : communitycontents,
@@ -78,7 +71,11 @@ function Tube({ params } : { params : { communityid : string, boardid : string }
     data : boardcontents,
     isLoading : isLoadingBoard,
     isError : isErrorBoard,
-  } = useQuery (['boardcontents', params.boardid] , () => fetchBoard(params.boardid));
+  } = useQuery (['boardcontents', params.communityid] , () => getBoardById(params.communityid));
+
+
+  console.log('boardcontents',boardcontents)
+
   if (isLoadingCommunity || isLoadingBoard) {
     return <span>Loading...</span>;
   }

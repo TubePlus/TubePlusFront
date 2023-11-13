@@ -10,11 +10,13 @@ import { baseUrl, endpointPrefix } from '@/lib/fetcher';
 
 
 interface CommunityData {
-  title: string;
+  communityName: string;
   description: string;
+  token: string;
+  ownerUuid: string;
 }
 
-function CommunityCreation() {
+export default function CommunityCreation() {
   const { data: session, status } = useSession();
   const router = useRouter();
   const queryClient = useQueryClient();
@@ -25,11 +27,10 @@ function CommunityCreation() {
 
     // useMutation 훅은 컴포넌트의 최상단으로 이동되어야 합니다.
   const createCommunityMutation = useMutation<any, any, CommunityData>((newCommunity) => {
-    return fetch('http://34.64.88.166:8000/api/v1/communities', {
+    return fetch(`${baseUrl}${endpointPrefix}/communities`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': 'Bearer ya29.a0AfB_byDdMbQ3x1-twdie-4URHPWqUqiFEqY7shuwkgWlgWVdushI2z5XmoX0Ly1TOuvAKKs2EEHFtXxmExATyvmfkoqRxFvtST_o0eRko7Ld-MDfXYW-5XHjJUIXB6FvzMWjy4ya2nTb_KPGbY0xMIwT0XfMwVGvExo8aCgYKAZISARESFQHGX2Miif-YmXRu84UvzXnpiBACEQ0171'
         // 필요하다면, 인증 토큰 등의 추가적인 헤더를 여기에 추가
       },
       body: JSON.stringify(newCommunity),
@@ -64,17 +65,17 @@ function CommunityCreation() {
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
     const newCommunity: CommunityData = {
-      title: formData.get('CommunityTitle') as string,
+      communityName: formData.get('CommunityName') as string,
       description: formData.get('CommunityDescription') as string,
+      token: session.user.token as string,
+      ownerUuid: session.user.uuid as string,
     };
     createCommunityMutation.mutate(newCommunity);
   };
 
-
-  
-  const checkDuplicateName = (name : string) => {
+  const checkDuplicateName = (communityName : string) => {
     setIsLoading(true);
-    fetch(`${baseUrl}${endpointPrefix}/communities/${name}/duplicate`, {
+    fetch(`${baseUrl}${endpointPrefix}/communities/${communityName}/duplicate`, {
       method: 'GET',
       headers: {
         'Content-type': 'application/json',
@@ -88,7 +89,7 @@ function CommunityCreation() {
         console.log('중복검사완료');
       } else {
         setIsInvalid(true);
-        setInvalidMsg(`${name}은 중복되거나 유효하지 않습니다!`);
+        setInvalidMsg(`${communityName}은 중복되거나 유효하지 않습니다!`);
       }
     })
     .catch(error => {
@@ -107,6 +108,7 @@ function CommunityCreation() {
     checkDuplicateName(communityName);
   };
 
+  console.log(session)
 
   return (
     <>
@@ -130,11 +132,13 @@ function CommunityCreation() {
             <Input
               className='col-span-2'
               isClearable size='lg'
-              type="CommunityTitle"
+              type='text'
+              name="CommunityName"
               variant={'underlined'}
               placeholder="Enter your CommunityTitle"
+              onChange={(e) => setCommunityName(e.target.value)}
             />
-            <Button className='col-span-1' size='md' color='primary'>
+            <Button onClick={handleDuplicateCheck} className='col-span-1' size='md' color='primary'>
               <span className="md:inline x:hidden"> Duplicate </span> check
             </Button>
           </div>
@@ -148,7 +152,9 @@ function CommunityCreation() {
             <Input
               className='col-span-6'
               isClearable size='lg'
-              type="CommunityDescription"
+              // type="CommunityDescription"
+              type="text" // 입력 필드 유형을 텍스트로 설정
+              name="CommunityDescription" // FormData가 이 값을 찾을 수 있도록 name 속성 설정
               variant={'underlined'}
               placeholder="Enter your CommunityDescription" />
           </div>
@@ -172,5 +178,3 @@ function CommunityCreation() {
     </>
   )
 }
-
-export default CommunityCreation

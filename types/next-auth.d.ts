@@ -20,6 +20,7 @@ export interface DBUserProps extends DefaultUser {
   link?: [{ url: string }];
   is_creator?: boolean;
   created_at?: string;
+  token?: string;
 }
 
 declare module 'next-auth' {

@@ -40,6 +40,7 @@ export default function RootLayout({
           <Navbar />
           {/* <SubNavbar /> */}
 
+          
           <main
             className={`relative grid mx-auto max-w-[1524px] px-4 scrollbar-thin
                         lg:gap-[.8rem]  lg:grid-cols-12
