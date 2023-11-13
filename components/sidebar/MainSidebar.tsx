@@ -18,6 +18,7 @@ import { Accordion, AccordionItem } from '@nextui-org/accordion';
 const MainSidebar = ({ isRoot = false }: { isRoot?: boolean }) => {
   const { data: session } = useSession();
   const username = session?.user.name; // TODO: 현재 google에서 전체 이름을 불러오고 있음. 기본값 별명(: young1ll)
+  const [isMore, setIsMore] = useState();
 
   // TODO: static top-0
   return (

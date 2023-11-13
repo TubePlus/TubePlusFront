@@ -1,5 +1,6 @@
 'use client';
 
+import { putTheme } from '@/lib/fetcher';
 import { Button, Skeleton, Spinner, Switch } from '@nextui-org/react';
 import { MoonIcon, SunIcon } from '@radix-ui/react-icons';
 import { useSession } from 'next-auth/react';
@@ -11,13 +12,19 @@ export const ThemeSwitcher = ({ type }: { type: 'toggle' | 'button' }) => {
   const { theme, setTheme, systemTheme } = useTheme(); // TODO: user를 위한 setThme() 사용 시 Handler 안에 넣어서 session 확인, 확인 후 post fetch
   const { data: session } = useSession();
 
+  const fetchTheme = async () => {
+    const response = await putTheme(session?.user.uuid as string);
+    const { data } = await response.json();
+
+    if (data.darkMode) setTheme('dark');
+    else setTheme('light');
+  };
+
   const toggleTheme = () => {
-    if (theme === 'light') {
-      setTheme('dark');
-      //TODO: fetch put here
+    if (session?.user) {
+      fetchTheme();
     } else {
-      setTheme('light');
-      //TODO: fetch put here
+      setTheme(theme === 'light' ? 'dark' : 'light');
     }
   };
 
@@ -25,8 +32,10 @@ export const ThemeSwitcher = ({ type }: { type: 'toggle' | 'button' }) => {
     setMounted(true);
     if (!session?.user) {
       setTheme('system');
+    } else {
+      if (session.user.darkmode) setTheme('dark');
+      else setTheme('light');
     }
-    // session 있는 경우에는?
   }, []); // TODO: Warning 의존성 배열에 setTheme 필요 - "mount 시에만 실행되어야 하기 때문에 추가하면 안됨"
 
   switch (type) {

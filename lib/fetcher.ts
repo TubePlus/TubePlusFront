@@ -260,3 +260,19 @@ export const getFavoritesByUuid = (uuid: string) => {
     });
   return result;
 };
+
+/**
+ * @param   uuid  user uuid
+ * @returns Community[]
+ */
+export const putTheme = async (uuid: string) => {
+  // const url = `${mockUrl}${endpointPrefix}/users/me/${uuid}`;
+  const url = new URL(`${baseUrl}${endpointPrefix}/users/darkmode`);
+
+  const result = await fetch(url, {
+    method: 'PUT',
+    headers: { 'content-type': 'application/json' },
+    body: JSON.stringify({ uuid: uuid }),
+  });
+  return result;
+};

@@ -49,7 +49,7 @@ const CreatorRanking = () => {
         ],
       }}
       topContent={
-        <div className="flex sm:gap-8 x:gap-4 items-center">
+        <div id="community" className="flex sm:gap-8 x:gap-4 items-center">
           <ScrollShadow orientation="horizontal" hideScrollBar className="">
             <div className="flex gap-2">
               {communityCategory.map(cate => (

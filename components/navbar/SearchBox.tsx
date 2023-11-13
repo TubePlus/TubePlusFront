@@ -71,6 +71,8 @@ const SearchBox = ({
     case 'input':
       return mounted ? (
         <div className="flex gap-[1px]">
+          {/*
+          REMOVED: we re-planned searching for only creator
           <Select
             className="max-w-[120px] mx-[-1px] z-0"
             classNames={{
@@ -87,7 +89,6 @@ const SearchBox = ({
               popover: 'dark:bg-default-100',
             }}
             label
-            isRequired
             selectedKeys={selectValue}
             onSelectionChange={setSelectValue}
             selectionMode="single"
@@ -98,10 +99,10 @@ const SearchBox = ({
             {filterItem => (
               <SelectItem key={filterItem.value}>{filterItem.label}</SelectItem>
             )}
-          </Select>
+          </Select> */}
 
           <SearchInput
-            placeholder="Search TubePlus"
+            placeholder="Search Creator active on TubePlus..."
             value={searchValue}
             onValueChange={setSearchValue}
             ref={searchInputRef}
@@ -144,6 +145,8 @@ const SearchBox = ({
           >
             <ModalContent>
               <div className="flex">
+                {/*
+                REMOVED: we re-planned searching for only creator
                 <Select
                   className="max-w-[120px] mx-[-1px]"
                   classNames={{
@@ -166,7 +169,8 @@ const SearchBox = ({
                       {filterItem.label}
                     </SelectItem>
                   )}
-                </Select>
+                </Select> */}
+
                 <Input
                   classNames={{}}
                   radius="none"
@@ -209,8 +213,6 @@ const SearchBox = ({
 
 export default SearchBox;
 
-// Custom Input: SearchInput
-const className = 'border-l-0 bg-opacity-50 transition-all';
 const styles = {
   base: [],
   // mainWrapper: [''],
@@ -219,8 +221,11 @@ const styles = {
   input: [''],
   inputWrapper: [
     'h-10 transition-colors motion-reduce:transition-none',
-    'border border-1 border-l-0',
-    'rounded-full rounded-ss-none rounded-es-none',
+    // 'border border-1 border-l-0',
+    'border border-1',
+    // 'rounded-full rounded-ss-none rounded-es-none',
+    'rounded-full',
+    'focus-within:rounded-ss-[20px] focus-within:rounded-es-none',
     'focus-within:rounded-se-[20px] focus-within:rounded-ee-none',
     'border-default-200 hover:border-default-400',
     'bg-opacity-10 hover:bg-transparent focus-within:!bg-transparent',
