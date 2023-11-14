@@ -13,7 +13,7 @@ import { baseUrl, endpointPrefix } from '@/lib/fetcher'
 // * limitTime 빼곤 null이면 안됨
 
 interface BoardData {
-  communityId: number;
+  communityId: string;
   boardName: string;
   boardType: string;
   boardDescription: string;
@@ -32,11 +32,12 @@ const boardType = [
 ]
 
 
-export default function BoardCreation() {
+// TODO: COMMUNITYID를 받아와야함
+export default function BoardCreation({communityId}: {communityId: string}) {
 
   const queryClient = useQueryClient();
   const createBoardMutation = useMutation<any, any, BoardData>((newBoard) => {
-    return fetch(`${baseUrl}${endpointPrefix}/boards`, {
+    return fetch(`https://tubeplus1.duckdns.org/api/v1/board-service/boards`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -67,7 +68,7 @@ export default function BoardCreation() {
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
     const newBoard: BoardData = {
-      communityId: 1,
+      communityId: communityId,
       boardName: formData.get('BoardName') as string,
       boardType: selectedBoardType,
       boardDescription: formData.get('BoardDescription') as string,
@@ -75,6 +76,8 @@ export default function BoardCreation() {
     };
     createBoardMutation.mutate(newBoard);
   }
+
+  
 
   return (
     

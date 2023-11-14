@@ -53,12 +53,14 @@ const fetchCommunity = async (communityId: string) => {
   return res.json()
 };
 
+//TODO: 게시판, 게시물, 댓글 API 요청 URL 숨기기
 const fetchBoard = async (boardId: string) => {
-  const res = await fetch(`http://34.64.88.166:8000/api/v1/boards/${boardId}/`, {
+  const res = await fetch(`https://tubeplus1.duckdns.org/api/v1/board-service/boards/${boardId}`, {
     headers: {
       'Content-Type': 'application/json',
     }
 })
+
   if (!res.ok) {
     throw new Error('Network response was not ok')
   }

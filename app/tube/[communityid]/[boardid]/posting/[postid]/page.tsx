@@ -43,7 +43,7 @@ interface CommentProps
 
 
 const fetchPosts = async (postingId: string) => {
-  const res = await fetch(`${baseUrl}${endpointPrefix}/postings/${postingId}`, {
+  const res = await fetch(`https://tubeplus.duckdns.org/api/v1/board-service/postings/${postingId}`, {
     headers: {
       'Content-Type': 'application/json',
     }
@@ -58,7 +58,7 @@ const fetchPosts = async (postingId: string) => {
 // `https://652c497bd0d1df5273ef56a5.mockapi.io/api/v1/post/${postId}/comments` 데이터패칭 되는것을 확인한 MOCK API 주소
 
 const fetchComments = async (postingId: string, parentId?: string) => {
-  let url = `https://tubeplus.duckdns.org/api/v1/comments?postingId=${postingId}`;
+  let url = `https://tubeplus.duckdns.org/api/v1/board-service/comments?postingId=${postingId}`;
   if (parentId) {
     url += `&parentId=${parentId}`; // 대댓글 조회를 위한 parentId 추가
   }
