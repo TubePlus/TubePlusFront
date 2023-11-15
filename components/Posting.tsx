@@ -7,7 +7,7 @@ import { Button } from '@nextui-org/react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { baseUrl, endpointPrefix } from '@/lib/fetcher';
 import { useSession } from 'next-auth/react';
-import { useS3Upload } from 'next-s3-upload';
+import AWS from 'aws-sdk';
 
 interface PostingType {
   boardId: string;
@@ -22,8 +22,8 @@ const Posting = (boardId: string) => {
   const [title, setTitle] = useState('')
   const [contentValue, setContentValue] = useState('')
   const session = useSession();
-  const { uploadToS3 } = useS3Upload();
 
+  // 게시물 POST 요청 로직
   const createPostingMutation = useMutation<any, any, PostingType>((newPosting) => {
     return fetch(`${baseUrl}${endpointPrefix}/postings`, {
       method: 'POST',
@@ -42,6 +42,8 @@ const Posting = (boardId: string) => {
     },
   });
   
+
+  // QUILL 모듈
   const modules = useMemo(() => ({
     toolbar: [
       ['image']
@@ -53,6 +55,7 @@ const Posting = (boardId: string) => {
   ), []);
 
   
+
   const imageHandler = async () => {
     const input = document.createElement('input')
     input.setAttribute("type", "file")
@@ -68,7 +71,7 @@ const Posting = (boardId: string) => {
           secretAccessKey: Secret_Access_Key,
       });
 
-      const upload = new AWS.S3.ManagedUpload({
+      const uploadImage = new AWS.S3.ManagedUpload({
         params: {
           ACL: 'public-read',
           Bucket: Bucket_Name,

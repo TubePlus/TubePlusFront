@@ -60,3 +60,16 @@
 .full-width-border {
   grid-column: -1 / 13; /* 그리드의 처음부터 끝까지 확장 */
 }
+
+/* 커뮤니티 페이지 상단부 */
+.community-header {
+  font-family: 'Arial', sans-serif;
+  color: #333;
+  margin: 0;
+  padding: 0;
+  background: linear-gradient(to right, #f0c27b, #4b1248);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
