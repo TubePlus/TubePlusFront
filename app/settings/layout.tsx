@@ -57,7 +57,7 @@ export default function SettingsLayout({
         <MainSidebar />
       </Sidebar>
 
-      <div className="fixed top-[3rem] left-0 w-full z-20">
+      <div className="fixed top-[5rem] left-0 w-full z-20">
         <SubNavbar dir={dir} />
       </div>
 

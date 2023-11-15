@@ -7,7 +7,8 @@ import { Button } from '@nextui-org/react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { baseUrl, endpointPrefix } from '@/lib/fetcher';
 import { useSession } from 'next-auth/react';
-import AWS from 'aws-sdk';
+import AWS from 'aws-sdk'
+import Image from 'next/image'
 
 interface PostingType {
   boardId: string;
@@ -16,12 +17,18 @@ interface PostingType {
   contents: string;
 }
 
+const REGION = process.env.REACT_APP_AWS_S3_BUCKET_REGION;
+const ACCESS_KEY = process.env.REACT_APP_AWS_S3_BUCKET_ACCESS_KEY_ID;
+const SECRET_ACCESS_KEY = process.env.REACT_APP_AWS_S3_BUCKET_SECRET_ACCESS_KEY;
+const BUCKET_NAME = process.env.REACT_APP_AWS_S3_BUCKET_NAME;
+
 //TODO: boardId 받아오기
 const Posting = (boardId: string) => {
   const queryClient = useQueryClient();
   const [title, setTitle] = useState('')
   const [contentValue, setContentValue] = useState('')
   const session = useSession();
+  const quillRef = useRef<ReactQuill>(null);
 
   // 게시물 POST 요청 로직
   const createPostingMutation = useMutation<any, any, PostingType>((newPosting) => {
@@ -42,7 +49,6 @@ const Posting = (boardId: string) => {
     },
   });
   
-
   // QUILL 모듈
   const modules = useMemo(() => ({
     toolbar: [
@@ -54,8 +60,7 @@ const Posting = (boardId: string) => {
   }
   ), []);
 
-  
-
+  //이미지 저장을 위한 핸들러
   const imageHandler = async () => {
     const input = document.createElement('input')
     input.setAttribute("type", "file")
@@ -67,14 +72,16 @@ const Posting = (boardId: string) => {
         const name = Date.now();
         AWS.config.update({
           region: REGION,
-          accessKeyId: Access_Key,
-          secretAccessKey: Secret_Access_Key,
+          accessKeyId: ACCESS_KEY,
+          secretAccessKey: SECRET_ACCESS_KEY,
+          bucketName: BUCKET_NAME,
       });
 
-      const uploadImage = new AWS.S3.ManagedUpload({
+
+      const upload = new AWS.S3.ManagedUpload({
         params: {
           ACL: 'public-read',
-          Bucket: Bucket_Name,
+          Bucket: BUCKET_NAME,
           Key: `${name}.${file?.name.split('.').pop()}`,
           Body: file,
         },
@@ -92,12 +99,10 @@ const Posting = (boardId: string) => {
 };
 
 
-
-
-
   const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setTitle(e.target.value);
   }
+
   const handleQuillChange = (contentValue: string) => {
     setContentValue(contentValue);
   };
