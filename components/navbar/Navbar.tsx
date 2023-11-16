@@ -20,7 +20,7 @@ const Navbar = async () => {
       classNames={{ base: 'min-w-[360px]', wrapper: 'px-4 max-w-[1524px]' }}
       isBordered
       isBlurred
-      height={'3rem'}
+      height={'5rem'}
     >
       <BrandBox />
 

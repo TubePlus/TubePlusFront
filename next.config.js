@@ -20,10 +20,6 @@ const nextConfig = {
         port: '',
         pathname: '**',
       },
-      {
-        protocol: 'https',
-        hostname: 't4.ftcdn.net',
-      },
     ],
   },
   async rewrites() {

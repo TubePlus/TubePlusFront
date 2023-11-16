@@ -17,7 +17,7 @@ interface BoardData {
   boardName: string;
   boardType: string;
   boardDescription: string;
-  limitTime: string;
+  limitDateTime: string;
 }
 
 const boardType = [
@@ -26,17 +26,18 @@ const boardType = [
     description: '일반 게시판',
   },
   {
-    name: 'TIMELIMIT',
-    description: '시간제한',
+    name: 'MEMBER',
+    description: '멤버십 게시판',
   }
 ]
 
-
-export default function BoardCreation() {
+// TODO: COMMUNITYID를 받아와야함
+export default function BoardCreation({communityId}: {communityId: number}) {
 
   const queryClient = useQueryClient();
+  
   const createBoardMutation = useMutation<any, any, BoardData>((newBoard) => {
-    return fetch(`${baseUrl}${endpointPrefix}/boards`, {
+    return fetch(`https://tubeplus1.duckdns.org/api/v1/board-service/boards`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -66,13 +67,26 @@ export default function BoardCreation() {
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
+  
+    // 사용자가 입력한 분을 정수로 변환
+    const limitTimeInMinutes = parseInt(formData.get('Limit Date Time') as string, 10);
+    
+    // 현재 시간에 사용자가 입력한 분을 더하고 ISO 형식으로 변환
+    let limitDateTime = '';
+    if (!isNaN(limitTimeInMinutes)) {
+      const currentDate = new Date();
+      currentDate.setMinutes(currentDate.getMinutes() + limitTimeInMinutes);
+      limitDateTime = currentDate.toISOString();
+    }
+  
     const newBoard: BoardData = {
-      communityId: 1,
+      communityId: communityId,
       boardName: formData.get('BoardName') as string,
       boardType: selectedBoardType,
       boardDescription: formData.get('BoardDescription') as string,
-      limitTime: formData.get('Limit Time') as string,
+      limitDateTime: limitDateTime, // 계산된 시간을 사용
     };
+  
     createBoardMutation.mutate(newBoard);
   }
 
@@ -90,7 +104,7 @@ export default function BoardCreation() {
     
     <div className="px-6 pb-6 flex flex-col gap-2">
       <h5 className="col-span-1 min-w-unit-24 font-semibold whitespace-nowrap overflow-hidden text-ellipsis">
-        <div className="md:inline x:hidden"> Name </div>
+        <div className="md:inline"> Name </div>
         <div className="pt-3 pb-5 font-light"> Board names cannot be changed. </div>
       </h5>
       <div className="grid grid-cols-5 flex-row gap-8 w-full text-sm pb-7">
@@ -111,7 +125,7 @@ export default function BoardCreation() {
 
         <div className="grid grid-cols-5 flex-row gap-8 w-full text-sm pb-7">
           <h5 className="col-span-1 min-w-unit-24 font-semibold whitespace-nowrap overflow-hidden text-ellipsis">
-            <span className="md:inline x:hidden"> BoardType </span>
+            <span className="md:inline"> BoardType </span>
           </h5>
           <Select
             classNames={{ trigger: 'h-[28px]', innerWrapper: 'py-0' }}            
@@ -137,7 +151,7 @@ export default function BoardCreation() {
       
       <div className="grid grid-cols-5 flex-row gap-16 pt-10 items-center w-full text-sm">
         <h5 className="pl-5 col-span-1 min-w-unit-24 font-semibold whitespace-nowrap overflow-hidden text-ellipsis">
-          <span className="md:inline x:hidden"> Description </span>
+          <span className="md:inline"> Description </span>
         </h5>
       </div>
       <div className="grid grid-cols-5 pl-5 pr-20 flex-row gap-16 items-center w-full text-sm pb-10">
@@ -149,17 +163,17 @@ export default function BoardCreation() {
           variant={'underlined'}
           placeholder="Enter your BoardDescription" />
 
-        <div className='grid col-span-2 gap-3 '>
+        <div className='grid col-span-2 gap-3'>
           <h5 className="col-span-1 min-w-unit-24 font-semibold whitespace-nowrap overflow-hidden text-ellipsis">
-            <span className="md:inline x:hidden"> Limit Time </span>
+            <span className="md:inline"> Limit Date Time (Minute) </span>
           </h5>
           <Input
           className='col-span-6'
           isClearable size='lg'
           type="text" // 입력 필드 유형을 텍스트로 설정
-          name="Limit Time" // FormData가 이 값을 찾을 수 있도록 name 속성 설정
+          name="Limit Date Time" // FormData가 이 값을 찾을 수 있도록 name 속성 설정
           variant={'underlined'}
-          placeholder="Enter your Limit Time" />
+          placeholder="Enter your Limit Time (Minute)" />
 
         </div>
       </div>

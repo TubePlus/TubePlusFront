@@ -21,7 +21,7 @@ interface RulesType {
 }
 
 interface SideBlockProps {
-  communityid: string;
+  communityid: number;
   // imageUrl: string;
 }
 
@@ -35,25 +35,25 @@ const SideBlock = ( { communityid } : SideBlockProps ) => {
   
 console.log('커뮤니티 아이디:', communityid)
 
-  const fetchSideBlock = async () => {
-    const res = await fetch(`https://34.64.88.166:8000/api/v1/communities/${communityid}/side/r`)
-    return res.json()
-  };
+  // const fetchSideBlock = async () => {
+  //   const res = await fetch(`https://34.64.88.166:8000/api/v1/communities/${communityid}/side/r`)
+  //   return res.json()
+  // };
 
-  const {
-    data : sideblockcontents,
-    isLoading : isLoadingRules,
-    isError : isErrorRules,
-  } = useQuery (['rulescontents'] , fetchSideBlock);
+  // const {
+  //   data : sideblockcontents,
+  //   isLoading : isLoadingRules,
+  //   isError : isErrorRules,
+  // } = useQuery (['rulescontents'] , fetchSideBlock);
   
-  console.log('사이드블록:', sideblockcontents)
+  // console.log('사이드블록:', sideblockcontents)
 
-  if (isLoadingRules) {
-    return <span>Loading...</span>;
-  }
-  if (isErrorRules) {
-    return <span>Error!</span>;
-  }
+  // if (isLoadingRules) {
+  //   return <span>Loading...</span>;
+  // }
+  // if (isErrorRules) {
+  //   return <span>Error!</span>;
+  // }
 
   return (
     <>
@@ -66,15 +66,15 @@ console.log('커뮤니티 아이디:', communityid)
       <Divider/>
       <CardBody>
         <div className='flex'>
-          <Link href={sideblockcontents.link}>
+          {/* <Link href={sideblockcontents.link}> */}
         <Image
           alt="nextui logo"
           height={40}
           radius="sm"
-          src={sideblockcontents.imageUrl}
+          // src={sideblockcontents.imageUrl}
           width={40}
         />
-          </Link>
+          {/* </Link> */}
         <p>Make beautiful websites regardless of your design experience.</p>
         <Button color='primary'>Join</Button>
         </div>
