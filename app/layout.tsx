@@ -13,6 +13,7 @@ import 'swiper/css/pagination';
 import 'swiper/css/scrollbar';
 
 import TubePlusLogo from '@/components/TubePlusLogo';
+import { ThemeProvider } from './theme-provider';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -36,23 +37,24 @@ export default function RootLayout({
                     overflow-y-auto scrollbar-none`}
       >
         <Providers>
-          {modal}
-          <Navbar />
-          {/* <SubNavbar /> */}
+          <ThemeProvider>
+            {modal}
+            <Navbar />
+            {/* <SubNavbar /> */}
 
-          
-          <main
-            className={`relative grid mx-auto max-w-[1524px] px-4 scrollbar-thin
+            <main
+              className={`relative grid mx-auto max-w-[1524px] px-4 scrollbar-thin
                         lg:gap-[.8rem]  lg:grid-cols-12
                         md:gap-unit-md  md:grid-cols-10
                         sm:gap-unit-sm  sm:grid-cols-8
                         x:gap-unit-xs   x:grid-cols-4
                         `}
-          >
-            {children}
-          </main>
+            >
+              {children}
+            </main>
 
-          <ScrollToTop />
+            <ScrollToTop />
+          </ThemeProvider>
         </Providers>
 
         {/* Footer */}

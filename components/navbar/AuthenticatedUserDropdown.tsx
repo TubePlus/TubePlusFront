@@ -21,6 +21,7 @@ import { Md, Sm, SmValue } from '../Responsive';
 import { Avatar, Skeleton, useSkeleton } from '@nextui-org/react';
 import { Suspense } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 
 const userItems = [
   {
@@ -68,6 +69,7 @@ const etcItems = [
 ];
 
 const AuthenticatedUserDropdown = () => {
+  const router = useRouter();
   const { data: session } = useSession(); //TODO: session 정보가 확인 되면, userInfo fetching 데이터로 세션을 수정. next-auth 내 profile(), signIn을 수정하거나 세션 갱신할 것.
 
   return (
@@ -110,16 +112,17 @@ const AuthenticatedUserDropdown = () => {
           aria-label="User Items Section"
         >
           {userItems.map(item => (
-            <DropdownItem key={item.key}>
-              <Link
-                href={
+            <DropdownItem
+              key={item.key}
+              onClick={() =>
+                router.push(
                   item.key === 'profile'
                     ? item.href + `/${session?.user.username}`
-                    : item.href
-                }
-              >
-                {item.label}
-              </Link>
+                    : item.href,
+                )
+              }
+            >
+              {item.label}
             </DropdownItem>
           ))}
         </DropdownSection>
