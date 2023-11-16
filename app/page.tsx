@@ -12,7 +12,6 @@ import Link from 'next/link';
 export default function Home() {
   return (
     <>
-    
       <div
         className="-ml-4 z-20
           lg:col-span-3
@@ -115,7 +114,6 @@ export default function Home() {
           <SuggestedCreator />
         </section>
       </section>
-      
     </>
   );
 }

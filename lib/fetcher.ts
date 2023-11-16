@@ -67,6 +67,21 @@ export const getShorts = () => {
   return result;
 };
 
+export const getShortsFromServer = () => {
+  // NOTE: body에 email
+  const url = new URL(baseUrl + endpointPrefix + '/etc/trendingVideos');
+
+  const result = fetch(url, {
+    method: 'GET',
+    headers: { 'content-type': 'application/json' },
+  })
+    .then(res => {
+      if (res.ok) return res.json();
+    })
+    .catch(e => console.log(e));
+  return result;
+};
+
 /**
  * @warning     MockAPI
  * @description get a user from server
@@ -102,6 +117,39 @@ export const getUserByUuid = (uuid: string) => {
 
   const result = fetch(baseUrl + endpointPrefix + '/users/info', {
     method: 'POST',
+    headers: { 'content-type': 'application/json' },
+    body: JSON.stringify(body),
+  })
+    .then(res => {
+      return res.json();
+    })
+    .catch(e => console.log(e));
+  return result;
+};
+
+/**
+ * @warning     tubePlus Server API
+ * @description get a user from server
+ * @param       uuid
+ * @returns     json body
+ */
+export const updateAUser = (editableValue: {
+  uuid: string;
+  username: string;
+  profileImage: string;
+  locale: string;
+  bio: string;
+}) => {
+  const body = {
+    uuid: editableValue.uuid,
+    username: editableValue.username,
+    profileImage: editableValue.profileImage,
+    locale: editableValue.locale,
+    bio: editableValue.bio,
+  };
+
+  const result = fetch(baseUrl + endpointPrefix + '/users/info', {
+    method: 'PUT',
     headers: { 'content-type': 'application/json' },
     body: JSON.stringify(body),
   })
@@ -287,7 +335,10 @@ export const getBoardById = async (boardId: string) => {
     headers: headers,
   };
 
-  const res = await fetch(`${baseUrl}${endpointPrefix}/boards/${boardId}/`, requestOptions);
+  const res = await fetch(
+    `${baseUrl}${endpointPrefix}/boards/${boardId}/`,
+    requestOptions,
+  );
 
   if (!res.ok) {
     throw new Error('Network response was not ok');

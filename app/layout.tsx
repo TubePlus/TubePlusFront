@@ -13,6 +13,7 @@ import 'swiper/css/pagination';
 import 'swiper/css/scrollbar';
 
 import TubePlusLogo from '@/components/TubePlusLogo';
+import { ThemeProvider } from './theme-provider';
 import { usePathname } from 'next/navigation';
 import CommunityHeader from '@/components/headers/CommunityHeader';
 
@@ -38,6 +39,7 @@ export default function RootLayout({
                     overflow-y-auto scrollbar-none`}
       >
         <Providers>
+        <ThemeProvider>
           {modal}
           <Navbar />
           <CommunityHeader />
@@ -51,11 +53,12 @@ export default function RootLayout({
                         sm:gap-unit-sm  sm:grid-cols-8
                         x:gap-unit-xs   x:grid-cols-4
                         `}
-          >
-            {children}
-          </main>
+            >
+              {children}
+            </main>
 
-          <ScrollToTop />
+            <ScrollToTop />
+          </ThemeProvider>
         </Providers>
 
         {/* Footer */}
