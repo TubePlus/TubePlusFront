@@ -20,9 +20,10 @@ import {
 } from '@radix-ui/react-icons';
 import { useQuery } from '@tanstack/react-query';
 import { baseUrl , endpointPrefix } from '@/lib/fetcher';
+import { usePathname } from 'next/navigation';
 
 interface PostProps {
-  postingId: string;
+  postingId: number;
   authorName: string;
   avatar: string;
   title: string;
@@ -41,51 +42,55 @@ interface CommentProps
   avatar: string;  // MEMO: 댓글 작성자 프로필이미지 넣을지 여부 상의 필요
   }
 
-
-const fetchPosts = async (postingId: string) => {
-  const res = await fetch(`${baseUrl}${endpointPrefix}/postings/${postingId}`, {
-    headers: {
-      'Content-Type': 'application/json',
-    }
-});
-  
-  if (!res.ok) {
-    throw new Error('Network response was not ok');
-  }
-  return res.json();
-};
-
 // `https://652c497bd0d1df5273ef56a5.mockapi.io/api/v1/post/${postId}/comments` 데이터패칭 되는것을 확인한 MOCK API 주소
 
-const fetchComments = async (postingId: string, parentId?: string) => {
-  let url = `https://tubeplus.duckdns.org/api/v1/comments?postingId=${postingId}`;
-  if (parentId) {
-    url += `&parentId=${parentId}`; // 대댓글 조회를 위한 parentId 추가
-  }
+function Posting({ params }: { params: { postingId: number , parentId?: number } }) {
 
-  const res = await fetch(url, {
-    headers: {
-      'Content-Type': 'application/json',
-    },
+  const path = usePathname()
+  const postingId = Number(path.split('/')[5])
+
+  const fetchPosts = async () => {
+    const res = await fetch(`https://tubeplus1.duckdns.org/api/v1/board-service/postings/${postingId}`, {
+      headers: {
+        'Content-Type': 'application/json',
+      }
   });
-  if (!res.ok) {
-    throw new Error('Network response was not ok');
-  }
-  return res.json();
-};
+    if (!res.ok) {
+      throw new Error('Network response was not ok');
+    }
+    return res.json();
+  };
 
-function Posting({ params }: { params: { postingId: string , parentId: string } }) {
   const {
     data: postcontents,
     isLoading: isLoadingPost,
     isError: isErrorPost,
-  } = useQuery(['postcontents', params.postingId], () => fetchPosts(params.postingId));
+  } = useQuery(['postcontents', params.postingId], fetchPosts);
+
+
+  const fetchComments = async (postingId: number, parentId?: number) => {
+    let url = `https://tubeplus1.duckdns.org/api/v1/board-service/comments?postingId=${postingId}`;
+    if (parentId) {
+      url += `&parentId=${parentId}`; // 대댓글 조회를 위한 parentId 추가
+    }
+  
+    const res = await fetch(url, {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+    if (!res.ok) {
+      throw new Error('Network response was not ok');
+    }
+    return res.json();
+  };
   
   const {
     data: comments,
     isLoading: isLoadingComments,
     isError: isErrorComments,
   } = useQuery(['comments', params.postingId, params.parentId], () => fetchComments(params.postingId, params.parentId));
+
 
   const variants = ['flat', 'faded', 'bordered', 'underlined'];
   const postStyle = {
@@ -147,6 +152,8 @@ function Posting({ params }: { params: { postingId: string , parentId: string } 
               </div>
             </div>
           </CardFooter>
+
+          {/* 하단부 댓글 컴포넌트 */}
 
           <div className="flex flex-nowrap pt-5 pl-5 pr-5 border-t-5">
             <div className="flex flex-nowrap gap-x-2">

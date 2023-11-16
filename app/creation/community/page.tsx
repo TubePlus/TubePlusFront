@@ -8,7 +8,6 @@ import { useRouter } from 'next/navigation'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { baseUrl, endpointPrefix } from '@/lib/fetcher';
 
-
 interface CommunityData {
   communityName: string;
   description: string;
