@@ -11,7 +11,7 @@ import AWS from 'aws-sdk'
 import Image from 'next/image'
 
 interface PostingType {
-  boardId: string;
+  boardId: number;
   authorUuid: string;
   title: string;
   contents: string;
@@ -23,7 +23,7 @@ const SECRET_ACCESS_KEY = process.env.NEXT_PUBLIC_REACT_APP_AWS_S3_BUCKET_SECRET
 const BUCKET_NAME = process.env.NEXT_PUBLIC_REACT_APP_AWS_S3_BUCKET_NAME;
 
 //TODO: boardId 받아오기
-const Posting = ( { boardId }: { boardId:string }) => {
+const Posting = ( { boardId }: { boardId: number }) => {
   const queryClient = useQueryClient();
   const [title, setTitle] = useState('')
   const [contentValue, setContentValue] = useState('')
