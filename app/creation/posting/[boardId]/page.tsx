@@ -1,7 +1,7 @@
 import React from 'react'
 import Posting from '@/components/Posting'
 
-function PostingPage({params: {boardId}} : {params: {boardId: string}}) {
+function PostingPage({params: {boardId}} : {params: {boardId: number}}) {
 
   return (
     <div>

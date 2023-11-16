@@ -17,13 +17,13 @@ interface PostingType {
   contents: string;
 }
 
-const REGION = process.env.REACT_APP_AWS_S3_BUCKET_REGION;
-const ACCESS_KEY = process.env.REACT_APP_AWS_S3_BUCKET_ACCESS_KEY_ID;
-const SECRET_ACCESS_KEY = process.env.REACT_APP_AWS_S3_BUCKET_SECRET_ACCESS_KEY;
-const BUCKET_NAME = process.env.REACT_APP_AWS_S3_BUCKET_NAME;
+const REGION = process.env.NEXT_PUBLIC_REACT_APP_AWS_S3_BUCKET_REGION;
+const ACCESS_KEY = process.env.NEXT_PUBLIC_REACT_APP_AWS_S3_BUCKET_ACCESS_KEY_ID;
+const SECRET_ACCESS_KEY = process.env.NEXT_PUBLIC_REACT_APP_AWS_S3_BUCKET_SECRET_ACCESS_KEY;
+const BUCKET_NAME = process.env.NEXT_PUBLIC_REACT_APP_AWS_S3_BUCKET_NAME;
 
 //TODO: boardId 받아오기
-const Posting = (boardId: string) => {
+const Posting = ( { boardId }: { boardId:string }) => {
   const queryClient = useQueryClient();
   const [title, setTitle] = useState('')
   const [contentValue, setContentValue] = useState('')
@@ -62,41 +62,54 @@ const Posting = (boardId: string) => {
 
   //이미지 저장을 위한 핸들러
   const imageHandler = async () => {
-    const input = document.createElement('input')
-    input.setAttribute("type", "file")
-    input.setAttribute("accept", "image/*")
-    input.click()
-    input.addEventListener('change', async () => {
-      const file = input.files?.[0]
+    const input = document.createElement('input');
+    input.setAttribute("type", "file");
+    input.setAttribute("accept", "image/*");
+    input.click();
+  
+    input.onchange = async () => {
+      if (!input.files || input.files.length === 0) {
+        return; // 파일이 선택되지 않은 경우 종료
+      }
+  
+      const file = input.files[0];
+  
       try {
-        const name = Date.now();
+        const fileNameParts = file.name.split('.');
+        const fileExtension = fileNameParts.pop();
+        const name = `${Date.now()}.${fileExtension}`;
+  
         AWS.config.update({
-          region: REGION,
-          accessKeyId: ACCESS_KEY,
-          secretAccessKey: SECRET_ACCESS_KEY,
-          bucketName: BUCKET_NAME,
-      });
-
-
-      const upload = new AWS.S3.ManagedUpload({
-        params: {
-          ACL: 'public-read',
-          Bucket: BUCKET_NAME,
-          Key: `${name}.${file?.name.split('.').pop()}`,
-          Body: file,
-        },
-      });
-
-      const IMG_URL = await upload.promise().then((res) => res.Location);
-      const editor = quillRef.current?.getEditor();
-      const range = editor?.getSelection()?.index;
-
-      editor.insertEmbed(range, 'image', IMG_URL);
-    } catch (err) {
-      console.log(err);
-    }
-  });
-};
+          region: REGION as string,
+          accessKeyId: ACCESS_KEY as string,
+          secretAccessKey: SECRET_ACCESS_KEY as string,
+        });
+  
+        const upload = new AWS.S3.ManagedUpload({
+          params: {
+            ACL: 'public-read',
+            Bucket: BUCKET_NAME as string,
+            Key: name,
+            Body: file,
+          },
+        });
+  
+        const uploadResult = await upload.promise();
+        const IMG_URL = uploadResult.Location;
+  
+        const editor = quillRef.current?.getEditor();
+        if (editor) {
+          const range = editor.getSelection()?.index;
+          if (range != null) {
+            editor.insertEmbed(range, 'image', IMG_URL);
+          }
+        }
+      } catch (err) {
+        console.error('Error uploading image:', err);
+      }
+    };
+  };
+  
 
 
   const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {

@@ -21,7 +21,7 @@ interface RulesType {
 }
 
 interface SideBlockProps {
-  communityid: string;
+  communityid: number;
   // imageUrl: string;
 }
 

@@ -1,13 +1,13 @@
 "use client"
 import { usePathname } from 'next/navigation'
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Image, Button } from '@nextui-org/react'
 import { useQuery } from '@tanstack/react-query'
 import { baseUrl , endpointPrefix } from '@/lib/fetcher'
 
 
 interface communityType {
-  communityId: string
+  communityId: number
   bannerImage: string
   ownerUuid: string
   profileImage: string
@@ -19,27 +19,31 @@ interface communityType {
   updatedDate: string
 }
 
-const fetchCommunity = async (communityId: string) => {
-  const res = await fetch(`${baseUrl}${endpointPrefix}/communities/${communityId}/info`, {
-    headers: {
-      'Content-Type': 'application/json',
-    }
-})
-  if (!res.ok) {
-    throw new Error('Network response was not ok')
-  }
-  return res.json()
-};
 
+function CommunityHeader( ) {
 
-function CommumityHeader({ params } : { params : { communityId : string} }) {
-
-    const {
-      data : communitycontents,
-      isLoading : isLoadingCommunity,
-      isError : isErrorCommunity,
-    } = useQuery (['communitycontents', params.communityId] , () => fetchCommunity(params.communityId))
+    const path = usePathname()
+    const communityId = Number(path.split('/')[2])
+      
+    const fetchCommunity = async () => {
+      const res = await fetch(`${baseUrl}${endpointPrefix}/communities/${communityId}/info`, {
+        headers: {
+          'Content-Type': 'application/json',
+        }
+    })
+      if (!res.ok) {
+        throw new Error('Network response was not ok')
+      }
+      return res.json()
+    };
     
+    const {
+      data: communitycontents,
+      isLoading: isLoadingCommunity,
+      isError: isErrorCommunity,
+    } = useQuery(['communitycontents', communityId], fetchCommunity);
+    
+    // TODO : SPINNER 
     if (isLoadingCommunity) {
       return <span>Loading...</span>;
     }
@@ -49,36 +53,32 @@ function CommumityHeader({ params } : { params : { communityId : string} }) {
       return <span>Error!</span>;
     }
 
-    const path = usePathname()
+    if(path.split('/')[1] !== 'tube' || path.split('/')[4] === 'posting' ) return null
+
     console.log(path)
-    if(path.split('/')[1] !== 'tube') return null
-
-
-
-
-    const bgImage = `url(${communitycontents.data.bannerImage})`
+    console.log("커뮤니티데이터",communitycontents)
 
   return (
 
-    <div className='w-full h-[600px] bg-black'> 
+    <div className='w-full h-[50%] bg-zinc-200'>
 
       <div className='relative w-full h-[500px] flex justify-center items-end mb-10'>
-        <div className='flex absolute w-full h-[500px]  justify-center items-end mb-10 blur-sm -z-10' style={{backgroundImage: bgImage, backgroundPosition: "center", backgroundSize: "cover", backgroundRepeat: "no-repeat"}}/>
+        <div className='flex absolute w-full h-[500px]  justify-center items-end mb-10 blur-sm -z-10' style={{backgroundImage: `${communitycontents.data?.bannerImage}`, backgroundPosition: "center", backgroundSize: "cover", backgroundRepeat: "no-repeat"}}/>
         <div className='grid mx-auto max-w-[1524px] pl-5 pr-3 pt-4 pb-3 min-h-[200px]'>
           <div className='flex w-full'>
-            <Image src={bgImage}/>
+            <Image src={communitycontents.data?.bannerImage}/>
           </div>
-          <div className='flex flex-col gap-unit-md'>
-            <div className='flex flex-row items-center gap-unit-xl'>
+          <div className='flex pt-3 flex-col gap-unit-md'>
+            <div className='flex items-center justify-center gap-unit-xl'>
 
-            <div className='w-[200px] h-[200px] rounded-3xl overflow-hidden flex justify-center items-center bg-white'>
-              <Image src={communitycontents.data.profileImage} alt='creator' width={200} height={200} />
+            <div className='w-[200px] h-[200px] rounded-full overflow-hidden flex justify-center items-center bg-white'>
+              <Image src={communitycontents.data?.profileImage} alt='creator' width={200} height={200} />
             </div>
               
             <div className='flex w-[15%] flex-col gap-3'>
-              <div className='text-3xl font-bold'>{communitycontents.data.communityName}</div>
-              <div className='text-xl font-bold'>{communitycontents.data.communityMemberCount} Members</div>
-              <div className='text-xl'>{communitycontents.data.createdDate}</div>
+              <div className='text-3xl font-bold'>{communitycontents.data?.communityName}</div>
+              <div className='text-xl font-bold'>{communitycontents.data?.communityMemberCount} Members</div>
+              <div className='text-xl'>{communitycontents.data?.createdDate}</div>
               <div className='a'>
               <Button radius='full' size='lg' color='primary'>Join</Button>
               </div>
@@ -90,7 +90,7 @@ function CommumityHeader({ params } : { params : { communityId : string} }) {
               </div>
 
               <div className='flex flex-row items-center gap-unit-md'>
-                <p className='text-xl'>{communitycontents.data.description}</p>
+                <p className='text-xl'>{communitycontents.data?.description}</p>
               </div>
             </div>
           </div>
@@ -115,11 +115,7 @@ function CommumityHeader({ params } : { params : { communityId : string} }) {
         </div>
       </main>
     
-    
-    
-    
     </div>
   )
 }
-
-export default CommumityHeader
+export default CommunityHeader

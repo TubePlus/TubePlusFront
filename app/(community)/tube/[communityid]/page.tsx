@@ -9,14 +9,7 @@ import { baseUrl , endpointPrefix, getBoardById } from '@/lib/fetcher'
 import Link from 'next/link'
 
 interface communityType {
-  communityId: string
-  communityBanner: string
-  title: string
-  communityImage: string
-  createdAt: string
-  isJoined: boolean
-  communitySize: number
-
+  communityId: number
   bannerImage: string
   ownerUuid: string
   profileImage: string
@@ -29,20 +22,21 @@ interface communityType {
 }
 
 interface boardType {
-  boardId: string;
+  boardId: number;
   boardName: string;
   boardType: string;
   boardDescription: string;
   visible: boolean;
   limitTime: string;
   erase?: boolean;
-} 
+}
 
 interface TabsProps {
   activeTab: string;
 }
 
-const fetchCommunity = async (communityId: string) => {
+
+const fetchCommunity = async (communityId: number) => {
   const res = await fetch(`${baseUrl}${endpointPrefix}/communities/${communityId}/info`)
   if (!res.ok) {
     throw new Error('Network response was not ok')
@@ -58,8 +52,7 @@ const fetchCommunity = async (communityId: string) => {
 //   return res.json()
 // };
 
-
-function Tube({ params } : { params : { communityid : string }}) {
+function Tube({ params } : { params : { communityid : number }}) {
   
   const {
     data : communitycontents,
@@ -85,7 +78,6 @@ function Tube({ params } : { params : { communityid : string }}) {
   
   console.log(communitycontents)
 
-  const bgImage = `url(${communitycontents.data.bannerImage})`
 
   return (
     <>

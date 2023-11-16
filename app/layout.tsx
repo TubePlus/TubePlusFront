@@ -14,7 +14,7 @@ import 'swiper/css/scrollbar';
 
 import TubePlusLogo from '@/components/TubePlusLogo';
 import { usePathname } from 'next/navigation';
-import CommumityHeader from '@/components/headers/CommumityHeader';
+import CommunityHeader from '@/components/headers/CommunityHeader';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -40,7 +40,7 @@ export default function RootLayout({
         <Providers>
           {modal}
           <Navbar />
-          <CommumityHeader />
+          <CommunityHeader />
           {/* <SubNavbar /> */}
 
           

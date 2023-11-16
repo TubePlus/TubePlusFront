@@ -90,8 +90,6 @@ export default function BoardCreation({communityId}: {communityId: number}) {
     createBoardMutation.mutate(newBoard);
   }
 
-  
-
   return (
     
     <section className="flex flex-col gap-8 min-h-[800px]">
