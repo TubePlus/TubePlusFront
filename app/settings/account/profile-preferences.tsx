@@ -1,3 +1,4 @@
+import { useFileUpload } from '@/hooks/use-file-upload';
 import useGlobalState from '@/hooks/use-global-state';
 import { Avatar } from '@nextui-org/avatar';
 import { Button } from '@nextui-org/button';
@@ -9,26 +10,37 @@ import React, { useEffect, useRef, useState } from 'react';
 const ProfilePreference = () => {
   const { data: session } = useSession();
   const [user, setUser] = useGlobalState('/settings');
-  const [bio, setBio] = useState('');
+  const [bio, setBio] = useState(session?.user.bio || '');
 
   const profileRef = useRef<HTMLInputElement | null>(null);
+  const uploadFile = useFileUpload();
   const [file, setFile] = useState<any>(null);
-  const [url, setUrl] = useState('');
+  const [profileImage, setProfileImage] = useState(session?.user.image);
 
   const handleProfile = async (e: any) => {
     e.preventDefault();
-    if (!profileRef.current?.files?.[0]) return;
-    const profile = profileRef.current.files[0];
-
-    profileRef.current.value = ''; // clear
-
     const img = {
-      preview: URL.createObjectURL(profile),
-      data: profile,
+      preview: URL.createObjectURL(e.target.files[0]),
+      data: e.target.files[0],
     };
 
     setFile(img);
-    console.log(file);
+    if (file) {
+      console.log(file.data.name);
+      const upload = await uploadFile(file.data.name, file.data);
+
+      console.log(file);
+      console.log(upload);
+      if (upload.ok) {
+        // show success
+        setProfileImage(upload.filepath);
+        alert('upload ok');
+        // 성공하면 url state를 설정하고, globalstate에 저장
+      } else {
+        // show error
+        alert('upload error');
+      }
+    }
   };
 
   useEffect(() => {
@@ -36,12 +48,13 @@ const ProfilePreference = () => {
       ...user,
       editable: {
         ...user?.editable,
+        profileImage,
         bio,
       },
     };
     setUser(updatedUser);
     console.log(user);
-  }, [bio]);
+  }, [bio, profileImage]);
 
   return (
     <div className="px-6 pb-6 flex flex-col gap-2 items-center border-b-1 border-default-300">
@@ -62,7 +75,7 @@ const ProfilePreference = () => {
               className="absolute md:bottom-[5%] md:right-[1%] x:bottom-0 x:right-0 z-20 border border-default-600 shadow-none hover:shadow-md duration-300"
               size="sm"
               onClick={() => {
-                console.log('이미지 수정!');
+                // console.log('이미지 수정!');
                 profileRef.current?.click();
               }}
             >
