@@ -8,6 +8,7 @@ import { ChangeEvent } from 'react'
 import { useState } from 'react'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { baseUrl, endpointPrefix } from '@/lib/fetcher'
+import { useRouter } from 'next/navigation'
 
 // * TODO: 크리에이터만 가능하게 권한 체크
 // * limitTime 빼곤 null이면 안됨
@@ -35,6 +36,7 @@ const boardType = [
 export default function BoardCreation({communityId}: {communityId: number}) {
 
   const queryClient = useQueryClient();
+  const router = useRouter();
   
   const createBoardMutation = useMutation<any, any, BoardData>((newBoard) => {
     return fetch(`https://tubeplus1.duckdns.org/api/v1/board-service/boards`, {
@@ -50,6 +52,7 @@ export default function BoardCreation({communityId}: {communityId: number}) {
     onSuccess: () => {
       // 요청이 성공적으로 완료되면 캐시를 무효화하거나, 필요한 추가적인 액션을 수행합니다.
       queryClient.invalidateQueries(['boards']);
+      router.push(`/tube/${communityId}`);
     },
     onError: (error) => {
       // 에러 처리 로직을 작성합니다.
@@ -86,9 +89,10 @@ export default function BoardCreation({communityId}: {communityId: number}) {
       boardDescription: formData.get('BoardDescription') as string,
       limitDateTime: limitDateTime, // 계산된 시간을 사용
     };
-  
     createBoardMutation.mutate(newBoard);
   }
+
+
 
   return (
     
@@ -115,7 +119,6 @@ export default function BoardCreation({communityId}: {communityId: number}) {
           name="BoardName"
           variant={'underlined'}
           placeholder="Enter your BoardTitle"
-          
         />
         {/* TODO: 게시판 이름 중복체크 할지 여부, 한다면 커뮤니티 중복체크 로직 사용 */}
         {/* <Button className='col-span-1' size='md' color='primary'>

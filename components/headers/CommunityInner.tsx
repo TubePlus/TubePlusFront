@@ -1,8 +1,10 @@
 import React from 'react'
-import { useQuery } from '@tanstack/react-query'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { baseUrl , endpointPrefix } from '@/lib/fetcher'
 import { Button } from '@nextui-org/react';
 import {Image} from "@nextui-org/react";
+import { useRouter } from 'next/navigation';
+import { useSession } from 'next-auth/react';
 
 
 interface communityType {
@@ -18,8 +20,51 @@ interface communityType {
   updatedDate: string
 }
 
+interface JoinType {
+  userUUid: string;
+}
 
 function CommunityInner( { communityId }: { communityId : Number} ) {
+
+  const router = useRouter()
+  const queryClient = useQueryClient();
+  const session = useSession();
+
+  const joinCommunityMutation = useMutation<any, any, JoinType>(() => {
+    return fetch(`${baseUrl}${endpointPrefix}/communities/${communityId}/users/me`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(session.data?.user.uuid),
+    }).then((res) => res.json());
+  }, {
+    onSuccess: () => {
+      // 요청이 성공적으로 완료되면 캐시를 무효화하거나, 필요한 추가적인 액션을 수행합니다.
+      // queryClient.invalidateQueries(['postings']);
+      router.push(`/tube/${communityId}`);
+    },
+    onError: (error) => {
+      console.error('Error joining community:', error);
+    },
+  });
+
+  // const joinhistoryMutation = useMutation<any, any, JoinType>(() => {
+  //   return fetch(`${baseUrl}${endpointPrefix}/communities/${communityId}/users/me/join-history`, {
+  //     method: 'POST',
+  //     headers: {
+  //       'Content-Type': 'application/json',
+  //     },
+  //     body: JSON.stringify(session.data?.user.uuid),
+  //   }).then((res) => res.json());
+  //   }, {
+  //     onSuccess: () => {
+  //       router.push(`/tube/${communityId}`)
+  //     },
+  //     onError: (error) => {
+  //       console.error('Error joining community:', error);
+  //     },
+  //   });
   
   const fetchCommunity = async () => {
     const res = await fetch(`${baseUrl}${endpointPrefix}/communities/${communityId}/info`, {
@@ -39,15 +84,21 @@ function CommunityInner( { communityId }: { communityId : Number} ) {
     isError: isErrorCommunity,
   } = useQuery(['communitycontents', communityId], fetchCommunity);
   
-
   if (isLoadingCommunity) {
     return <span>Loading...</span>;
   }
- 
   // 에러 상태 처리
   if (isErrorCommunity) {
     return <span>Error!</span>;
   }
+
+  const handleJoinClick = () => {
+    if ( session.data?.user && session.data.user.uuid ) {
+      joinCommunityMutation.mutate({ userUUid: session.data.user.uuid });
+    }
+    else
+      console.error("세션 없음")
+  };
 
   return (
     <>
@@ -67,21 +118,25 @@ function CommunityInner( { communityId }: { communityId : Number} ) {
           </div>
             
           <div className='flex w-[15%] flex-col gap-3'>
-            <div className='text-3xl font-bold'>{communitycontents.data?.communityName}</div>
-            <div className='text-xl font-bold'>{communitycontents.data?.communityMemberCount} Members</div>
-            <div className='text-xl'>{communitycontents.data?.createdDate}</div>
+            <div className='text-2xl font-bold'>{communitycontents.data?.communityName}</div>
+            <div className='text-base font-bold'>{communitycontents.data?.communityMemberCount} Members</div>
+            <div className='text-base'>{communitycontents.data?.createdDate}</div>
             <div className='a'>
-            <Button radius='full' size='lg' color='primary'>Join</Button>
+
+              <Button radius='full' size='lg' color='primary' onClick={handleJoinClick}>
+                Join
+              </Button>
+
             </div>
           </div>
 
           <div className='flex w-[50%] flex-col gap-3'>
             <div className='flex flex-col gap-unit-md'>
-              <h2 className='text-2xl font-bold'>About</h2>
+              <h2 className='text-xl font-bold'>About</h2>
             </div>
 
             <div className='flex flex-row items-center gap-unit-md'>
-              <p className='text-xl'>{communitycontents.data?.description}</p>
+              <p className='text-base font-sans'>{communitycontents.data?.description}</p>
             </div>
           </div>
         </div>
