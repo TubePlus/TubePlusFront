@@ -17,6 +17,7 @@ import {
 } from '@radix-ui/react-icons';
 import Link from 'next/link';
 import { useQuery } from '@tanstack/react-query';
+import { usePathname } from 'next/navigation';
 
 interface PostType {
   id: number;
@@ -46,6 +47,7 @@ const fetchPosts = async () => {
 
 
 const Post = () => {
+  const path = usePathname();
   const {
     data: postcontents,
     error,
@@ -55,8 +57,11 @@ const Post = () => {
   if (isLoading) return <div>Loading...</div>;
   if (error) return <div>Error fetching data</div>;
 
+  const isTube = (path.split('/')[1] === 'tube' && path.split('/')[3] === undefined);
+
   return (
     <>
+      <div className={`${isTube ? 'blurred' : ''}`}>
       <div className="flex gap-3 flex-nowrap pt-10">
         <Button>
           <Chip color="default"> Popular </Chip>
@@ -116,7 +121,10 @@ const Post = () => {
             </Card>
           </div>
         ))}
+
+      </div>
     </>
   );
 };
+
 export default Post;
