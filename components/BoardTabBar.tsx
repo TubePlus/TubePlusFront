@@ -15,9 +15,8 @@ const BoardTabsBar = ({ communityId, boardContents }: TabsProps) => {
     <nav>
       <ul className='flex whitespace-nowrap text-xl font-semibold'>
         {boardContents?.data?.map((board: any, index: number) => (
-          <Card>
+          <Card key={board.id}>
           <li
-            key={board.id}
             className={`flex items-center justify-center min-w-max
             ${pathname === `/tube/${communityId}/${board.id}` ? 'bg-blue-300 text-black rounded-lg' : 'text-gray-500'}
             hover:bg-blue-200 overflow-auto ${index !== 0 ? 'border-l border-gray-600' : ''} py-2`}
