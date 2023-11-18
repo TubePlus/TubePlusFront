@@ -12,8 +12,6 @@ const Sidebar = ({
   className?: string;
   isDrawerOnly?: boolean;
 }) => {
-  // TODO: mounted Skeleton 추가 필요?
-
   const [isOpen, setIsOpen] = useGlobalState('sidebarStatus');
   const [mounted, setMounted] = useState(false);
 
@@ -34,7 +32,7 @@ const Sidebar = ({
       {(!MdValue() || isDrawerOnly) && (
         <>
           <div
-            className={`${className} fixed !top-[3rem] inset-0 isolate
+            className={`${className} fixed !top-[5rem] inset-0 isolate
                     lg:w-[30%] md:w-[40%] sm:w-[60%] x:w-[100%]
                     border-r border-solid border-divider
                     overflow-hidden order-first z-[25] duration-300
