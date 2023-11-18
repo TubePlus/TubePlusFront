@@ -36,4 +36,4 @@ next-env.d.ts
 
 #gcp
 tubeplus-*.json
-gcs-*.json
+cors.json
