@@ -13,8 +13,12 @@ function CommunityHeader( ) {
 
   return (
 
-    <div className='w-full h-[50%] bg-zinc-200'>
+    <div className='w-full h-[50%] bg-slate-200'>
+      
       <div className='relative w-full h-[500px] flex justify-center items-end mb-10'>
+
+        {/* <div className='overlay absolute inset-0 bg-black opacity-25'></div> */}
+
         <CommunityInner communityId={communityId}/>
       </div>
 

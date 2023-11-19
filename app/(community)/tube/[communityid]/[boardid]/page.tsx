@@ -2,7 +2,7 @@
 import Post from '@/components/Post'
 import React, { use, useEffect, useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
-import { Image , Card , Button } from '@nextui-org/react'
+import { Image , Card , Button, Link } from '@nextui-org/react'
 import BoardTabBar from '@/components/BoardTabBar'
 import SideBlock from '@/components/SideBlock'
 import { baseUrl , endpointPrefix } from '@/lib/fetcher'
@@ -42,8 +42,6 @@ interface DirItem {
   href: string;
 }
 
-
-
 //TODO: 게시판, 게시물, 댓글 API 요청 URL 숨기기
 
 function Tube() {
@@ -69,7 +67,6 @@ function Tube() {
     isLoading : isLoadingCommunity,
     isError : isErrorCommunity,
   } = useQuery (['communitycontents', communityId] , fetchCommunity);
-
   
   const fetchBoard = async () => {
     const res = await fetch(`https://tubeplus1.duckdns.org/api/v1/board-service/boards?community-id=${communityId}&board-search-type=ACCESSIBLE`, {
@@ -100,7 +97,7 @@ function Tube() {
   console.log("보드데이터", boardcontents)
 
   return (
-    <>      
+    <>
         
         <div className='flex flex-row flex-nowrap gap-5'>
 
@@ -110,14 +107,22 @@ function Tube() {
           <div className='flex col-start-1 col-end-7'>
           <div className='flex flex-col pt-4 pb-16 pr-1 gap-6'>
 
+            <div className=''>
+              <Button color='default'>
+                <Link href={`/creation/board/${communityId}`}>게시판 추가</Link>
+              </Button>
+            </div>
+
             {/* 중단부 게시판 컴포넌트 */}
-            <div className='w-full border-b-3 border-black '>
+            
+            <div className='w-full'>
             {
               boardcontents !== undefined && communitycontents !== undefined ?
               <BoardTabBar communityId={communityId} boardContents={boardcontents} />
               : null
             }
             </div>
+            
 
             <Post/>
           </div>

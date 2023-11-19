@@ -23,6 +23,7 @@ export default function CommunityCreation() {
   const [isInvalid, setIsInvalid] = useState(false);
   const [invalidMsg, setInvalidMsg] = useState('');
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isDuplicateCheckComplete, setIsDuplicateCheckComplete] = useState(false);
 
     // useMutation 훅은 컴포넌트의 최상단으로 이동되어야 합니다.
   const createCommunityMutation = useMutation<any, any, CommunityData>((newCommunity) => {
@@ -39,6 +40,7 @@ export default function CommunityCreation() {
     onSuccess: () => {
       // 요청이 성공적으로 완료되면 캐시를 무효화하거나, 필요한 추가적인 액션을 수행합니다.
       queryClient.invalidateQueries(['communities']);
+      // router.push(`/`);
     },
     onError: (error) => {
       // 에러 처리 로직을 작성합니다.
@@ -52,8 +54,13 @@ export default function CommunityCreation() {
         router.push('/');
       }
     }
-  }, [session, status, router]);
+    setIsInvalid(false);
+    setInvalidMsg('');
+    setIsDuplicateCheckComplete(false);
+  }, [session, status, router, communityName]);
 
+  // useEffect(() => {
+  // }, );
   // 이 부분에서 세션 상태에 따른 렌더링을 처리합니다.
   if (!session || (session.user && session.user.is_creator)) {
     return <div>Unauthorized</div>;
@@ -85,9 +92,11 @@ export default function CommunityCreation() {
       setIsLoading(false);
       if (data.code === 'S001') {
         setIsInvalid(false);
+        setIsDuplicateCheckComplete(true);
         console.log('중복검사완료');
       } else {
         setIsInvalid(true);
+        setIsDuplicateCheckComplete(false);
         setInvalidMsg(`${communityName}은 중복되거나 유효하지 않습니다!`);
       }
     })
@@ -101,13 +110,11 @@ export default function CommunityCreation() {
   const handleDuplicateCheck = () => {
     if (!communityName) {
       setIsInvalid(true);
-      setInvalidMsg(`커뮤니티 이름을 입력해주세요.`);
+      setInvalidMsg(`커뮤니티 이름을 다시 입력해주세요.`);
       return;
     }
     checkDuplicateName(communityName);
   };
-
-  console.log(session)
 
   return (
     <>
@@ -137,7 +144,12 @@ export default function CommunityCreation() {
               placeholder="Enter your CommunityTitle"
               onChange={(e) => setCommunityName(e.target.value)}
             />
-            <Button onClick={handleDuplicateCheck} className='col-span-1' size='md' color='primary'>
+              <Button
+                onClick={handleDuplicateCheck}
+                size='md'
+                className='col-span-1'
+                color={isDuplicateCheckComplete ? 'success' : 'primary'}
+              >
               <span className="md:inline x:hidden"> Duplicate </span> check
             </Button>
           </div>
