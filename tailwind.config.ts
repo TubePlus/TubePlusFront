@@ -22,7 +22,7 @@ module.exports = {
   },
   plugins: [
     require('tailwindcss-animate'),
-    require('tailwind-scrollbar'),
+    require('tailwind-scrollbar')({ nocompatible: true }),
     nextui(),
   ],
 };
