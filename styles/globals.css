@@ -2,6 +2,22 @@
 @tailwind components;
 @tailwind utilities;
 
+.ql-snow {
+  @apply !border-default-200;
+}
+
+.ql-toolbar {
+  @apply rounded-ss-lg rounded-se-lg;
+}
+
+.ql-container {
+  @apply rounded-es-lg rounded-ee-lg;
+}
+
+.ql-editor {
+  @apply min-h-[300px] max-h-[350px] scrollbar-thin;
+}
+
 /* grid 관련 css */
 .grid-container {
   display: grid;
@@ -10,7 +26,7 @@
 }
 
 .cate::after {
-  content: "";
+  content: '';
   clear: both;
   display: inline-block;
   width: 1px;

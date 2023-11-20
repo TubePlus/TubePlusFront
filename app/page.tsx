@@ -1,8 +1,8 @@
 import MainSidebar from '@/components/sidebar/MainSidebar';
 import Sidebar from '@/components/sidebar/Sidebar';
-import { MainBanner, SuggestedCreator } from '@/app/main_slider';
-import CreatorRanking from '@/app/creator_ranking';
-import MainShorts from './main_shorts';
+import { MainBanner, SuggestedCreator } from '@/app/main-slider';
+import CreatorRanking from '@/app/creator-ranking';
+import MainShorts from './main-shorts';
 import { Card, CardBody, CardHeader, CardFooter } from '@nextui-org/card';
 import { Button } from '@nextui-org/button';
 import { Image } from '@nextui-org/image';

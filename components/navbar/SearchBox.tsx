@@ -235,7 +235,7 @@ const styles = {
 export const SearchInput = forwardRef(
   ({
     children,
-    // TODO: warning ref(Warning: forwardRef render functions accept exactly two parameters: props and ref. Did you forget to use the ref parameter?)
+    ref,
     // NOTE: https://deepscan.io/docs/rules/react-useless-forward-ref
     ...props
   }: {

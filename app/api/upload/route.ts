@@ -13,7 +13,7 @@ const storage = new Storage({
   },
 });
 const BUCKET_NAME = process.env.BUCKET_NAME!;
-const SUB_PATH = 'profile/';
+const SUB_PATH = 'public/';
 
 export async function POST(
   req: NextRequest,

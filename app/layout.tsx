@@ -26,28 +26,32 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
+  params,
   modal,
 }: {
   children: React.ReactNode;
   modal: React.ReactNode;
+  params: {
+    lang: string;
+  };
 }) {
+  console.log(params, 'params');
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang={params.lang} suppressHydrationWarning>
       <body
         className={`${inter.className} bg-zinc-50 dark:bg-zinc-900
                     min-h-screen h-full w-screen
                     overflow-y-auto scrollbar-none`}
       >
         <Providers>
-        <ThemeProvider>
-          {modal}
-          <Navbar />
-          <CommunityHeader />
-          {/* <SubNavbar /> */}
+          <ThemeProvider>
+            {modal}
+            <Navbar />
+            <CommunityHeader />
+            {/* <SubNavbar /> */}
 
-          
-          <main
-            className={`relative grid mx-auto max-w-[1524px] px-4 scrollbar-thin
+            <main
+              className={`relative grid mx-auto max-w-[1524px] px-4 scrollbar-thumb-rounded-full scrollbar-thumb-zinc-400 scrollbar-track-zinc-200
                         lg:gap-[.8rem]  lg:grid-cols-12
                         md:gap-unit-md  md:grid-cols-10
                         sm:gap-unit-sm  sm:grid-cols-8

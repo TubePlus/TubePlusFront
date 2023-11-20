@@ -7,9 +7,14 @@ import { Pencil1Icon } from '@radix-ui/react-icons';
 import { useSession } from 'next-auth/react';
 import React, { useEffect, useRef, useState } from 'react';
 
+/**
+ * @description 파일 경로, preSignedUrl 등 세부적인 조정을 위해 app/api/upload를 확인
+ * @returns
+ */
 const ProfilePreference = () => {
   const { data: session } = useSession();
   const [user, setUser] = useGlobalState('/settings');
+  const [username, setUsername] = useState(session?.user.username);
   const [bio, setBio] = useState(session?.user.bio || '');
 
   const profileRef = useRef<HTMLInputElement | null>(null);
@@ -34,6 +39,8 @@ const ProfilePreference = () => {
       if (upload.ok) {
         // show success
         setProfileImage(upload.filepath);
+        // TODO: pforile filepath(upload)를 db에 fetch
+        // TODO: session update
         alert('upload ok');
         // 성공하면 url state를 설정하고, globalstate에 저장
       } else {
@@ -48,13 +55,14 @@ const ProfilePreference = () => {
       ...user,
       editable: {
         ...user?.editable,
+        username,
         profileImage,
         bio,
       },
     };
     setUser(updatedUser);
     console.log(user);
-  }, [bio, profileImage]);
+  }, [bio, profileImage, username]);
 
   return (
     <div className="px-6 pb-6 flex flex-col gap-2 items-center border-b-1 border-default-300">
@@ -65,7 +73,13 @@ const ProfilePreference = () => {
               classNames={{
                 base: 'w-full h-full border border-default-300',
               }}
-              src={file ? file.preview : (session?.user.image as string)}
+              src={
+                file
+                  ? file.preview
+                  : user?.image
+                  ? user?.image
+                  : (session?.user.image as string)
+              }
               alt={session?.user.name as string}
             />
 
@@ -90,7 +104,37 @@ const ProfilePreference = () => {
           </div>
         </div>
         <div className="md:col-span-3 x:col-span-full flex flex-col gap-4">
-          <UsernameInput className="" currentUser={user} />
+          {/* TODO: 위 avatar로 대체 */}
+          {/* <UsernameInput className="" currentUser={user} /> */}
+
+          <div className="flex flex-row gap-4">
+            <Avatar
+              className="md:hidden"
+              classNames={{
+                base: 'h-[64px] w-[64px] border border-default-300',
+              }}
+              src={
+                file
+                  ? file.preview
+                  : user?.image
+                  ? user?.image
+                  : (session?.user.image as string)
+              }
+              alt={session?.user.name as string}
+            />
+            <div className="relative col-span-3 flex flex-col w-full">
+              <h5 className="col-span-1 font-semibold whitespace-nowrap">
+                Username
+              </h5>
+              <Input
+                type="text"
+                variant="bordered"
+                placeholder={session?.user.username}
+                defaultValue={username}
+                onValueChange={setUsername}
+              />
+            </div>
+          </div>
 
           <div className="relative col-span-3 flex flex-col">
             <h5 className="col-span-1 font-semibold whitespace-nowrap">
@@ -117,57 +161,3 @@ const ProfilePreference = () => {
 };
 
 export default ProfilePreference;
-
-const UsernameInput = ({
-  className,
-}: {
-  className?: string;
-  currentUser: any;
-}) => {
-  const { data: session } = useSession();
-  const [username, setUsername] = useState(session?.user.username);
-  const [user, setUser] = useGlobalState('/settings');
-
-  useEffect(() => {
-    if (!username) setUsername(session?.user.username);
-  }, [session]);
-
-  useEffect(() => {
-    const updatedUser = {
-      ...user,
-      editable: {
-        ...user?.editable,
-        username: username || session?.user.username,
-      },
-    };
-    setUser(updatedUser);
-  }, [username]);
-
-  return (
-    <div className="flex gap-3 w-full">
-      <Avatar
-        className="md:hidden x:block w-[60px] h-[60px] aspect-square shrink-0 cursor-pointer scale-100 hover:scale-105 duration-200"
-        src={user?.image}
-        alt={user?.name}
-        onClick={() => {
-          console.log('이미지 수정!');
-        }}
-      />
-      <div
-        className={`w-full max-w-[380px] flex flex-col justify-between ${className}`}
-      >
-        <h5 className="min-w-unit-24 font-semibold whitespace-nowrap overflow-hidden text-ellipsis">
-          Display Name(<span className="text-sm">Username</span>)
-        </h5>
-        <Input
-          // isReadOnly
-          type="text"
-          variant="bordered"
-          placeholder={session?.user.username}
-          value={username}
-          onValueChange={setUsername}
-        />
-      </div>
-    </div>
-  );
-};

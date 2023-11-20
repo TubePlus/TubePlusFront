@@ -6,7 +6,7 @@ import {
   getPostsByUuid,
 } from '@/lib/fetcher';
 import { useQuery } from '@tanstack/react-query';
-import { renderCell } from '@/hooks/use-render-cell';
+import { rankingCell, renderCell } from '@/hooks/use-render-cell';
 import {
   Table,
   TableBody,
@@ -36,6 +36,16 @@ const latestPostColumns = [
   { key: 'actions', label: 'Actions' },
 ];
 
+const myCommunityColumns = [
+  { key: 'id', label: 'Order' },
+  { key: 'username', label: 'Creator' },
+  { key: 'communityName', label: 'Community' },
+  { key: 'views', label: 'Avg.Views' },
+  { key: 'youtubeSubscribers', label: 'Subscribers' },
+  { key: 'view-subs', label: 'View/Subs.' },
+  { key: 'communityMembers', label: 'Members' },
+];
+
 export default function UserPage({ params }: UserPageProps) {
   const {
     isLoading: isPostsLoading,
@@ -55,7 +65,7 @@ export default function UserPage({ params }: UserPageProps) {
     data: myCommunities,
     refetch: communitiesRefetch,
   } = useQuery(['my-communities-all'], () => {
-    // return getPostsByUuid(user?.uuid as string);
+    // return getMyJoinedCommunities(user?.uuid as string);
     return getCommunitiesByUuid('7a424347-b903-4abb-b97b-90ece0821e6f');
   });
 
@@ -106,7 +116,7 @@ export default function UserPage({ params }: UserPageProps) {
             </TableHeader>
 
             <TableBody>
-              {myPosts.map((row: { key: Key }) => (
+              {myPosts?.map((row: { key: Key }) => (
                 <TableRow key={row.key}>
                   {columnKey => (
                     <TableCell
@@ -130,18 +140,17 @@ export default function UserPage({ params }: UserPageProps) {
         title={`My Communities(${myPosts?.length || 0})`}
         externalLink={``}
       >
-        {isPostsLoading ? (
+        {isCommuinitiesLoading ? (
           <Spinner size="lg" color="default" />
         ) : (
           <Table
             classNames={{}}
             checkboxesProps={{ classNames: { wrapper: 'mx-auto' } }}
-            selectionMode="multiple"
             removeWrapper
           >
             <TableHeader
               className="" // background
-              columns={latestPostColumns}
+              columns={myCommunityColumns}
             >
               {(column: { key: string; label: string }) => (
                 <TableColumn
@@ -157,7 +166,7 @@ export default function UserPage({ params }: UserPageProps) {
             </TableHeader>
 
             <TableBody>
-              {myPosts.map((row: { key: Key }) => (
+              {myCommunities?.map((row: { key: Key }) => (
                 <TableRow key={row.key}>
                   {columnKey => (
                     <TableCell
@@ -167,7 +176,7 @@ export default function UserPage({ params }: UserPageProps) {
                           : ''
                       }`}
                     >
-                      {renderCell(row, columnKey)}
+                      {rankingCell(row, columnKey)}
                     </TableCell>
                   )}
                 </TableRow>
@@ -208,7 +217,7 @@ export default function UserPage({ params }: UserPageProps) {
             </TableHeader>
 
             <TableBody>
-              {myPosts.map((row: { key: Key }) => (
+              {myPosts?.map((row: { key: Key }) => (
                 <TableRow key={row.key}>
                   {columnKey => (
                     <TableCell

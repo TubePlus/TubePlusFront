@@ -133,6 +133,32 @@ export const getUserByUuid = (uuid: string) => {
  * @param       uuid
  * @returns     json body
  */
+export const getMyJoinedCommunities = (uuid: string) => {
+  const body = {
+    uuid: uuid,
+  };
+
+  const result = fetch(
+    `${baseUrl}${endpointPrefix}/communities/users/me/joined-communities?page=0&size=5`,
+    {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify(body),
+    },
+  )
+    .then(res => {
+      return res.json();
+    })
+    .catch(e => console.log(e));
+  return result;
+};
+
+/**
+ * @warning     tubePlus Server API
+ * @description get a user from server
+ * @param       uuid
+ * @returns     json body
+ */
 export const updateAUser = (editableValue: {
   uuid: string;
   username: string;
@@ -153,6 +179,42 @@ export const updateAUser = (editableValue: {
     headers: { 'content-type': 'application/json' },
     body: JSON.stringify(body),
   })
+    .then(res => {
+      return res.json();
+    })
+    .catch(e => console.log(e));
+  return result;
+};
+
+/**
+ * @warning     tubePlus Server API
+ * @description POST a post on the board
+ * @param
+ * @returns     json body
+ */
+export const uploadPost = (post: {
+  boardId: number;
+  authorUuid: string;
+  title: string;
+  contents: string;
+  withImage: boolean;
+}) => {
+  const body = {
+    boardId: post.boardId,
+    authorUuid: post.authorUuid,
+    title: post.title,
+    contents: post.contents,
+    withImage: post.withImage,
+  };
+
+  const result = fetch(
+    'https://tubeplus1.duckdns.org' + endpointPrefix + '/postings',
+    {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify(body),
+    },
+  )
     .then(res => {
       return res.json();
     })

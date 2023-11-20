@@ -56,7 +56,7 @@ const Sidebar = ({
       {!isDrawerOnly ? (
         <Md>
           <div
-            className={`${className} sticky top-[3rem] overflow-hidden order-first
+            className={`${className} sticky top-[5rem] overflow-hidden order-first
                   isolate w-full h-[calc(100vh-3rem)]
                   border-r border-solid border-divider
                   

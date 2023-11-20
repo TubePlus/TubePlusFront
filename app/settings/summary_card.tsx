@@ -71,19 +71,26 @@ const SummaryCard = () => {
       <SimpleCard title="Settings Summary">
         <ul className="px-2 space-y-1">
           <li className="flex items-center gap-2">
-            Username:
-            <Chip size="sm" onClose={handleRemove}>
-              {user?.editable.username}
+            Email:
+            <Chip
+              classNames={{
+                base: 'overflow-hidden',
+                content: 'text-ellipsis line-clamp-1',
+              }}
+              size="sm"
+              onClose={handleRemove}
+            >
+              {session?.user.email}
             </Chip>
           </li>
-          {user?.default?.email && (
-            <li className="flex items-center gap-2">
-              Email:
-              <Chip size="sm" onClose={handleRemove}>
-                {user?.default?.email}
-              </Chip>
-            </li>
-          )}
+
+          <li className="flex items-center gap-2">
+            Username:
+            <Chip size="sm" onClose={handleRemove}>
+              {user?.editable.username || session?.user.username}
+            </Chip>
+          </li>
+
           {user?.editable.locale && (
             <li className="flex items-center gap-2">
               Language:
@@ -96,6 +103,7 @@ const SummaryCard = () => {
               </Chip>
             </li>
           )}
+
           {user?.editable.bio && (
             <li className="flex items-center gap-2">
               About(bio):
@@ -111,8 +119,6 @@ const SummaryCard = () => {
               </Chip>
             </li>
           )}
-          <li>community name</li>
-          <li>community bio</li>
         </ul>
       </SimpleCard>
 

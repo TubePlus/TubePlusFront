@@ -23,10 +23,13 @@ const QuickResultQuery = ({
         {selectValue} | {searchValue}
       </p>
       {!isError ? (
-        data &&
-        data.map((result: DBUserProps) => (
-          <p key={result.id}>{result.username}</p>
-        ))
+        !isLoading ? (
+          data.map((result: DBUserProps) => (
+            <p key={result.id}>{result.username}</p>
+          ))
+        ) : (
+          <p>Loading...</p>
+        )
       ) : (
         <>
           <div>

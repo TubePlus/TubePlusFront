@@ -1,0 +1,7 @@
+{
+  "form": {
+    "name": "이름",
+    "email": "email",
+    "city": "도시"
+  }
+}
