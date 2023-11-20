@@ -97,24 +97,21 @@ function Tube() {
   console.log("보드데이터", boardcontents)
 
   return (
-    <>
-        
-        <div className='flex flex-row flex-nowrap gap-5'>
+    <>      
+        {/* <div className='flex flex-row flex-nowrap gap-5'> */}
 
         {/* TODO: 게시판 아이디값을 통해 해당 게시판에 속해있는 게시물만 표시 할 수 있도록 포스트 컴포넌트에 커뮤니티아이디와 게시판아이디를 넘겨줄 예정 */}
         
-          { 
-          <div className='flex col-start-1 col-end-7'>
-          <div className='flex flex-col pt-4 pb-16 pr-1 gap-6'>
+          {/* <div className='grid col-start-1 col-end-10'> */}
+          <div className='col-span-9 pt-4 pb-16 pr-1 gap-6'>
 
-            <div className=''>
+            <div className='flex flex-wrap gap-5 pb-10'>
               <Button color='default'>
                 <Link href={`/creation/board/${communityId}`}>게시판 추가</Link>
               </Button>
-            </div>
+            
 
             {/* 중단부 게시판 컴포넌트 */}
-            
             <div className='w-full'>
             {
               boardcontents !== undefined && communitycontents !== undefined ?
@@ -122,20 +119,17 @@ function Tube() {
               : null
             }
             </div>
-            
-
-            <Post/>
+            </div>
+            <Post communityId={communitycontents.data.communityId} />
           </div>
-          </div>
-
-          }
-
-          <div className='flex flex-col pt-32 gap-5 whitespace-nowrap'> 
-            <SideBlock communityid={communityId} />
+          {/* </div> */}
+          
+          <div className='col-span-3 flex flex-col pt-32 gap-5 whitespace-nowrap'> 
+            <SideBlock communityid={communitycontents.data.communityId} />
           </div>
 
-        </div>
-    </> 
+        {/* </div> */}
+    </>
   )
 }
 

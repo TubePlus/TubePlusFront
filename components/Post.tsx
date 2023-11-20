@@ -1,5 +1,5 @@
 'use client';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Card,
   CardHeader,
@@ -12,12 +12,13 @@ import {
 import {
   BookmarkIcon,
   ChatBubbleIcon,
+  HamburgerMenuIcon,
   ThickArrowDownIcon,
   ThickArrowUpIcon,
 } from '@radix-ui/react-icons';
 import Link from 'next/link';
-import { useQuery } from '@tanstack/react-query';
-import { usePathname } from 'next/navigation';
+import { useMutation, useQuery } from '@tanstack/react-query';
+import { useSession } from 'next-auth/react';
 
 interface PostType {
   id: number;
@@ -31,23 +32,81 @@ interface PostType {
   avatar: string;
 }
 
-const fetchPosts = async () => {
-  const res = await fetch(
-    'https://652c497bd0d1df5273ef56a5.mockapi.io/api/v1/post',
-    {
-      method: 'GET',
-      headers: { 'Content-Type': 'application/json' },
+interface verifiedProps {
+  userUuid: string;
+}
+
+
+const Post = ( {communityId} : {communityId:number} ) => {
+  const session = useSession();
+
+  const [verified, setVerified] = useState({
+    isJoined: false,
+    isUnJoined: false
+  });
+
+  const [verifiedCreator, setVerifiedCreator] = useState({
+    isMaster: false,
+    isNotMaster: false
+  });
+
+  const fetchVerifiedMutation = useMutation<any, any, verifiedProps>(() => {
+    return fetch(`https://tubeplus.duckdns.org/api/v1/communities/${communityId}/verified`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(joinCheck),
+    }).then((res) => res.json());
+  }, {
+    retry: 1,
+    onSuccess: () => {
+      setVerified({ isJoined: true, isUnJoined: false })
     },
-  );
-  if (!res.ok) {
-    throw new Error('Network response was not ok');
-  }
-  return res.json();
-};
+    onError: () => {
+      setVerified({ isJoined: false, isUnJoined: true })
+    }
+  });
+  
+  const fetchVerifiedCreatorMutation = useMutation<any, any, verifiedProps>(() => {
+    return fetch('https://tubeplus.duckdns.org/api/v1/communities/users/me/creator-community-id', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(joinCheck),
+      }).then((res) => res.json());
+    }, {
+      retry: 1,
+      onSuccess: () => {
+        setVerifiedCreator({ isMaster: true, isNotMaster: false })
+      },
+      onError: () => {
+        setVerifiedCreator({ isMaster: false, isNotMaster: true })
+      }
+    });
 
+    useEffect(() => {
+    if (session.data?.user && session.data.user.uuid) {
+      fetchVerifiedMutation.mutate({ userUuid: session.data.user.uuid });
+      fetchVerifiedCreatorMutation.mutate({ userUuid: session.data.user.uuid });
+    }
+  }, [session.data?.user, communityId]);
+    
+  const fetchPosts = async () => {
+    const res = await fetch(
+      'https://652c497bd0d1df5273ef56a5.mockapi.io/api/v1/post',
+      {
+        method: 'GET',
+        headers: { 'Content-Type': 'application/json' },
+      },
+    );
+    if (!res.ok) {
+      throw new Error('Network response was not ok');
+    }
+    return res.json();
+  };
 
-const Post = () => {
-  const path = usePathname();
   const {
     data: postcontents,
     error,
@@ -57,12 +116,30 @@ const Post = () => {
   if (isLoading) return <div>Loading...</div>;
   if (error) return <div>Error fetching data</div>;
 
-  const isTube = (path.split('/')[1] === 'tube' && path.split('/')[3] === undefined);
+  const isJoined = 
+    (session.data?.user && session.data.user.uuid) ? 
+    (verified.isJoined) : true;
+  const isMaster =
+    (session.data?.user && session.data.user.uuid) ?
+    (verifiedCreator.isMaster) : true;
+
+  console.log(isJoined, isMaster);
+
+  const joinCheck: verifiedProps = {
+    userUuid: session.data?.user.uuid ?? '',
+  };
+
+  console.log(joinCheck)
+
 
   return (
     <>
-      <div className={`${isTube ? 'blurred' : ''}`}>
-      <div className="flex gap-3 flex-nowrap pt-10">
+    <div className={`${isJoined || isMaster ? '' : 'blurred'}`}>
+
+
+      <div className='flex justify-between pt-3'> 
+
+      <div className="flex gap-3 flex-nowrap">
         <Button>
           <Chip color="default"> Popular </Chip>
         </Button>
@@ -76,23 +153,31 @@ const Post = () => {
         </Button>
       </div>
 
+      <div>
+        <Button>
+          <HamburgerMenuIcon className="w-8 h-8" />
+        </Button>
+      </div>
+
+      </div>
+
       {postcontents &&
         postcontents.map((item: PostType) => (
-          <div key={item.id}>
+          <div key={item.id} className='pt-7 col-span-10 gap-5'>
             <Card>
               <CardHeader>
-                <div className="flex flex-nowrap gap-[700px]">
-                  <div className="flex flex-nowrap gap-4">
+                <div className="flex flex-nowrap justify-between w-full">
+                  <div className="flex whitespace-nowrap gap-5">
                     <Avatar src={item.avatar} />
-                    <Chip color="default"> {item.authorName} </Chip>
-                    <Chip color="default"> {item.title} </Chip>
+                      <span className='font-semibold'> {item.authorName} </span>
+                      <span className='font-semibold'> {item.title} </span>
                   </div>
 
                   <div className="flex flex-nowrap items-center gap-4">
                     <button>
                       <ThickArrowUpIcon className="w-8 h-8" />
                     </button>
-                    <b>{item.voteCounts}</b>
+                      <b>{item.voteCounts}</b>
                     <button>
                       <ThickArrowDownIcon className="w-8 h-8" />
                     </button>
@@ -110,10 +195,10 @@ const Post = () => {
                   <div className="border-t-1 w-full">
                     <div className="flex pt-5 flex-nowrap gap-x-2">
                       <ChatBubbleIcon className="w-8 h-8" />
-                      <Chip color="default"> Comment </Chip>
+                      Comment
 
                       <BookmarkIcon className="w-8 h-8" />
-                      <Chip color="default"> BookMark </Chip>
+                      BookMark
                     </div>
                   </div>
                 </CardFooter>
@@ -122,7 +207,7 @@ const Post = () => {
           </div>
         ))}
 
-      </div>
+    </div>
     </>
   );
 };

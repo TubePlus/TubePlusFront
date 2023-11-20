@@ -15,6 +15,11 @@ interface CommunityData {
   ownerUuid: string;
 }
 
+interface CreateCommunityCheckType {
+  userUuid: string;
+}
+
+
 export default function CommunityCreation() {
   const { data: session, status } = useSession();
   const router = useRouter();
@@ -25,6 +30,31 @@ export default function CommunityCreation() {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isDuplicateCheckComplete, setIsDuplicateCheckComplete] = useState(false);
 
+  const createCommunityCheckMutation = useMutation<any, any, CreateCommunityCheckType>(() => {
+    return fetch('https://tubeplus.duckdns.org/api/v1/communities/users/me/creator-community', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(createCommunityCheck),
+    }).then((res) => res.json());
+  }, {
+    onSuccess: () => {
+      router.push(`/`);
+    }
+  }
+  );
+
+  const createCommunityCheck: CreateCommunityCheckType = {
+    userUuid: session?.user.uuid as string,
+  };
+
+  useEffect(() => {
+    if (session?.user?.uuid) {
+      createCommunityCheckMutation.mutate({ userUuid: session.user.uuid });
+    }
+  }, [session?.user?.uuid]); // 의존성 배열에 session.user.uuid를 추가
+    
     // useMutation 훅은 컴포넌트의 최상단으로 이동되어야 합니다.
   const createCommunityMutation = useMutation<any, any, CommunityData>((newCommunity) => {
     return fetch(`${baseUrl}${endpointPrefix}/communities`, {
@@ -37,6 +67,7 @@ export default function CommunityCreation() {
             
     }).then((res) => res.json());
   }, {
+    retry: 1,
     onSuccess: () => {
       // 요청이 성공적으로 완료되면 캐시를 무효화하거나, 필요한 추가적인 액션을 수행합니다.
       queryClient.invalidateQueries(['communities']);
@@ -141,7 +172,7 @@ export default function CommunityCreation() {
               type='text'
               name="CommunityName"
               variant={'underlined'}
-              placeholder="Enter your CommunityTitle"
+              placeholder=" Enter your CommunityTitle"
               onChange={(e) => setCommunityName(e.target.value)}
             />
               <Button
@@ -156,7 +187,7 @@ export default function CommunityCreation() {
           
           <div className="grid grid-cols-5 flex-row gap-16 pt-10 items-center w-full text-sm">
             <h5 className="col-span-1 min-w-unit-24 font-semibold whitespace-nowrap overflow-hidden text-ellipsis">
-              <span className="md:inline x:hidden"> Description </span>
+              <span className="md:inline xs:hidden"> Description </span>
             </h5>
           </div>
           <div className="grid grid-cols-5 flex-row gap-16 items-center w-full text-sm pb-10">
@@ -177,7 +208,7 @@ export default function CommunityCreation() {
           </Button>
 
           <Button type='submit' color='primary'>
-            Create <span className="md:inline x:hidden"> Community </span>
+            Create <span className="md:inline xs:hidden"> Community </span>
           </Button>
         </div>
 

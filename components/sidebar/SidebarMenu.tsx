@@ -43,14 +43,14 @@ const SidebarMenu = ({
         <Button
           key={`${item.name}-${index}`} //Error: Key Props error 표시되지만 문제 없음
           className={`${classNames?.button} lg:flex lg:justify-start
-                     ${isRoot && 'md:hidden'}
-                     x:flex x:justify-start
-                     min-h-unit-10 mx-auto w-[95%] bg-opacity-50
-                     ${
-                       pathname === item.href
-                         ? `${classNames?.activeBgColor || ''}`
-                         : `${classNames?.defaultBgColor || ''}`
-                     }
+                      ${isRoot && 'md:hidden'}
+                      x:flex x:justify-start
+                      min-h-unit-10 mx-auto w-[95%] bg-opacity-50
+                      ${
+                        pathname === item.href
+                          ? `${classNames?.activeBgColor || ''}`
+                          : `${classNames?.defaultBgColor || ''}`
+                      }
                     `}
           variant={pathname === item.href ? 'solid' : 'light'}
           as={Link || ''}
