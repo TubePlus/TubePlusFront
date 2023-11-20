@@ -46,7 +46,6 @@ export default function BoardCreation({communityId}: {communityId: number}) {
         // 필요하다면, 인증 토큰 등의 추가적인 헤더를 여기에 추가
       },
       body: JSON.stringify(newBoard),
-            
     }).then((res) => res.json());
   }, {
     onSuccess: () => {

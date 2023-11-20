@@ -127,7 +127,7 @@ function Posting({ params }: { params: { postingId: number , parentId?: number }
                 <button>
                   <ThickArrowUpIcon className="w-8 h-8" />
                 </button>
-                <b>{postcontents.votecounts}</b>
+                  <b>{postcontents.votecounts}</b>
                 <button>
                   <ThickArrowDownIcon className="w-8 h-8" />
                 </button>
