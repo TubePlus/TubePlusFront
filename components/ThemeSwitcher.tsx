@@ -10,7 +10,7 @@ import React, { Suspense, useEffect, useState } from 'react';
 export const ThemeSwitcher = ({ type }: { type: 'toggle' | 'button' }) => {
   const [mounted, setMounted] = useState(false); // hydration error 방지
   const { theme, setTheme, systemTheme } = useTheme(); // TODO: user를 위한 setThme() 사용 시 Handler 안에 넣어서 session 확인, 확인 후 post fetch
-  const { data: session } = useSession();
+  const { data: session, update } = useSession();
 
   const fetchTheme = async () => {
     const response = await putTheme(session?.user.uuid as string);
@@ -23,20 +23,21 @@ export const ThemeSwitcher = ({ type }: { type: 'toggle' | 'button' }) => {
   const toggleTheme = () => {
     if (session?.user) {
       fetchTheme();
+      update();
     } else {
       setTheme(theme === 'light' ? 'dark' : 'light');
     }
   };
 
-  useEffect(() => {
-    setMounted(true);
-    if (!session?.user) {
-      setTheme('system');
-    } else {
-      if (session.user.darkmode) setTheme('dark');
-      else setTheme('light');
-    }
-  }, []); // TODO: Warning 의존성 배열에 setTheme 필요 - "mount 시에만 실행되어야 하기 때문에 추가하면 안됨"
+  // useEffect(() => {
+  //   setMounted(true);
+  //   if (!session?.user) {
+  //     setTheme('system');
+  //   } else {
+  //     if (session.user.darkmode) setTheme('dark');
+  //     else setTheme('light');
+  //   }
+  // }, [setTheme]); // TODO: Warning 의존성 배열에 setTheme 필요 - "mount 시에만 실행되어야 하기 때문에 추가하면 안됨"
 
   switch (type) {
     case 'toggle':
@@ -53,7 +54,7 @@ export const ThemeSwitcher = ({ type }: { type: 'toggle' | 'button' }) => {
       );
 
     case 'button':
-      return mounted ? (
+      return (
         <Button
           className="text-default-600"
           variant="light"
@@ -73,10 +74,6 @@ export const ThemeSwitcher = ({ type }: { type: 'toggle' | 'button' }) => {
             <SunIcon width={20} height={20} />
           )}
         </Button>
-      ) : (
-        <div>
-          <Skeleton className="flex rounded-lg w-10 h-10" />
-        </div>
       );
   }
 };

@@ -101,11 +101,7 @@ const AuthenticatedUserDropdown = () => {
         </div>
       </DropdownTrigger>
 
-      <DropdownMenu
-        aria-label="User Dropdown Menu"
-        variant="faded"
-        closeOnSelect={false}
-      >
+      <DropdownMenu aria-label="User Dropdown Menu" variant="faded">
         <DropdownSection
           title={'User'}
           showDivider
@@ -135,6 +131,9 @@ const AuthenticatedUserDropdown = () => {
           <DropdownItem
             endContent={<ThemeSwitcher type="toggle" />}
             closeOnSelect={false}
+            onClick={e => {
+              e.preventDefault();
+            }}
           >
             Dark Mode
           </DropdownItem>
