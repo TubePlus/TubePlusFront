@@ -55,6 +55,7 @@ export default async function LocaleLayout({
   } catch (error) {
     notFound();
   }
+  unstable_setRequestLocale(locale);
 
   return (
     <html lang={locale} suppressHydrationWarning>
