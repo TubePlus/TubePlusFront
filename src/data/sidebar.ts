@@ -9,12 +9,12 @@ import {
 
 export const defaultMenuItem = [
   {
-    name: 'Home',
+    name: 'home',
     icon: HomeIcon,
     href: '/',
   },
   {
-    name: 'Community',
+    name: 'community',
     icon: GlobeIcon,
     href: '/#community',
   },
@@ -22,12 +22,12 @@ export const defaultMenuItem = [
 
 export const profileMemusStatic = [
   {
-    name: 'User Agreements',
+    name: 'user-agreements',
     icon: PersonIcon,
     href: '/user-agreements',
   },
   {
-    name: 'Privacy Policy',
+    name: 'privacy-policy',
     icon: IdCardIcon,
     href: '/privacy-policy',
   },
@@ -80,17 +80,17 @@ export const subscribeMenuItem = [
 
 export const resourceMenuItem = [
   {
-    name: 'About TubePlus',
+    name: 'about-tube',
     icon: VideoIcon,
     href: '/about',
   },
   {
-    name: 'Help',
+    name: 'help',
     icon: EnvelopeOpenIcon,
     href: '/help',
   },
   {
-    name: 'Policies and Agreements',
+    name: 'policies-terms',
     icon: IdCardIcon,
     href: '/policies-agreements',
   },

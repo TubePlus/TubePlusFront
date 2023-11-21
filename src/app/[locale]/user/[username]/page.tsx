@@ -6,7 +6,7 @@ import {
   getPostsByUuid,
 } from '@/lib/fetcher';
 import { useQuery } from '@tanstack/react-query';
-import { rankingCell, renderCell } from '@/hooks/use-render-cell';
+import { renderCell } from '@/hooks/use-render-cell';
 import {
   Table,
   TableBody,
@@ -176,7 +176,7 @@ export default function UserPage({ params }: UserPageProps) {
                           : ''
                       }`}
                     >
-                      {rankingCell(row, columnKey)}
+                      {renderCell(row, columnKey)}
                     </TableCell>
                   )}
                 </TableRow>

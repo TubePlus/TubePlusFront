@@ -20,13 +20,12 @@ import { ThemeSwitcher } from '../ThemeSwitcher';
 import { NavbarItem } from '@nextui-org/navbar';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { useTranslations } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
 
 const UnauthenticatedUserDropdown = () => {
   const t = useTranslations('Home');
 
   const [mounted, setMounted] = useState(false);
-  const router = useRouter();
 
   useEffect(() => {
     setMounted(true);
@@ -62,7 +61,7 @@ const UnauthenticatedUserDropdown = () => {
             variant="light"
             className="text-default-600 hover:text-default-900"
             as={Link}
-            href={'/login'}
+            href={`/login`}
           >
             {t(`login`)}
           </Button>
@@ -73,7 +72,7 @@ const UnauthenticatedUserDropdown = () => {
             variant="light"
             className="text-default-600 hover:text-default-900"
             as={Link}
-            href="/join"
+            href={`/join`}
           >
             {t('register')}
           </Button>

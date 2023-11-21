@@ -9,8 +9,9 @@ import { usePathname, useRouter } from 'next/navigation';
 import { Md } from '../Responsive';
 import Link from 'next/link';
 import TubePlusLogo from '../TubePlusLogo';
+import { getLocale } from 'next-intl/server';
 
-const BrandBox = () => {
+const BrandBox = ({ locale }: { locale: string }) => {
   const [mounted, setMounted] = useState(false);
   const pathname = usePathname();
 
@@ -21,7 +22,7 @@ const BrandBox = () => {
   return mounted ? (
     <NavbarBrand className="min-w-fit max-w-[145px] flex-grow-0 gap-2">
       <SidebarHamburgerButton
-        className={`${pathname === '/' ? 'md:hidden' : ''}`}
+        className={`${pathname === `/${locale}` ? 'md:hidden' : ''}`}
       />
 
       <Link className="flex cursor-pointer items-center" href={'/'}>

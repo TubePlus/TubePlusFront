@@ -11,7 +11,11 @@ import UnauthenticatedUserDropdown from './UnauthenticatedUserDropdown';
 import { getAuthSession } from '@/lib/auth';
 import LocaleSwitcher from '../LocaleSwicher';
 
-const Navbar = async () => {
+type Props = {
+  params: { locale: string };
+};
+
+const Navbar = async ({ params: { locale } }: Props) => {
   const session = await getAuthSession();
 
   return (
@@ -27,7 +31,7 @@ const Navbar = async () => {
         <LocaleSwitcher />
       </NavbarContent>
 
-      <BrandBox />
+      <BrandBox locale={locale} />
 
       <NavbarContent
         className="basis-[750px] md:flex x:hidden"

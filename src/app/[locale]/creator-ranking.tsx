@@ -1,7 +1,6 @@
 'use client';
 
 import { communityCategory } from '@/data/sidebar';
-import { rankingCell } from '@/hooks/use-render-cell';
 import { getRanks } from '@/lib/fetcher';
 import { Chip } from '@nextui-org/chip';
 import { Button } from '@nextui-org/button';
@@ -14,10 +13,13 @@ import {
   TableColumn,
   TableHeader,
   TableRow,
+  Selection,
 } from '@nextui-org/table';
 import { useQuery } from '@tanstack/react-query';
-import React, { Key } from 'react';
+import React, { Key, useState } from 'react';
 import { useTranslations } from 'next-intl';
+import { User } from '@nextui-org/user';
+import { cn } from '@nextui-org/system-rsc';
 
 const rankingTableColumn = [
   { key: 'id', label: 'order' },
@@ -30,6 +32,11 @@ const rankingTableColumn = [
 ];
 
 const CreatorRanking = () => {
+  const [categoryFilter, setCategoryFilter] = useState<Selection>('all');
+  const [categoryFilterChip, setCategoryFilterChip] = useState(() => [
+    { code: 'all' },
+    ...communityCategory,
+  ]);
   const {
     isLoading,
     isError: isPostsError,
@@ -38,7 +45,86 @@ const CreatorRanking = () => {
     refetch: postsRefetch,
   } = useQuery(['community-ranking'], getRanks);
 
+  const filteredItems = React.useMemo(() => {
+    if (data) {
+      let filteredCreator = [...data];
+
+      if (
+        categoryFilter !== 'all' &&
+        Array.from(categoryFilter).length !== communityCategory.length
+      ) {
+        filteredCreator = filteredCreator.filter(c =>
+          Array.from(categoryFilter).includes(c.communityCategory),
+        );
+      }
+
+      return filteredCreator;
+    } else return data;
+  }, [categoryFilter, data]);
+
+  const handleCategoryFilter = (categoryKey: string) => {
+    console.log(categoryKey);
+    if (categoryKey === 'all') {
+      setCategoryFilter('all');
+    } else {
+      setCategoryFilter(new Set(categoryKey.split(',')));
+    }
+  };
+
   const t = useTranslations('Home');
+
+  const rankingCell = (row: any, columnKey: Key) => {
+    type Rows = (typeof row)[0];
+    const cellValue = row[columnKey as keyof Rows];
+
+    switch (columnKey) {
+      case 'id': //TODO: order 로 변경
+        return <div className="text-center">{row.id}</div>;
+      case 'username':
+        return (
+          <div className="whitespace-nowrap">
+            <User
+              classNames={{ description: 'italic' }}
+              avatarProps={{ src: row.profileImage }}
+              name={row.username}
+              description={`@${row.youtubeHandler}`}
+            />
+          </div>
+        );
+
+      case 'communityName':
+        return (
+          <div className="flex flex-col line-clamp-1 text-ellipsis">
+            <span className="text-tiny line-clamp-1 text-ellipsis">
+              {t(`category.${row.communityCategory}`)}
+            </span>
+            <span className="text-sm line-clamp-1 text-ellipsis">
+              {row.communityName}
+            </span>
+          </div>
+        );
+
+      case 'views':
+        return <div className="text-center">{row.views}</div>;
+
+      case 'youtubeSubscribers':
+        return <div className="text-center">{row.youtubeSubscribers}</div>;
+
+      case 'communityMembers':
+        return <div className="text-center">{row.communityMembers}</div>;
+
+      case 'view-subs':
+        return (
+          <div className="text-center">
+            {row.views}/{row.youtubeSubscribers}
+          </div>
+        );
+
+      default:
+        return cellValue;
+      // return null;
+    }
+  };
 
   return !isLoading ? (
     <Table
@@ -55,8 +141,22 @@ const CreatorRanking = () => {
         <div id="community" className="flex sm:gap-8 x:gap-4 items-center">
           <ScrollShadow orientation="horizontal" hideScrollBar className="">
             <div className="flex gap-2">
-              {communityCategory.map(cate => (
-                <Chip key={cate.code}>{t(`category.${cate.code}`)}</Chip>
+              {/* {Array.from(categoryFilter).includes()} */}
+              {categoryFilterChip.map(cate => (
+                <Chip
+                  className={cn(
+                    `cursor-pointer`,
+                    `${
+                      (Array.from(categoryFilter).includes(cate.code) ||
+                        categoryFilter.toString() === cate.code) &&
+                      'bg-black text-white dark:bg-zinc-100 dark:text-black'
+                    }`,
+                  )}
+                  key={cate.code}
+                  onClick={() => handleCategoryFilter(cate.code)}
+                >
+                  {t(`category.${cate.code}`)}
+                </Chip>
               ))}
             </div>
           </ScrollShadow>
@@ -94,8 +194,8 @@ const CreatorRanking = () => {
       </TableHeader>
 
       <TableBody>
-        {data &&
-          data.map((row: { key: Key }) => (
+        {filteredItems &&
+          filteredItems.map((row: { key: Key }) => (
             <TableRow key={row.key}>
               {columnKey => (
                 <TableCell

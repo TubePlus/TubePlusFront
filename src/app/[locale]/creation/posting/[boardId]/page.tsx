@@ -19,20 +19,3 @@ export default function PostingPage({
     </>
   );
 }
-
-/**
- * @note  CreatePostingButton
- * @param boardName string
- * @returns
- */
-const CreatePostingButton = (boardName: string) => {
-  return (
-    <div>
-      <Button as={Link} href={`creation/posting/${boardName}/`}>
-        Write Post
-      </Button>
-    </div>
-  );
-};
-
-export { CreatePostingButton };

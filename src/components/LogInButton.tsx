@@ -4,9 +4,13 @@ import { Button } from '@nextui-org/button';
 import { Image } from '@nextui-org/image';
 import { User } from '@nextui-org/user';
 import { signIn, useSession } from 'next-auth/react';
+import { useLocale } from 'next-intl';
+import { useRouter } from 'next/navigation';
 import React, { useState } from 'react';
 
 const LoginButton = () => {
+  const locale = useLocale();
+  const router = useRouter();
   const { data: session } = useSession();
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
@@ -15,7 +19,18 @@ const LoginButton = () => {
 
     try {
       // for login
-      await signIn('google');
+      await signIn('google', {
+        redirect: false,
+        redirectTo: `/${locale}`,
+      }).then(result => {
+        if (result?.error) {
+          // toast notification
+          alert('Err: Login Failure!');
+        } else {
+          // toast notification
+          alert('Login Success!');
+        }
+      });
     } catch (error) {
       // toast notification
       alert('Err: Login Failure!');

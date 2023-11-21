@@ -113,8 +113,8 @@ export default function CommuSettingsPage() {
                 variant="bordered"
               >
                 {communityCategory.map(cate => (
-                  <SelectItem key={cate.code} value={cate.label}>
-                    {cate.label}
+                  <SelectItem key={cate.code} value={cate.code}>
+                    {cate.code}
                   </SelectItem>
                 ))}
               </Select>

@@ -5,6 +5,7 @@ import { Avatar } from '@nextui-org/avatar';
 import { Button } from '@nextui-org/button';
 import { usePathname } from 'next/navigation';
 import { Skeleton } from '@nextui-org/skeleton';
+import { useLocale, useTranslations } from 'next-intl';
 
 interface SidebarMenuItemProps {
   name: string;
@@ -31,7 +32,9 @@ const SidebarMenu = ({
   isRoot?: boolean;
 }) => {
   const pathname = usePathname();
+  const locale = useLocale();
   const [mounted, setMounted] = useState(false);
+  const t = useTranslations('Home');
 
   useEffect(() => {
     setMounted(true);
@@ -47,7 +50,7 @@ const SidebarMenu = ({
                       x:flex x:justify-start
                       min-h-unit-10 mx-auto w-[95%] bg-opacity-50
                       ${
-                        pathname === item.href
+                        pathname === '/' + locale + item.href
                           ? `${classNames?.activeBgColor || ''}`
                           : `${classNames?.defaultBgColor || ''}`
                       }
@@ -65,7 +68,7 @@ const SidebarMenu = ({
             )
           }
         >
-          {item.name}
+          {t(`sidebar.${item.name}`)}
         </Button>
 
         {isRoot && (

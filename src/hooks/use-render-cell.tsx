@@ -111,59 +111,6 @@ const renderCell = (row: any, columnKey: Key) => {
   }
 };
 
-const rankingCell = (row: any, columnKey: Key) => {
-  type Rows = (typeof row)[0];
-  const cellValue = row[columnKey as keyof Rows];
-
-  switch (columnKey) {
-    case 'id': //TODO: order 로 변경
-      return <div className="text-center">{row.id}</div>;
-    case 'username':
-      return (
-        <div className="whitespace-nowrap">
-          <User
-            classNames={{ description: 'italic' }}
-            avatarProps={{ src: row.profileImage }}
-            name={row.username}
-            description={`@${row.youtubeHandler}`}
-          />
-        </div>
-      );
-
-    case 'communityName':
-      return (
-        <div className="flex flex-col line-clamp-1 text-ellipsis">
-          <span className="text-tiny line-clamp-1 text-ellipsis">
-            {row.communityCategory}
-          </span>
-          <span className="text-sm line-clamp-1 text-ellipsis">
-            {row.communityName}
-          </span>
-        </div>
-      );
-
-    case 'views':
-      return <div className="text-center">{row.views}</div>;
-
-    case 'youtubeSubscribers':
-      return <div className="text-center">{row.youtubeSubscribers}</div>;
-
-    case 'communityMembers':
-      return <div className="text-center">{row.communityMembers}</div>;
-
-    case 'view-subs':
-      return (
-        <div className="text-center">
-          {row.views}/{row.youtubeSubscribers}
-        </div>
-      );
-
-    default:
-      return cellValue;
-    // return null;
-  }
-};
-
 function datetimeFormatter(originalDate: string) {
   const date = new Date(originalDate);
   const year = date.getFullYear();
@@ -175,4 +122,4 @@ function datetimeFormatter(originalDate: string) {
   return formattedDate;
 }
 
-export { renderCell, rankingCell, datetimeFormatter };
+export { renderCell, datetimeFormatter };

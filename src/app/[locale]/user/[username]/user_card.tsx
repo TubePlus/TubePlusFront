@@ -16,7 +16,7 @@ import { Card } from '@nextui-org/card';
 import { Badge } from '@nextui-org/badge';
 import { Tooltip } from '@nextui-org/tooltip';
 
-const UserBox = () => {
+const UserCard = () => {
   const session = useSession();
   const user = session.data?.user;
 
@@ -202,4 +202,4 @@ const UserBox = () => {
   );
 };
 
-export default UserBox;
+export default UserCard;

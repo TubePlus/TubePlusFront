@@ -1,4 +1,9 @@
 {
+  "LocaleSwitcher": {
+    "label": "Change language",
+    "locale": "{locale, select, de {German} en {English} other {Unknown}}"
+  },
+
   "Home": {
     "title": "안녕하세요!",
     "theme": "테마",
@@ -12,8 +17,9 @@
     "see-all-creator": "모든 크리에이터",
 
     "search": "검색",
-    "search-creator-avtive-on-tube": "Search creator avtive on tubePlus",
+    "search-creator-avtive-on-tube": "TubePlus에 활성화된 크리에이터 검색",
     "search-creator": "크리에이터 검색",
+    "search-tube": "TubePlus 검색",
 
     "login": "로그인",
     "logout": "로그아웃",
@@ -23,9 +29,17 @@
     "sidebar": {
       "home": "홈페이지",
       "community": "커뮤니티",
-      "about-tube": "튜브플러스 알아보기",
+      "about-tube": "TubePlus 알아보기",
       "help": "헬프센터",
-      "policy-terms": "이용약관/정책"
+      "user-agreements": "이용약관",
+      "privacy-policy": "개인정보 및 정책",
+      "policies-terms": "정책/약관",
+
+      "한국어": "한국어",
+      "English": "English",
+      "日本語": "日本語",
+      "中国话": "中国话",
+      "Español": "Español"
     },
 
     "unauthorized-dropdown": {
@@ -36,6 +50,7 @@
     },
 
     "category": {
+      "all": "전체",
       "MOVIE": "영화/애니메이션",
       "CAR": "자동차",
       "MUSIC": "음악",

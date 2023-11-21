@@ -60,6 +60,7 @@ export default async function LocaleLayout({
     <html lang={locale} suppressHydrationWarning>
       <body
         className={`${inter.className} bg-zinc-50 dark:bg-zinc-900
+                    selection:bg-red-500 selection:text-white
                     min-h-screen h-full w-screen
                     overflow-y-auto scrollbar-none`}
       >
@@ -67,7 +68,7 @@ export default async function LocaleLayout({
           <ThemeProvider>
             <NextIntlClientProvider locale={locale} messages={messages}>
               {modal}
-              <Navbar />
+              <Navbar params={{ locale }} />
               <CommunityHeader />
               {/* <SubNavbar /> */}
 

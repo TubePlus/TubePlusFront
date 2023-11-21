@@ -1,7 +1,7 @@
 import SubNavbar from '@/components/navbar/SubNavbar';
-import UserCard from '@/app/user/[username]/user_card';
 import Sidebar from '@/components/sidebar/Sidebar';
 import MainSidebar from '@/components/sidebar/MainSidebar';
+import UserCard from './user_card';
 
 interface UserPageProps {
   username: string;

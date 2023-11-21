@@ -176,7 +176,7 @@ const SearchBox = ({
                 <Input
                   classNames={{}}
                   radius="none"
-                  placeholder="Search TubePlus"
+                  placeholder={t('search-tube')}
                   startContent={<MagnifyingGlassIcon className="w-6 h-6" />}
                   endContent={
                     <Kbd classNames={{ content: 'text-xs' }} keys={['escape']}>

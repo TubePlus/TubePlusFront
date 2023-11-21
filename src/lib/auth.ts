@@ -14,9 +14,6 @@ export const authOptions: NextAuthOptions = {
   session: {
     strategy: 'jwt',
   },
-  pages: {
-    signIn: '/login' || '/join',
-  },
   providers: [
     GoogleProvider({
       name: 'google',
@@ -128,9 +125,9 @@ export const authOptions: NextAuthOptions = {
       }
       return true;
     },
-    async redirect() {
-      return '/';
-    },
+    // async redirect() {
+    //   return '/';
+    // },
   },
 };
 

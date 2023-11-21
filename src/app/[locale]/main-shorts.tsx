@@ -8,6 +8,7 @@ import React from 'react';
 import { Image } from '@nextui-org/image';
 import { Spinner } from '@nextui-org/spinner';
 import { Card, CardFooter, CardHeader } from '@nextui-org/react';
+import { Chip } from '@nextui-org/chip';
 import { User } from '@nextui-org/user';
 import Link from 'next/link';
 import { useTranslations } from 'next-intl';
@@ -43,34 +44,59 @@ const MainShorts = () => {
         {data?.data.map((s: ShortsProps) => (
           <Card
             key={s.channelId}
-            className="shadow-none min-h-[320px] min-w-[200px] group"
+            className="shadow-none min-h-[320px] min-w-[200px] border-0 border-red-500 hover:border-2 group"
           >
             <Link
               className="h-full w-full"
               href={`https://${s.videoUrl}`}
               target="_blank"
             >
-              <div className="absolute w-full h-full z-[10] bg-default-900 group-hover:opacity-60 opacity-0 duration-300" />
+              <div className="absolute w-full h-full z-[10] bg-default-200 group-hover:opacity-50 opacity-0 duration-300" />
+              <div className="absolute w-full h-full z-[10] bg-gradient-to-t from-default-800 to-default-100/0 group-hover:opacity-0 opacity-50 duration-300" />
               <CardHeader className="absolute -top-1 -left-1">
-                <h1 className="w-8 h-8 flex justify-center items-center text-lg leading-4 font-semibold text-foreground bg-default-200 rounded-full">
+                <h1
+                  className="w-8 h-8 flex justify-center items-center text-lg leading-4 font-semibold
+                              text-foreground bg-default-200
+                              group-hover:text-default-100 group-hover:bg-red-600 duration-200
+                              rounded-full"
+                >
                   {s.ranking}
                 </h1>
               </CardHeader>
-
               <Image
                 removeWrapper
                 className="z-0 w-full h-full scale-[1.4] group-hover:scale-150 object-cover"
                 alt={s.channelId}
                 src={s.thumbnailUrl}
               />
-              <CardFooter className="z-[15] absolute bottom-0 h-full items-end text-default-200">
-                <div className="relative flex flex-col w-full text-ellipsis overflow-hidden">
-                  <h1 className="w-full block text-sm font-semibold whitespace-nowrap line-clamp-1 text-ellipsis">
-                    {s.channelName}
-                  </h1>
-                  <span className="text-sm">
-                    {t(`category.${s.videoCategory}`)}
+              <CardFooter className="z-[15] absolute bottom-0 h-full flex flex-col justify-end">
+                <div className="relative w-full h-1/3 flex flex-col">
+                  <span
+                    className="absolute font-bold text-start break-all text-ellipsis line-clamp-4
+                                    top-14 opacity-0 group-hover:top-0 group-hover:opacity-100 duration-300
+                                    "
+                  >
+                    {s.videoTitle}
                   </span>
+                </div>
+
+                <div className="relative flex flex-col gap-1 w-full">
+                  <Chip
+                    className="line-clamp-1 text-ellipsis group-hover:bg-red-600 duration-200"
+                    size="sm"
+                  >
+                    <span className="font-semibold group-hover:text-white duration-200">
+                      {s.channelName}
+                    </span>
+                  </Chip>
+                  <Chip
+                    className="text-sm group-hover:bg-red-500 duration-200"
+                    size="sm"
+                  >
+                    <span className="font-semibold group-hover:text-default-300 duration-200">
+                      {t(`category.${s.videoCategory}`)}
+                    </span>
+                  </Chip>
                 </div>
               </CardFooter>
             </Link>

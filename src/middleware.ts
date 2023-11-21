@@ -2,7 +2,7 @@ import withAuth, { NextRequestWithAuth } from 'next-auth/middleware';
 import createIntlMiddleware from 'next-intl/middleware';
 
 const locales = ['en', 'ko'];
-const publicPages = ['/', '/login'];
+const publicPages = ['/', '/login', '/join', '/about', '/team'];
 
 const intlMiddleware = createIntlMiddleware({
   locales,
@@ -10,17 +10,15 @@ const intlMiddleware = createIntlMiddleware({
 });
 
 const authMiddleware = withAuth(
-  req => intlMiddleware(req),
-  // function onSuccess(req) {
-  //   return intlMiddleware(req);
-  // },
+  // req => intlMiddleware(req),
+  function onSuccess(req) {
+    return intlMiddleware(req);
+  },
 
   {
     callbacks: {
-      authorized: ({ token }) => token?.role == ('MEMBER' || 'ADMIN'),
-    },
-    pages: {
-      signIn: '/login',
+      // authorized: ({ token }) => token?.role == ('MEMBER' || 'ADMIN'),
+      authorized: ({ token }) => token != null,
     },
   },
 );
@@ -43,4 +41,5 @@ export default function middleware(req: NextRequestWithAuth) {
 
 export const config = {
   matcher: ['/((?!api|_next|.*\\..*).*)'],
+  // matcher: ['/', '/(en|ko)/:path*'],
 };
