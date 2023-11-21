@@ -1,5 +1,5 @@
 import SubNavbar from '@/components/navbar/SubNavbar';
-import UserCard from '@/app/user/[username]/user_card';
+import UserBox from './user_card';
 import Sidebar from '@/components/sidebar/Sidebar';
 import MainSidebar from '@/components/sidebar/MainSidebar';
 
@@ -49,7 +49,7 @@ export default function UserLayout({
                   x:col-span-full"
       >
         <div className="sticky top-[6.08rem] mb-8">
-          <UserCard />
+          <UserBox />
         </div>
       </div>
 

@@ -208,7 +208,7 @@ export const uploadPost = (post: {
   };
 
   const result = fetch(
-    'https://tubeplus1.duckdns.org' + endpointPrefix + '/postings',
+    'https://tubeplus1.duckdns.org' + endpointPrefix + '/board-service/postings',
     {
       method: 'POST',
       headers: { 'content-type': 'application/json' },
