@@ -1,5 +1,7 @@
+const withNextIntl = require('next-intl/plugin')();
+
 /** @type {import('next').NextConfig} */
-const nextConfig = {
+const nextConfig = withNextIntl({
   images: {
     remotePatterns: [
       {
@@ -27,11 +29,6 @@ const nextConfig = {
     ],
   },
 
-  i18n: {
-    locales: ['en-US', 'ko-KR', 'ja-JP', 'zh-CN', 'es-ES'],
-    defaultLocale: 'en-US',
-  },
-
   async rewrites() {
     console.log('Rewrites called');
     return process.env.NODE_ENV === 'development'
@@ -43,4 +40,6 @@ const nextConfig = {
         ]
       : [];
   },
-};
+});
+
+module.exports = nextConfig;

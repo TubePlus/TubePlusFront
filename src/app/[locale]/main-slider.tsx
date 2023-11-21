@@ -11,6 +11,7 @@ import { Image } from '@nextui-org/image';
 import Link from 'next/link';
 import { LgValue, MdValue, SmValue } from '@/components/Responsive';
 import { Button } from '@nextui-org/button';
+import { useLocale, useTranslations } from 'next-intl';
 
 interface Banner {
   id: string;
@@ -20,6 +21,9 @@ interface Banner {
 }
 
 const MainBanner = () => {
+  const t = useTranslations('Home');
+  const locale = useLocale();
+
   const [banner, setBanner] = useState<Slidebanner[] | null>(null);
 
   const { data, isLoading, isError, error } = useQuery(
@@ -131,6 +135,7 @@ const suggestedCreator = [
 ];
 
 const SuggestedCreator = () => {
+  const t = useTranslations('Home');
   const isSm = SmValue();
   const isMd = MdValue();
   const isLg = LgValue();
@@ -177,7 +182,7 @@ const SuggestedCreator = () => {
               fullWidth
               size="sm"
             >
-              See More
+              {t('see-more')}
             </Button>
           </div>
         </SwiperSlide>

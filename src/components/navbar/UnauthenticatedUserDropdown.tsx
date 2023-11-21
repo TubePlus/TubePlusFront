@@ -20,8 +20,11 @@ import { ThemeSwitcher } from '../ThemeSwitcher';
 import { NavbarItem } from '@nextui-org/navbar';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import { useTranslations } from 'next-intl';
 
 const UnauthenticatedUserDropdown = () => {
+  const t = useTranslations('Home');
+
   const [mounted, setMounted] = useState(false);
   const router = useRouter();
 
@@ -33,19 +36,19 @@ const UnauthenticatedUserDropdown = () => {
   const items = [
     {
       key: 'join',
-      label: 'Log In/Sign Up',
+      label: 'login-register',
       icon: EnterIcon,
       href: '/login_m',
     },
     {
       key: 'about',
-      label: 'About TubePlus',
+      label: 'about-tube',
       icon: VideoIcon,
       href: 'https://www.notion.so/About-TubePlus-9183790a57494cacbfe6164f9929b0ad?pvs=4',
     },
     {
       key: 'contact',
-      label: 'Contact TubePlus',
+      label: 'contact-us',
       icon: EnvelopeClosedIcon,
       href: '/', // TODO: Contact Page를 별도로 만들던지(mailto), notion Page를 별도로 만들던지..
     },
@@ -61,7 +64,7 @@ const UnauthenticatedUserDropdown = () => {
             as={Link}
             href={'/login'}
           >
-            Log In
+            {t(`login`)}
           </Button>
         </NavbarItem>
 
@@ -72,7 +75,7 @@ const UnauthenticatedUserDropdown = () => {
             as={Link}
             href="/join"
           >
-            Join Us
+            {t('register')}
           </Button>
         </NavbarItem>
 
@@ -109,14 +112,14 @@ const UnauthenticatedUserDropdown = () => {
                     href={item.href || ''}
                     startContent={<item.icon />}
                   >
-                    {item.label}
+                    {t(`unauthorized-dropdown.${item.label}`)}
                   </DropdownItem>
                 ))}
               </DropdownSection>
 
-              <DropdownSection title={'Theme'}>
+              <DropdownSection title={t('theme')}>
                 <DropdownItem endContent={<ThemeSwitcher type="toggle" />}>
-                  Dark Mode
+                  {t(`unauthorized-dropdown.darkmode`)}
                 </DropdownItem>
               </DropdownSection>
             </DropdownMenu>

@@ -1,0 +1,91 @@
+{
+  "Home": {
+    "title": "안녕하세요!",
+    "theme": "테마",
+
+    "top": "위로",
+    "join": "가입",
+    "see-all": "모두보기",
+    "see-details": "자세히 보기",
+    "see-more": "더 보기",
+    "see-less": "줄이기",
+    "see-all-creator": "모든 크리에이터",
+
+    "search": "검색",
+    "search-creator-avtive-on-tube": "Search creator avtive on tubePlus",
+    "search-creator": "크리에이터 검색",
+
+    "login": "로그인",
+    "logout": "로그아웃",
+    "register": "가입",
+    "register-creator": "크리에이터 등록",
+
+    "sidebar": {
+      "home": "홈페이지",
+      "community": "커뮤니티",
+      "about-tube": "튜브플러스 알아보기",
+      "help": "헬프센터",
+      "policy-terms": "이용약관/정책"
+    },
+
+    "unauthorized-dropdown": {
+      "login-register": "로그인/회원가입",
+      "about-tube": "TubePlus 알아보기",
+      "contact-us": "연락하기",
+      "darkmode": "다크모드"
+    },
+
+    "category": {
+      "MOVIE": "영화/애니메이션",
+      "CAR": "자동차",
+      "MUSIC": "음악",
+      "ANIMAL": "반려동물/동물",
+      "SPORTS": "스포츠",
+      "TRAVEL": "여행/이벤트",
+      "GAME": "게임",
+      "BLOG": "인물/블로그",
+      "COMEDY": "코미디",
+      "ENTERTAINMENT": "엔터테인먼트",
+      "NEWS": "뉴스/정치",
+      "STYLE": "노하우/스타일",
+      "EDUCATION": "교육",
+      "SCIENCE": "과학기술"
+    },
+
+    "table-head": {
+      "order": "순위",
+      "title": "제목",
+      "creator": "크리에이터",
+      "community": "커뮤니티",
+      "category": "카테고리",
+      "members": "회원수",
+      "subscribers": "구독자",
+      "subscribe": "구독",
+      "date": "일자",
+      "status": "상태",
+      "action": "조정",
+      "view": "조회수",
+      "view-subs": "조회수/구독자수",
+      "avg-view": "평균 조회수",
+      "edit": "편집",
+      "delete": "Delete",
+      "publish": "Publish"
+    },
+
+    "related-creator": "연관 크리에이터",
+    "suggested-creator": "크리에이터 콘텐츠",
+    "popular-creator": "인기 크리에이터",
+
+    "releases-accessible": "새로운 콘텐츠",
+
+    "footer": {
+      "terms": "이용약관",
+      "privacy": "개인정보",
+      "contact": "연락",
+      "security": "보안",
+      "status": "상태",
+      "docs": "문서",
+      "about": "자세히"
+    }
+  }
+}

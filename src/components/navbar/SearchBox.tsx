@@ -28,6 +28,7 @@ import { useIsMobile } from '@nextui-org/use-is-mobile';
 
 import { CloseFilledIcon } from '../icons/CloseFilledIcon';
 import { QuickResultBox } from './QuickResultBox';
+import { useTranslations } from 'next-intl';
 
 // Don't Touch This Filter Items
 const SearchFilter = [
@@ -57,6 +58,7 @@ const SearchBox = ({
   className?: string;
   type: 'input' | 'button';
 }) => {
+  const t = useTranslations('Home');
   const mounted = useIsMounted();
   const isMobile = useIsMobile(); // TODO: 모바일에서 검색 창 사이즈 문제
 
@@ -102,7 +104,7 @@ const SearchBox = ({
           </Select> */}
 
           <SearchInput
-            placeholder="Search Creator active on TubePlus..."
+            placeholder={t('search-creator-avtive-on-tube')}
             value={searchValue}
             onValueChange={setSearchValue}
             ref={searchInputRef}

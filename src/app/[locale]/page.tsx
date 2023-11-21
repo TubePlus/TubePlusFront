@@ -1,15 +1,21 @@
 import MainSidebar from '@/components/sidebar/MainSidebar';
 import Sidebar from '@/components/sidebar/Sidebar';
-import { MainBanner, SuggestedCreator } from '@/app/main-slider';
-import CreatorRanking from '@/app/creator-ranking';
 import MainShorts from './main-shorts';
 import { Card, CardBody, CardHeader, CardFooter } from '@nextui-org/card';
 import { Button } from '@nextui-org/button';
 import { Image } from '@nextui-org/image';
 import { Avatar } from '@nextui-org/avatar';
 import Link from 'next/link';
+import { MainBanner, SuggestedCreator } from './main-slider';
+import CreatorRanking from './creator-ranking';
+import { useTranslations } from 'next-intl';
 
-export default function Home() {
+type Props = {
+  params: { locale: string };
+};
+
+export default function Home({ params: { locale } }: Props) {
+  const t = useTranslations('Home');
   return (
     <>
       <div
@@ -57,15 +63,15 @@ export default function Home() {
                   </div>
                 </div>
               }
-              titleLink={{ name: 'SEE DETAIL', href: '' }}
+              titleLink={{ name: t('see-details'), href: '' }}
             >
               <FlatCardTubePlusTeamBody />
             </FlatCard>
 
             <FlatCard
               className=""
-              title={`Related Creator`}
-              titleLink={{ name: 'SEE MORE', href: '' }}
+              title={t('related-creator')}
+              titleLink={{ name: t('see-more'), href: '' }}
             >
               <div className="p-2 pt-0">
                 <div className="p-2 flex items-center gap-2 justify-between border rounded-xl">
@@ -77,7 +83,7 @@ export default function Home() {
                       name="Related User"
                     />
                     <div className="flex flex-col ga-0">
-                      <span className="text-sm">Related User</span>
+                      <span className="text-sm">Related Creator</span>
                       <span className="text-[11px]">@relatedUser</span>
                     </div>
                   </div>
@@ -88,7 +94,7 @@ export default function Home() {
                     radius="full"
                     size="sm"
                   >
-                    Join
+                    {t('join')}
                   </Button>
                 </div>
               </div>
@@ -98,8 +104,8 @@ export default function Home() {
           <div className="sm:col-span-3 x:col-span-full">
             <FlatCard
               className="h-full justify-between"
-              title={'Releases Available'}
-              titleLink={{ name: 'SEE ALL', href: '' }}
+              title={t('releases-accessible')}
+              titleLink={{ name: t('see-all'), href: '' }}
             >
               <FlatCardRelease />
               <FlatCardRelease />
@@ -110,7 +116,7 @@ export default function Home() {
         </section>
 
         <section>
-          <h2 className="text-xl mb-4">Suggested Creator</h2>
+          <h2 className="text-xl mb-4">{t('suggested-creator')}</h2>
           <SuggestedCreator />
         </section>
       </section>

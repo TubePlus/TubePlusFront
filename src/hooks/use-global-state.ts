@@ -1,4 +1,4 @@
-import { queryClient } from '@/app/providers';
+import { queryClient } from '@/app/[locale]/providers';
 import { useQuery } from '@tanstack/react-query';
 
 const useGlobalState = (key: string, initialData: any = null) => {

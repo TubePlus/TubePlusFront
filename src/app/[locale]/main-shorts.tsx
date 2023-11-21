@@ -10,6 +10,7 @@ import { Spinner } from '@nextui-org/spinner';
 import { Card, CardFooter, CardHeader } from '@nextui-org/react';
 import { User } from '@nextui-org/user';
 import Link from 'next/link';
+import { useTranslations } from 'next-intl';
 
 interface ShortsProps {
   videoTitle: string;
@@ -22,6 +23,8 @@ interface ShortsProps {
 }
 
 const MainShorts = () => {
+  const t = useTranslations('Home');
+
   const {
     isLoading: mockIsLoading,
     isError: mockIsError,
@@ -65,7 +68,9 @@ const MainShorts = () => {
                   <h1 className="w-full block text-sm font-semibold whitespace-nowrap line-clamp-1 text-ellipsis">
                     {s.channelName}
                   </h1>
-                  <span className="text-sm">{s.videoCategory}</span>
+                  <span className="text-sm">
+                    {t(`category.${s.videoCategory}`)}
+                  </span>
                 </div>
               </CardFooter>
             </Link>

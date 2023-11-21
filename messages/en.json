@@ -1,0 +1,91 @@
+{
+  "Home": {
+    "title": "Hello world!",
+    "theme": "Theme",
+
+    "top": "Top",
+    "join": "Join",
+    "see-all": "See all",
+    "see-details": "See details",
+    "see-more": "See more",
+    "see-less": "See less",
+    "see-all-creator": "See all creator",
+
+    "search": "Search",
+    "search-creator-avtive-on-tube": "Search creator avtive on tubePlus",
+    "search-creator": "Search creator",
+
+    "login": "Log in",
+    "logout": "Log out",
+    "register": "Register",
+    "register-creator": "Register creator",
+
+    "sidebar": {
+      "home": "Home",
+      "community": "Community",
+      "about-tube": "About tubePlus",
+      "help": "Help",
+      "policy-terms": "Policy/Terms"
+    },
+
+    "unauthorized-dropdown": {
+      "login-register": "Log in/Register",
+      "about-tube": "About tubePlus",
+      "contact-us": "Contact us",
+      "darkmode": "Darkmode"
+    },
+
+    "category": {
+      "MOVIE": "Movie/Anime",
+      "CAR": "Car",
+      "MUSIC": "Music",
+      "ANIMAL": "Animal",
+      "SPORTS": "Sports",
+      "TRAVEL": "Travel",
+      "GAME": "Game",
+      "BLOG": "Blog",
+      "COMEDY": "Comedy",
+      "ENTERTAINMENT": "Entertainment",
+      "NEWS": "News",
+      "STYLE": "Style",
+      "EDUCATION": "Education",
+      "SCIENCE": "Science"
+    },
+
+    "table-head": {
+      "order": "Order",
+      "title": "Title",
+      "creator": "Creator",
+      "community": "Community",
+      "category": "Category",
+      "members": "Members",
+      "subscribers": "Subscribers",
+      "subscribe": "Subscribe",
+      "date": "Date",
+      "status": "Status",
+      "action": "Action",
+      "view": "View",
+      "view-subs": "View/Subs.",
+      "avg-view": "Avg.View",
+      "edit": "Edit",
+      "delete": "Delete",
+      "publish": "Publish"
+    },
+
+    "related-creator": "Related Creator",
+    "suggested-creator": "Suggested Creator",
+    "popular-creator": "Popular Creator",
+
+    "releases-accessible": "Releases Accessible",
+
+    "footer": {
+      "terms": "Terms",
+      "privacy": "Privacy",
+      "contact": "Contact",
+      "security": "Security",
+      "status": "Status",
+      "docs": "Docs",
+      "about": "About"
+    }
+  }
+}

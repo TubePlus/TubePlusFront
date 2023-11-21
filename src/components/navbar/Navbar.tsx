@@ -9,6 +9,7 @@ import UserPushBox from './UserPushBox';
 import AuthenticatedUserDropdown from './AuthenticatedUserDropdown';
 import UnauthenticatedUserDropdown from './UnauthenticatedUserDropdown';
 import { getAuthSession } from '@/lib/auth';
+import LocaleSwitcher from '../LocaleSwicher';
 
 const Navbar = async () => {
   const session = await getAuthSession();
@@ -22,6 +23,10 @@ const Navbar = async () => {
       isBlurred
       height={'5rem'}
     >
+      <NavbarContent>
+        <LocaleSwitcher />
+      </NavbarContent>
+
       <BrandBox />
 
       <NavbarContent

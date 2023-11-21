@@ -17,15 +17,16 @@ import {
 } from '@nextui-org/table';
 import { useQuery } from '@tanstack/react-query';
 import React, { Key } from 'react';
+import { useTranslations } from 'next-intl';
 
 const rankingTableColumn = [
-  { key: 'id', label: 'Order' },
-  { key: 'username', label: 'Creator' },
-  { key: 'communityName', label: 'Community' },
-  { key: 'views', label: 'Avg.Views' },
-  { key: 'youtubeSubscribers', label: 'Subscribers' },
-  { key: 'view-subs', label: 'View/Subs.' },
-  { key: 'communityMembers', label: 'Members' },
+  { key: 'id', label: 'order' },
+  { key: 'username', label: 'creator' },
+  { key: 'communityName', label: 'community' },
+  { key: 'views', label: 'avg-view' },
+  { key: 'youtubeSubscribers', label: 'subscribers' },
+  { key: 'view-subs', label: 'view-subs' },
+  { key: 'communityMembers', label: 'members' },
 ];
 
 const CreatorRanking = () => {
@@ -36,6 +37,8 @@ const CreatorRanking = () => {
     data,
     refetch: postsRefetch,
   } = useQuery(['community-ranking'], getRanks);
+
+  const t = useTranslations('Home');
 
   return !isLoading ? (
     <Table
@@ -53,12 +56,12 @@ const CreatorRanking = () => {
           <ScrollShadow orientation="horizontal" hideScrollBar className="">
             <div className="flex gap-2">
               {communityCategory.map(cate => (
-                <Chip key={cate.code}>{cate.label}</Chip>
+                <Chip key={cate.code}>{t(`category.${cate.code}`)}</Chip>
               ))}
             </div>
           </ScrollShadow>
           <Button variant="light" radius="full" size="sm">
-            See all
+            {t('see-all')}
           </Button>
         </div>
       }
@@ -85,7 +88,7 @@ const CreatorRanking = () => {
                 : ''
             }`}
           >
-            {column.label}
+            {t(`table-head.${column.label}`)}
           </TableColumn>
         )}
       </TableHeader>
