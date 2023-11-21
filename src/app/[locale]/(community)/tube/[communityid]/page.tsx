@@ -3,13 +3,15 @@
 import React, { use } from 'react'
 import Post from '@/components/Post'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { Image , Card , Button } from '@nextui-org/react'
+import { Image , Card , Button, Chip } from '@nextui-org/react'
 import BoardTabBar from '@/components/BoardTabBar'
 import SideBlock from '@/components/SideBlock'
 import { baseUrl , endpointPrefix, getBoardById } from '@/lib/fetcher'
 import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
 import { useSession } from 'next-auth/react'
+import { HamburgerMenuIcon } from '@radix-ui/react-icons'
+import PostList from '@/components/PostList'
 
 interface communityType {
   communityId: number
@@ -50,8 +52,9 @@ interface DirItem {
 function TubeGate() {
   
   const path = usePathname()
-  const communityId = Number(path.split('/')[2]) as number
-  const boardId = Number(path.split('/')[3])
+  const communityId = Number(path.split('/')[3]) as number
+  const boardId = Number(path.split('/')[4])
+  const locale = path.split('/')[1]
   
 
   const fetchCommunity = async () => {
@@ -111,7 +114,7 @@ function TubeGate() {
 
             <div className='flex flex-wrap gap-5 pb-10'>
               <Button color='default'>
-                <Link href={`/creation/board/${communityId}`}>게시판 추가</Link>
+                <Link href={`${locale}/creation/board/${communityId}`}>게시판 추가</Link>
               </Button>
             
 
@@ -124,7 +127,34 @@ function TubeGate() {
             }
             </div>
             </div>
-            <Post communityId={communitycontents.data.communityId} />
+
+            <div className='flex justify-between pt-3 pb-5'> 
+
+              <div className="flex gap-3 flex-nowrap">
+                <Button>
+                  <Chip color="default"> Newest </Chip>
+                </Button>
+
+                <Button>
+                  <Chip color="default"> Oldest </Chip>
+                </Button>
+
+                <Button color='primary'>
+                  <Link href={`${locale}/creation/posting/${boardId}`}>Posting</Link>
+                </Button>
+
+              </div>
+
+              <div>
+                <Button>
+                  <HamburgerMenuIcon className="w-8 h-8"/>
+                  
+                </Button>
+              </div>
+
+              </div>
+            {/* <Post communityId={communitycontents.data.communityId} boardId={boardcontents.data.boardId} /> */}
+            <PostList communityId={communitycontents.data.communityId} boardId={boardId} />
           </div>
           {/* </div> */}
           

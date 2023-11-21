@@ -49,22 +49,22 @@ function CommunityInner( { communityId }: { communityId : Number} ) {
     },
   });
 
-  // const joinhistoryMutation = useMutation<any, any, JoinType>(() => {
-  //   return fetch(`${baseUrl}${endpointPrefix}/communities/${communityId}/users/me/join-history`, {
-  //     method: 'POST',
-  //     headers: {
-  //       'Content-Type': 'application/json',
-  //     },
-  //     body: JSON.stringify(session.data?.user.uuid),
-  //   }).then((res) => res.json());
-  //   }, {
-  //     onSuccess: () => {
-  //       router.push(`/tube/${communityId}`)
-  //     },
-  //     onError: (error) => {
-  //       console.error('Error joining community:', error);
-  //     },
-  //   });
+  const joinhistoryMutation = useMutation<any, any, JoinType>(() => {
+    return fetch(`${baseUrl}${endpointPrefix}/communities/${communityId}/users/me/join-history`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(session.data?.user.uuid),
+    }).then((res) => res.json());
+    }, {
+      onSuccess: () => {
+        router.push(`/tube/${communityId}`)
+      },
+      onError: (error) => {
+        console.error('Error joining community:', error);
+      },
+    });
   
   const fetchCommunity = async () => {
     const res = await fetch(`${baseUrl}${endpointPrefix}/communities/${communityId}/info`, {

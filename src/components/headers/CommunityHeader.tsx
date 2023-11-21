@@ -7,9 +7,9 @@ import CommunityInner from './CommunityInner'
 function CommunityHeader( ) {
 
     const path = usePathname()
-    const communityId = Number(path.split('/')[2])
+    const communityId = Number(path.split('/')[3])
 
-    if(path.split('/')[1] !== 'tube' || path.split('/')[1] === undefined || (path.split('/')[1] === 'tube'&& path.split('/')[4] === 'posting' )) return null;
+    if(path.split('/')[2] !== 'tube' || path.split('/')[2] === undefined || (path.split('/')[2] === 'tube'&& path.split('/')[5] === 'posting' )) return null;
 
   return (
 

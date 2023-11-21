@@ -4,7 +4,7 @@ import React, { useState, useMemo, useRef } from 'react';
 import ReactQuill from 'react-quill';
 import { useMutation } from '@tanstack/react-query';
 import { useFileUpload } from '@/hooks/use-file-upload';
-
+import { usePathname } from 'next/navigation';
 import { useSession } from 'next-auth/react';
 
 import { Button } from '@nextui-org/button';
@@ -36,6 +36,9 @@ const Posting = ({ boardId }: { boardId: number }) => {
   const uploadFile = useFileUpload();
   const session = useSession();
   const quillRef = useRef<ReactQuill>(null);
+  const path = usePathname();
+
+  const bId = Number(path.split('/')[3]);
 
   const { mutate, isLoading, isError, error, isSuccess } =
     useMutation(uploadPost);
@@ -75,6 +78,7 @@ const Posting = ({ boardId }: { boardId: number }) => {
       }
     };
   };
+  
 
   // Quill.register('modules/imageHandler', imageHandler);
 
@@ -103,7 +107,7 @@ const Posting = ({ boardId }: { boardId: number }) => {
 
   const handleSubmit = () => {
     const newPosting: PostingType = {
-      boardId: boardId,
+      boardId: bId,
       authorUuid: session.data?.user.uuid as string,
       title: title,
       contents: contentValue,
