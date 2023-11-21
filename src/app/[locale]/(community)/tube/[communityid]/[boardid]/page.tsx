@@ -1,13 +1,16 @@
 'use client'
+
 import Post from '@/components/Post'
 import React, { use, useEffect, useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
-import { Image , Card , Button, Link } from '@nextui-org/react'
+import { Image , Card , Button, Link, Chip, DropdownItem, DropdownMenu, DropdownTrigger, Dropdown } from '@nextui-org/react'
 import BoardTabBar from '@/components/BoardTabBar'
 import SideBlock from '@/components/SideBlock'
 import { baseUrl , endpointPrefix } from '@/lib/fetcher'
 import SubNavbar from '@/components/navbar/SubNavbar'
 import { usePathname } from 'next/navigation'
+import PostList from '@/components/PostList'
+import { HamburgerMenuIcon, ViewHorizontalIcon } from '@radix-ui/react-icons'
 
 interface communityType {
   communityId: number
@@ -45,10 +48,18 @@ interface DirItem {
 //TODO: 게시판, 게시물, 댓글 API 요청 URL 숨기기
 
 function Tube() {
+
+  const [selectedKeys, setSelectedKeys] = React.useState(new Set(["text"]));
+
+  const selectedValue = React.useMemo(
+    () => Array.from(selectedKeys).join(", ").replaceAll("_", " "),
+    [selectedKeys]
+  );
   
   const path = usePathname()
   const communityId = Number(path.split('/')[2]) as number
   const boardId = Number(path.split('/')[3])
+  
 
   const fetchCommunity = async () => {
     const res = await fetch(`${baseUrl}${endpointPrefix}/communities/${communityId}/info`, {
@@ -95,6 +106,8 @@ function Tube() {
   }
 
   console.log("보드데이터", boardcontents)
+  console.log("커뮤니티데이터", communitycontents)
+  console.log("아이디:", boardId)
 
   return (
     <>      
@@ -107,7 +120,7 @@ function Tube() {
 
             <div className='flex flex-wrap gap-5 pb-10'>
               <Button color='default'>
-                <Link href={`/creation/board/${communityId}`}>게시판 추가</Link>
+                <Link href={`/creation/board/${communityId}`} color='foreground'>게시판 추가</Link>
               </Button>
             
 
@@ -120,7 +133,64 @@ function Tube() {
             }
             </div>
             </div>
-            <Post communityId={communitycontents.data.communityId} />
+            
+            <div className='flex justify-between pt-3 pb-5'> 
+
+              <div className="flex gap-3 flex-nowrap">
+                <Button>
+                  <Chip color="default"> Newest </Chip>
+                </Button>
+
+                <Button>
+                  <Chip color="default"> Oldest </Chip>
+                </Button>
+
+                <Button color="primary" >
+                  <Link className='hover:text-white' color='foreground' href={`/creation/posting/${boardId}`}> Posting </Link>
+                </Button>
+
+              </div>
+
+              <div>
+                
+                  
+              <Dropdown>
+                <DropdownTrigger>
+                  <Button 
+                    variant="flat" 
+                    className="capitalize"
+                  >
+                    {selectedValue}
+                  </Button>
+                </DropdownTrigger>
+                <DropdownMenu
+                  aria-label="Single selection example"
+                  variant="flat"
+                  disallowEmptySelection
+                  selectionMode="single"
+                  selectedKeys={selectedKeys}
+                  onSelectionChange={setSelectedKeys}
+                >
+                  <DropdownItem key="Compact">
+                    <HamburgerMenuIcon className="w-6 h-6"/>
+                    
+                  </DropdownItem>
+                  <DropdownItem key="Card">
+                    <ViewHorizontalIcon className='w-6 h-6'/>
+                  </DropdownItem>
+                  
+                </DropdownMenu>
+              </Dropdown>
+
+
+              </div>
+
+              </div>
+
+              
+              <Post communityId={communitycontents.data.communityId} boardId={boardId} />
+              
+            {/* <PostList communityId={communitycontents.data.communityId} boardId={boardId} /> */}
           </div>
           {/* </div> */}
           

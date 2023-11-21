@@ -37,7 +37,7 @@ interface verifiedProps {
 }
 
 
-const Post = ( {communityId} : {communityId:number} ) => {
+const Post = ( {communityId , boardId} : {communityId:number , boardId:number} ) => {
   const session = useSession();
 
   const [verified, setVerified] = useState({
@@ -92,10 +92,11 @@ const Post = ( {communityId} : {communityId:number} ) => {
       fetchVerifiedCreatorMutation.mutate({ userUuid: session.data.user.uuid });
     }
   }, [session.data?.user, communityId]);
-    
+
+  // 'https://652c497bd0d1df5273ef56a5.mockapi.io/api/v1/post' mock api 주소
+  // `https://tubeplus1.duckdns.org/api/v1/board-service/postings?search-type-req=BOARD_ID&view-type-req=FEED&boardId=${boardId}&feedSize=3` 백 주소
   const fetchPosts = async () => {
-    const res = await fetch(
-      'https://652c497bd0d1df5273ef56a5.mockapi.io/api/v1/post',
+    const res = await fetch('https://652c497bd0d1df5273ef56a5.mockapi.io/api/v1/post',
       {
         method: 'GET',
         headers: { 'Content-Type': 'application/json' },
@@ -129,41 +130,39 @@ const Post = ( {communityId} : {communityId:number} ) => {
     userUuid: session.data?.user.uuid ?? '',
   };
 
-  console.log(joinCheck)
-
+  console.log("게시물 내용:",[postcontents])
+  console.log(Array.isArray(postcontents))
+  console.log(session)
 
   return (
     <>
     <div className={`${isJoined || isMaster ? '' : 'blurred'}`}>
 
 
-      <div className='flex justify-between pt-3'> 
+      {/* <div className='flex justify-between pt-3'> 
 
       <div className="flex gap-3 flex-nowrap">
         <Button>
-          <Chip color="default"> Popular </Chip>
+          <Chip color="default"> New </Chip>
         </Button>
 
         <Button>
-          <Chip color="default"> Hot </Chip>
-        </Button>
-
-        <Button>
-          <Chip color="default"> Favorite </Chip>
+          <Chip color="default"> Old </Chip>
         </Button>
       </div>
 
       <div>
         <Button>
-          <HamburgerMenuIcon className="w-8 h-8" />
+          <HamburgerMenuIcon className="w-8 h-8"/>
+          
         </Button>
       </div>
 
-      </div>
+      </div> */}
 
       {postcontents &&
         postcontents.map((item: PostType) => (
-          <div key={item.id} className='pt-7 col-span-10 gap-5'>
+          <div key={item.id} className='mb-7'>
             <Card>
               <CardHeader>
                 <div className="flex flex-nowrap justify-between w-full">
@@ -184,7 +183,7 @@ const Post = ( {communityId} : {communityId:number} ) => {
                   </div>
                 </div>
               </CardHeader>
-              <Link href={`/tube/posting/${item.id}`}>
+              <Link href={`/tube/${communityId}/${boardId}/posting/${item.id}`}>
                 <CardBody>
                   <div className="flex flex-nowrap gap-4 overflow-hidden">
                     {item.contents}
@@ -194,7 +193,7 @@ const Post = ( {communityId} : {communityId:number} ) => {
                 <CardFooter>
                   <div className="border-t-1 w-full">
                     <div className="flex pt-5 flex-nowrap gap-x-2">
-                      <ChatBubbleIcon className="w-8 h-8" />
+                      <ChatBubbleIcon className="w-8 h-8"/>
                       Comment
 
                       <BookmarkIcon className="w-8 h-8" />
