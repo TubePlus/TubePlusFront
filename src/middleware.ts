@@ -7,6 +7,7 @@ const publicPages = ['/', '/login', '/join', '/about', '/team'];
 const intlMiddleware = createIntlMiddleware({
   locales,
   defaultLocale: 'en',
+  localePrefix: 'always',
 });
 
 const authMiddleware = withAuth(
