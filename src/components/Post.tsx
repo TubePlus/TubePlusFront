@@ -19,6 +19,7 @@ import {
 import Link from 'next/link';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { useSession } from 'next-auth/react';
+import { usePathname } from 'next/navigation';
 
 interface PostType {
   id: number;
@@ -39,6 +40,8 @@ interface verifiedProps {
 
 const Post = ( {communityId , boardId} : {communityId:number , boardId:number} ) => {
   const session = useSession();
+  const path = usePathname();
+  const locale = path.split('/')[1];
 
   const [verified, setVerified] = useState({
     isJoined: false,
@@ -183,7 +186,7 @@ const Post = ( {communityId , boardId} : {communityId:number , boardId:number} )
                   </div>
                 </div>
               </CardHeader>
-              <Link href={`/tube/${communityId}/${boardId}/posting/${item.id}`}>
+              <Link href={`${locale}/tube/${communityId}/${boardId}/posting/${item.id}`}>
                 <CardBody>
                   <div className="flex flex-nowrap gap-4 overflow-hidden">
                     {item.contents}

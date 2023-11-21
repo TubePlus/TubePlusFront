@@ -57,8 +57,8 @@ function Tube() {
   );
   
   const path = usePathname()
-  const communityId = Number(path.split('/')[2]) as number
-  const boardId = Number(path.split('/')[3])
+  const communityId = Number(path.split('/')[3]) as number
+  const boardId = Number(path.split('/')[4])
   
 
   const fetchCommunity = async () => {
@@ -169,7 +169,7 @@ function Tube() {
                   disallowEmptySelection
                   selectionMode="single"
                   selectedKeys={selectedKeys}
-                  onSelectionChange={setSelectedKeys}
+                  // onSelectionChange={setSelectedKeys}
                 >
                   <DropdownItem key="Compact">
                     <HamburgerMenuIcon className="w-6 h-6"/>

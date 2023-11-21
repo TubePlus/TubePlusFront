@@ -52,8 +52,9 @@ interface DirItem {
 function TubeGate() {
   
   const path = usePathname()
-  const communityId = Number(path.split('/')[2]) as number
-  const boardId = Number(path.split('/')[3])
+  const communityId = Number(path.split('/')[3]) as number
+  const boardId = Number(path.split('/')[4])
+  const locale = path.split('/')[1]
   
 
   const fetchCommunity = async () => {
@@ -113,7 +114,7 @@ function TubeGate() {
 
             <div className='flex flex-wrap gap-5 pb-10'>
               <Button color='default'>
-                <Link href={`/creation/board/${communityId}`}>게시판 추가</Link>
+                <Link href={`${locale}/creation/board/${communityId}`}>게시판 추가</Link>
               </Button>
             
 
@@ -139,7 +140,7 @@ function TubeGate() {
                 </Button>
 
                 <Button color='primary'>
-                  <Link href={`/creation/posting/${boardId}`}>Posting</Link>
+                  <Link href={`${locale}/creation/posting/${boardId}`}>Posting</Link>
                 </Button>
 
               </div>
