@@ -99,7 +99,7 @@ const UnauthenticatedUserDropdown = () => {
               </Button>
             </DropdownTrigger>
             <DropdownMenu
-              closeOnSelect={false}
+              closeOnSelect
               aria-label="Unathenticated User Dropdown"
             >
               <DropdownSection>
