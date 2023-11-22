@@ -1,15 +1,15 @@
 'use client'
 
-import Post from '@/components/Post'
+import Post from '@/components/post/Post'
 import React, { use, useEffect, useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
-import { Image , Card , Button, Link, Chip, DropdownItem, DropdownMenu, DropdownTrigger, Dropdown } from '@nextui-org/react'
+import { Image , Card , Button, Link, Chip, DropdownItem, DropdownMenu, DropdownTrigger, Dropdown, Spinner } from '@nextui-org/react'
 import BoardTabBar from '@/components/BoardTabBar'
 import SideBlock from '@/components/SideBlock'
 import { baseUrl , endpointPrefix } from '@/lib/fetcher'
 import SubNavbar from '@/components/navbar/SubNavbar'
 import { usePathname } from 'next/navigation'
-import PostList from '@/components/PostList'
+import PostList from '@/components/post/PostList'
 import { HamburgerMenuIcon, ViewHorizontalIcon } from '@radix-ui/react-icons'
 
 interface communityType {
@@ -50,7 +50,6 @@ interface DirItem {
 function Tube() {
 
   const [selectedKeys, setSelectedKeys] = React.useState(new Set(["text"]));
-
   const selectedValue = React.useMemo(
     () => Array.from(selectedKeys).join(", ").replaceAll("_", " "),
     [selectedKeys]
@@ -59,6 +58,7 @@ function Tube() {
   const path = usePathname()
   const communityId = Number(path.split('/')[3]) as number
   const boardId = Number(path.split('/')[4])
+  const locale = path.split('/')[1]
   
 
   const fetchCommunity = async () => {
@@ -98,11 +98,11 @@ function Tube() {
   } = useQuery (['boardcontents', boardId] , fetchBoard);
 
   if (isLoadingCommunity || isLoadingBoard) {
-    return <span>Loading...</span>;
+    return <Spinner size='lg' />;
   }
   // 에러 상태 처리
   if (isErrorCommunity || isErrorBoard) {
-    return <span>Error!</span>;
+    return <Spinner size='lg' />;
   }
 
   console.log("보드데이터", boardcontents)
@@ -121,6 +121,10 @@ function Tube() {
             <div className='flex flex-wrap gap-5 pb-10'>
               <Button color='default'>
                 <Link href={`/creation/board/${communityId}`} color='foreground'>게시판 추가</Link>
+              </Button>
+
+              <Button color='default'>
+                <Link href={`/creation/board/${communityId}`} color='foreground'>게시판 수정</Link>
               </Button>
             
 
@@ -146,7 +150,7 @@ function Tube() {
                 </Button>
 
                 <Button color="primary" >
-                  <Link className='hover:text-white' color='foreground' href={`/creation/posting/${boardId}`}> Posting </Link>
+                  <Link className='hover:text-white' color='foreground' href={`/${locale}/creation/posting/${boardId}`}> Posting </Link>
                 </Button>
 
               </div>
@@ -156,8 +160,8 @@ function Tube() {
                   
               <Dropdown>
                 <DropdownTrigger>
-                  <Button 
-                    variant="flat" 
+                  <Button
+                    variant="flat"
                     className="capitalize"
                   >
                     {selectedValue}
@@ -189,7 +193,7 @@ function Tube() {
 
               
               <Post communityId={communitycontents.data.communityId} boardId={boardId} />
-              
+
             {/* <PostList communityId={communitycontents.data.communityId} boardId={boardId} /> */}
           </div>
           {/* </div> */}

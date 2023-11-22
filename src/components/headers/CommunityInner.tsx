@@ -2,7 +2,7 @@ import React from 'react'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { baseUrl , endpointPrefix } from '@/lib/fetcher'
 import { Button } from '@nextui-org/react';
-import {Image} from "@nextui-org/react";
+import { Image } from "@nextui-org/react";
 import { useRouter } from 'next/navigation';
 import { useSession } from 'next-auth/react';
 
@@ -29,7 +29,9 @@ function CommunityInner( { communityId }: { communityId : Number} ) {
   const router = useRouter()
   const queryClient = useQueryClient();
   const session = useSession();
+  const [ joinCheck, setJoinCheck ] = React.useState(false);
 
+  // 커뮤니티 가입 요청
   const joinCommunityMutation = useMutation<any, any, JoinType>(() => {
     return fetch(`${baseUrl}${endpointPrefix}/communities/${communityId}/users/me`, {
       method: 'POST',
@@ -48,7 +50,8 @@ function CommunityInner( { communityId }: { communityId : Number} ) {
       console.error('Error joining community:', error);
     },
   });
-
+  
+  // 해당 커뮤니티 가입 이력 조회
   const joinhistoryMutation = useMutation<any, any, JoinType>(() => {
     return fetch(`${baseUrl}${endpointPrefix}/communities/${communityId}/users/me/join-history`, {
       method: 'POST',
@@ -65,7 +68,8 @@ function CommunityInner( { communityId }: { communityId : Number} ) {
         console.error('Error joining community:', error);
       },
     });
-  
+
+    //커뮤니티 정보 조회  
   const fetchCommunity = async () => {
     const res = await fetch(`${baseUrl}${endpointPrefix}/communities/${communityId}/info`, {
       headers: {
@@ -93,11 +97,12 @@ function CommunityInner( { communityId }: { communityId : Number} ) {
   }
 
   const handleJoinClick = () => {
-    if ( session.data?.user && session.data.user.uuid ) {
+    if (session.data?.user && session.data.user.uuid) {
       joinCommunityMutation.mutate({ userUUid: session.data.user.uuid });
+      setJoinCheck(true);
+    } else {
+      console.error("세션 없음");
     }
-    else
-      console.error("세션 없음")
   };
 
   return (
@@ -122,10 +127,20 @@ function CommunityInner( { communityId }: { communityId : Number} ) {
             <div className='text-base font-bold'>{communitycontents.data?.communityMemberCount} Members</div>
             <div className='text-base'>{communitycontents.data?.createdDate}</div>
             <div className='a'>
+              
 
-              <Button radius='full' size='lg' color='primary' onClick={handleJoinClick}>
-                Join
-              </Button>
+            <div className='a'>
+              {/* Conditionally render "Join" or "Joined" based on joinCheck */}
+              {joinCheck ? (
+                <Button radius='full' size='lg' color='success' disabled>
+                  Joined
+                </Button>
+              ) : (
+                <Button radius='full' size='lg' color='primary' onClick={handleJoinClick}>
+                  Join
+                </Button>
+              )}
+            </div>
 
             </div>
           </div>

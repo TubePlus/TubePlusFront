@@ -8,6 +8,7 @@ import {
   Avatar,
   Chip,
   Button,
+  Spinner,
 } from '@nextui-org/react';
 import {
   BookmarkIcon,
@@ -20,28 +21,46 @@ import Link from 'next/link';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { useSession } from 'next-auth/react';
 import { usePathname } from 'next/navigation';
-
-interface PostType {
-  id: number;
-  isVoted: boolean;
-  boardId: number;
-  title: string;
-  contents: string;
-  voteCounts: number;
-  authorUuid: string;
-  authorName: string;
-  avatar: string;
-}
-
-interface verifiedProps {
-  userUuid: string;
-}
+import PostContents from './PostContents';
+import UserInfo from './UserInfo';
 
 
-const Post = ( {communityId , boardId} : {communityId:number , boardId:number} ) => {
+  interface PostContentsType {
+    authorUuid: string;
+    voteCount: number;
+    contents: string;
+    title: string;
+    userVoteId: number;
+    withImage: boolean;
+  }
+
+  interface PostContainerType {
+    data: any[];
+    lastCursoredId: number;
+    hasNextFeed: boolean;
+  }
+
+  type PostType = {
+    id: number;
+    authorUuid: string;
+    voteCount: number;
+    pinned: boolean;
+    title: string;
+    withImage: boolean;
+  }
+
+
+
+  interface verifiedProps {
+    userUuid: string;
+  }
+
+
+const Post = ( { communityId , boardId } : { communityId:number , boardId:number } ) => {
   const session = useSession();
   const path = usePathname();
   const locale = path.split('/')[1];
+  const [ contents , setContents ] = useState<PostType[] | null>(null);;
 
   const [verified, setVerified] = useState({
     isJoined: false,
@@ -96,29 +115,44 @@ const Post = ( {communityId , boardId} : {communityId:number , boardId:number} )
     }
   }, [session.data?.user, communityId]);
 
-  // 'https://652c497bd0d1df5273ef56a5.mockapi.io/api/v1/post' mock api 주소
-  // `https://tubeplus1.duckdns.org/api/v1/board-service/postings?search-type-req=BOARD_ID&view-type-req=FEED&boardId=${boardId}&feedSize=3` 백 주소
-  const fetchPosts = async () => {
-    const res = await fetch('https://652c497bd0d1df5273ef56a5.mockapi.io/api/v1/post',
-      {
-        method: 'GET',
-        headers: { 'Content-Type': 'application/json' },
-      },
-    );
-    if (!res.ok) {
-      throw new Error('Network response was not ok');
+  // 한단계 더 감싸진 배열형식의 리스트
+  const fetchPostContainer = async () => {
+    const res = await fetch(`https://tubeplus1.duckdns.org/api/v1/board-service/postings?search-type-req=BOARD_ID&view-type-req=FEED&boardId=${boardId}&feedSize=3`,
+    {
+      method: 'GET',
+      headers: { 'Content-Type': 'application/json' },
+    });
+  if (!res.ok) {
+    throw new Error('Network response was not ok');
+  }
+  
+  return res.json();
+};
+
+const {
+  data: postContainer,
+  error,
+  isLoading,
+  isSuccess,
+} = useQuery(['postType'], fetchPostContainer);
+
+useEffect(() => {
+  if (postContainer && postContainer.data && postContainer.data.feedPostingData) {
+    setContents(postContainer.data.fedPostingData.data);
+  }
+}, [postContainer]);
+
+useEffect(() => {
+  if (isSuccess) {
+    const postData = postContainer.data.fedPostingData?.data;
+    if (postData) {
+      setContents(postData);
     }
-    return res.json();
-  };
+  }
+}, [isSuccess]);
 
-  const {
-    data: postcontents,
-    error,
-    isLoading,
-  } = useQuery(['posts'], fetchPosts);
-
-  if (isLoading) return <div>Loading...</div>;
-  if (error) return <div>Error fetching data</div>;
+if (isLoading) return <Spinner size='lg' />;
+if (error) return <div>Error fetching data</div>;
 
   const isJoined = 
     (session.data?.user && session.data.user.uuid) ? 
@@ -127,51 +161,33 @@ const Post = ( {communityId , boardId} : {communityId:number , boardId:number} )
     (session.data?.user && session.data.user.uuid) ?
     (verifiedCreator.isMaster) : true;
 
-  console.log(isJoined, isMaster);
-
   const joinCheck: verifiedProps = {
     userUuid: session.data?.user.uuid ?? '',
   };
 
-  console.log("게시물 내용:",[postcontents])
-  console.log(Array.isArray(postcontents))
-  console.log(session)
+  console.log("게시물 형식1번:", postContainer.data.fedPostingData.data)
+  console.log("게시물 형식2번:", postContainer)
+  console.log("게시물 형식3번:", contents)
+  console.log("테스트",)
 
+  if (contents === null) {
+    return <Spinner size='lg' />;
+  }
+  
   return (
     <>
     <div className={`${isJoined || isMaster ? '' : 'blurred'}`}>
 
-
-      {/* <div className='flex justify-between pt-3'> 
-
-      <div className="flex gap-3 flex-nowrap">
-        <Button>
-          <Chip color="default"> New </Chip>
-        </Button>
-
-        <Button>
-          <Chip color="default"> Old </Chip>
-        </Button>
-      </div>
-
-      <div>
-        <Button>
-          <HamburgerMenuIcon className="w-8 h-8"/>
-          
-        </Button>
-      </div>
-
-      </div> */}
-
-      {postcontents &&
-        postcontents.map((item: PostType) => (
+      {contents && contents.length > 0 && contents.map(( item: PostType ) => (
+        
           <div key={item.id} className='mb-7'>
             <Card>
               <CardHeader>
                 <div className="flex flex-nowrap justify-between w-full">
                   <div className="flex whitespace-nowrap gap-5">
-                    <Avatar src={item.avatar} />
-                      <span className='font-semibold'> {item.authorName} </span>
+
+                    <UserInfo authorUuid={item.authorUuid} />
+
                       <span className='font-semibold'> {item.title} </span>
                   </div>
 
@@ -179,7 +195,7 @@ const Post = ( {communityId , boardId} : {communityId:number , boardId:number} )
                     <button>
                       <ThickArrowUpIcon className="w-8 h-8" />
                     </button>
-                      <b>{item.voteCounts}</b>
+                      <b>{item.voteCount}</b>
                     <button>
                       <ThickArrowDownIcon className="w-8 h-8" />
                     </button>
@@ -187,10 +203,11 @@ const Post = ( {communityId , boardId} : {communityId:number , boardId:number} )
                 </div>
               </CardHeader>
               <Link href={`${locale}/tube/${communityId}/${boardId}/posting/${item.id}`}>
+
                 <CardBody>
-                  <div className="flex flex-nowrap gap-4 overflow-hidden">
-                    {item.contents}
-                  </div>
+
+                  <PostContents postId={item.id}/>
+                  
                 </CardBody>
 
                 <CardFooter>
@@ -215,3 +232,41 @@ const Post = ( {communityId , boardId} : {communityId:number , boardId:number} )
 };
 
 export default Post;
+
+// mock type
+// interface PostType {
+//   id: number;
+//   isVoted: boolean;
+//   boardId: number;
+//   title: string;
+//   contents: string;
+//   voteCounts: number;
+//   authorUuid: string;
+//   authorName: string;
+//   avatar: string;
+// }
+
+
+  // 'https://652c497bd0d1df5273ef56a5.mockapi.io/api/v1/post' mock api 주소
+  // `https://tubeplus1.duckdns.org/api/v1/board-service/postings?search-type-req=BOARD_ID&view-type-req=FEED&boardId=${boardId}&feedSize=3` 한단계 더 감싸진 배열형식의 리스트 백 주소
+  // `https://tubeplus1.duckdns.org/api/v1/board-service/postings/{id}?user_uuid={사용자 uuid}` 리스트의 id값을 이용해서 조회하는 콘텐츠 데이터 패칭 주소
+
+  // 리스트의 id값을 이용해서 조회하는 데이터 패칭
+  // const fetchPosts = async () => {
+  //   const res = await fetch('https://652c497bd0d1df5273ef56a5.mockapi.io/api/v1/post',
+  //     {
+  //       method: 'GET',
+  //       headers: { 'Content-Type': 'application/json' },
+  //     },
+  //   );
+  //   if (!res.ok) {
+  //     throw new Error('Network response was not ok');
+  //   }
+  //   return res.json();
+  // };
+
+  // const {
+  //   data: postcontents,
+  //   error,
+  //   isLoading,
+  // } = useQuery(['posts'], fetchPosts);

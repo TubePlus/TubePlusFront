@@ -1,7 +1,7 @@
 'use client'
 
 import React, { use } from 'react'
-import Post from '@/components/Post'
+import Post from '@/components/post/Post'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { Image , Card , Button, Chip } from '@nextui-org/react'
 import BoardTabBar from '@/components/BoardTabBar'
@@ -11,7 +11,7 @@ import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
 import { useSession } from 'next-auth/react'
 import { HamburgerMenuIcon } from '@radix-ui/react-icons'
-import PostList from '@/components/PostList'
+import PostList from '@/components/post/PostList'
 
 interface communityType {
   communityId: number
@@ -114,7 +114,7 @@ function TubeGate() {
 
             <div className='flex flex-wrap gap-5 pb-10'>
               <Button color='default'>
-                <Link href={`${locale}/creation/board/${communityId}`}>게시판 추가</Link>
+                <Link href={`/${locale}/creation/board/${communityId}`}>게시판 추가</Link>
               </Button>
             
 
