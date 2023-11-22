@@ -19,6 +19,11 @@ const Sidebar = ({
     setMounted(true);
   }, []);
 
+  useEffect(() => {
+    if (isOpen) {
+      setIsOpen(!isOpen);
+    }
+  }, []);
   const handleSidebar = () => {
     setIsOpen(!isOpen);
   };

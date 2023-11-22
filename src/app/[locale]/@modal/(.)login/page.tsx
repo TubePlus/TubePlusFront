@@ -13,8 +13,10 @@ import {
   ModalBody,
   ModalFooter,
 } from '@nextui-org/modal';
+import { useTranslations } from 'next-intl';
 
 const LogInModalPage = () => {
+  const t = useTranslations('Auth');
   return (
     <InterceptingModal>
       <ModalBody>
@@ -24,14 +26,14 @@ const LogInModalPage = () => {
       <Divider />
 
       <ModalFooter>
-        <p className="leading-5">
-          Wellcom to tubePlus! This Project created by{' '}
+        <p className="leading-8 align-middle">
+          <span className="pr-2 align-top">{t('teams-greetings')}</span>
           {memebers.map((mem, index) => (
             <Chip
               as={Link}
               variant="flat"
               classNames={{
-                base: 'duration-200 hover:-translate-y-1',
+                base: 'mt-1 duration-200 hover:-translate-y-1',
                 content: 'text-xs flex items-center gap-1',
               }}
               size="sm"

@@ -128,7 +128,6 @@ const CreatorRanking = () => {
 
   return !isLoading ? (
     <Table
-      className="!gap-2"
       classNames={{
         th: [
           'bg-transparent',
@@ -136,6 +135,7 @@ const CreatorRanking = () => {
           'border-b',
           'border-divider',
         ],
+        base: 'border border-default-300 rounded-xl p-4 min-h-[658px]',
       }}
       topContent={
         <div id="community" className="flex sm:gap-8 x:gap-4 items-center">

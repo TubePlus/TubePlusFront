@@ -54,10 +54,11 @@ const ProfilePreference = () => {
     const updatedUser = {
       ...user,
       editable: {
-        ...user?.editable,
-        username,
-        profileImage,
-        bio,
+        uuid: session?.user.uuid,
+        username: username || session?.user.username,
+        profileImage: profileImage || session?.user.image,
+        locale: session?.user.locale,
+        bio: bio || '',
       },
     };
     setUser(updatedUser);

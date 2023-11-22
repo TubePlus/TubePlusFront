@@ -297,6 +297,8 @@ export const SearchInput = forwardRef(
       return <input {...getInputProps()} />;
     }, [startContent, end, getInputProps, getInnerWrapperProps]);
 
+    //TODO: keyboard Enter event 추가
+
     return (
       <>
         <Component {...getBaseProps()}>

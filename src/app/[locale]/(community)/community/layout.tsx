@@ -1,8 +1,7 @@
 import MainSidebar from '@/components/sidebar/MainSidebar';
 import Sidebar from '@/components/sidebar/Sidebar';
-import SidebarR from './sidebar_r';
 
-export default function TubePlusLayout({
+export default function CommunityLayout({
   children,
 }: {
   children: React.ReactNode;
@@ -22,8 +21,6 @@ export default function TubePlusLayout({
       </div>
 
       {children}
-
-      <SidebarR />
     </>
   );
 }

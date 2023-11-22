@@ -9,7 +9,7 @@ const DefaultPreference = () => {
   const { data: session } = useSession();
   const [user, setUser] = useGlobalState('/settings');
   const [currentLocale, setCurrentLocale] = useState(
-    languages.find(lang => lang.locale.includes(session?.user.locale!)),
+    languages.find(lang => lang.locale.includes(session?.user.locale!) || 'ko'),
   );
 
   const [selectedLangValue, setSelectedLangValue] =
@@ -29,7 +29,7 @@ const DefaultPreference = () => {
 
     if (selectedLanguage) {
       setSelectedLangValue(selectedLanguage);
-      // console.log(selectedLangValue.locale);
+      console.log(selectedLangValue?.locale);
     }
   };
 

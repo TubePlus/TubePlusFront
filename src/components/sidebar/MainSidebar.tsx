@@ -14,11 +14,13 @@ import { Divider } from '@nextui-org/divider';
 import { Tooltip } from '@nextui-org/tooltip';
 import { LightningBoltIcon } from '@radix-ui/react-icons';
 import { Accordion, AccordionItem } from '@nextui-org/accordion';
+import { useTranslations } from 'next-intl';
 
 const MainSidebar = ({ isRoot = false }: { isRoot?: boolean }) => {
   const { data: session } = useSession();
-  const username = session?.user.name; // TODO: 현재 google에서 전체 이름을 불러오고 있음. 기본값 별명(: young1ll)
+  const username = session?.user.username; // TODO: 현재 google에서 전체 이름을 불러오고 있음. 기본값 별명(: young1ll)
   const [isMore, setIsMore] = useState();
+  const t = useTranslations('Home');
 
   // TODO: static top-0
   return (
@@ -41,7 +43,7 @@ const MainSidebar = ({ isRoot = false }: { isRoot?: boolean }) => {
             isCompact
           >
             <AccordionItem
-              title="My Subscription"
+              title={t(`sidebar.my-subscription`)}
               classNames={{
                 title: 'pl-unit-md text-sm',
                 content: 'flex flex-col gap-2',
@@ -55,11 +57,15 @@ const MainSidebar = ({ isRoot = false }: { isRoot?: boolean }) => {
             </AccordionItem>
           </Accordion>
 
-          <Tooltip radius="sm" placement="right" content="My ubscription">
+          <Tooltip
+            radius="sm"
+            placement="right"
+            content={t(`sidebar.my-subscription`)}
+          >
             <Button
               variant="light"
               as={Link}
-              href={`/user/${username}/subscription`}
+              href={`/user/${username}/favorites`}
               className={`flex w-[90%] mx-auto ${
                 isRoot ? 'lg:hidden md:flex x:hidden' : 'hidden'
               }`}
@@ -92,7 +98,7 @@ const MainSidebar = ({ isRoot = false }: { isRoot?: boolean }) => {
       <Divider />
 
       <div className="grid grid-cols-2 gap-1 px-1 md:hidden lg:grid">
-        <SidebarMenu menuItem={languages} isRoot={isRoot} />
+        <SidebarMenu menuItem={languages} isRoot={isRoot} isLocale />
       </div>
     </div>
   );

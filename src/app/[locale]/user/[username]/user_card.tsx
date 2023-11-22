@@ -54,12 +54,12 @@ const UserCard = () => {
 
   const profileMemusDynamic = [
     {
-      name: 'Overview',
+      name: 'overview',
       icon: HomeIcon,
       href: `/user/${user?.username}`,
     },
     {
-      name: 'My Community',
+      name: 'my-community',
       icon: GlobeIcon,
       href: `/user/${user?.username}/my-community`,
     },
@@ -128,21 +128,28 @@ const UserCard = () => {
                   Display Language: {fromUser?.locale}
                 </span>
 
-                <span className="md:hidden x:line-clamp-2 text-ellipsis text-sm">
+                <span
+                  className={`md:hidden x:line-clamp-2 text-ellipsis text-sm ${
+                    fromUser?.bio
+                      ? 'text-default-foreground'
+                      : 'text-default-500'
+                  }`}
+                >
                   {fromUser?.bio ||
-                    'this area is for user bio. this area is for user bio. this area is for user bio.'}
+                    'Enter your bio here. It will be shown on your profile.'}
                 </span>
               </div>
             </div>
           </div>
 
-          {
-            // fromUser?.bio &&
-            <div className="md:flex x:hidden px-1 text-sm">
-              {fromUser?.bio ||
-                'this area is for user bio. this area is for user bio. this area is for user bio.'}
-            </div>
-          }
+          <span
+            className={`md:line-clamp-3 x:hidden text-ellipsis text-sm ${
+              fromUser?.bio ? 'text-default-foreground' : 'text-default-500'
+            }`}
+          >
+            {fromUser?.bio ||
+              'Enter your bio here. It will be shown on your profile.'}
+          </span>
 
           <Button
             className="flex items-center h-10 leading-10

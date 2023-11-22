@@ -4,19 +4,19 @@ import { Link } from '@nextui-org/link';
 import NextLink from 'next/link';
 import JoinButton from './JoinButton';
 import TubePlusLogo from './TubePlusLogo';
+import { useTranslations } from 'next-intl';
 
 const SignUp = () => {
+  const t = useTranslations('Auth');
+
   return (
     <>
       <TubePlusLogo classNames={{ base: 'flex justify-center' }} />
 
-      <h1 className="text-2xl">Welcome!</h1>
+      <h1 className="text-2xl">{t('welcome')}!</h1>
 
       <div className="pb-4">
-        <p className="text-sm">
-          By continuing, you are setting up MyCommu account and agree to out
-          User Agreement and Privacy Policy.
-        </p>
+        <p className="text-sm">{t('auth-description')}</p>
       </div>
 
       <Divider />
@@ -26,9 +26,9 @@ const SignUp = () => {
 
       <Divider />
       <div className="py-4">
-        Already a member of TubePlus?{' '}
+        {t('already-have-account')}?{' '}
         <Link as={NextLink} className="ml-1" href="/login">
-          Log In
+          {t('login')}
         </Link>
       </div>
     </>

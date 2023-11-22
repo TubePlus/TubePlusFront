@@ -27,9 +27,9 @@ const Navbar = async ({ params: { locale } }: Props) => {
       isBlurred
       height={'5rem'}
     >
-      <NavbarContent>
+      {/* <NavbarContent>
         <LocaleSwitcher />
-      </NavbarContent>
+      </NavbarContent> */}
 
       <BrandBox locale={locale} />
 

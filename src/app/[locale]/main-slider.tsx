@@ -150,33 +150,34 @@ const SuggestedCreator = () => {
       {suggestedCreator.map(c => (
         <SwiperSlide
           key={c.name}
-          className="border rounded-lg overflow-hidden group flex flex-col gap-1 justify-between h-full min-h-[210px]"
+          className="bg-default-100 border border-default-300 rounded-lg
+                    overflow-hidden group flex flex-col gap-1 justify-between h-full min-h-[210px]"
         >
           <div className="overflow-hidden">
             <Image
               classNames={{
                 wrapper: 'overflow-hidden rounded-none',
-                img: 'h-32 object-cover group-hover:scale-105 rounded-none',
+                img: 'sm:h-32 sm:w-auto x:h-auto x:w-full object-cover group-hover:scale-105 rounded-none',
               }}
-              // removeWrapper
+              // removeWrapp
               src={c.src}
               alt=""
             />
           </div>
 
           <div className="px-2 h-full">
-            <div className="flex justify-between">
+            <div className="flex justify-between pt-2">
               <span className="max-w-[120px] text-ellipsis whitespace-nowrap overflow-hidden">
                 {c.name}
               </span>
               <span className="text-[11px]">{c.date}</span>
             </div>
-            <p className="text-tiny text-ellipsis line-clamp-2">
+            <p className="font-light text-tiny text-ellipsis line-clamp-2">
               {c.description}
             </p>
 
             <Button
-              className="my-4 hover:bg-primary-600 hover:text-primary-foreground"
+              className="my-4 bg-zinc-300 dark:bg-zinc-500 hover:bg-red-600 hover:text-primary-foreground"
               as={Link}
               href={c.href}
               fullWidth

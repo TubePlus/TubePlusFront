@@ -16,6 +16,8 @@ import { Pencil1Icon } from '@radix-ui/react-icons';
 import useGlobalState from '@/hooks/use-global-state';
 import DefaultPreference from './default-preferences';
 import ProfilePreference from './profile-preferences';
+import { useMutation } from '@tanstack/react-query';
+import { deleteUser } from '@/lib/fetcher';
 
 const communityInfo = [
   { id: 1, title: 'Category', value: '엔터테인먼트' },
@@ -26,7 +28,7 @@ const communityInfo = [
 ];
 
 export default function AccountPage() {
-  const { data: session } = useSession();
+  const { data: session, update } = useSession();
   const [user, setUser] = useGlobalState('/settings');
 
   useEffect(() => {
@@ -57,6 +59,26 @@ export default function AccountPage() {
       : session?.user.is_creator
       ? 'CREATOR'
       : session?.user.role;
+
+  const {
+    mutate: deleteUserMutate,
+    isLoading,
+    data: newSession,
+    isError,
+    error,
+    isSuccess,
+  } = useMutation(deleteUser);
+
+  const handleDelUser = () => {
+    deleteUserMutate(session?.user.uuid as string);
+
+    if (isSuccess) {
+      //TODO 삭제 완료 및 로그아웃
+      window.confirm('User has been deleted');
+      update();
+      window.location.href = '/';
+    }
+  };
 
   return (
     <section className="flex flex-col gap-8 min-h-[800px]">
@@ -223,6 +245,7 @@ export default function AccountPage() {
             className="opacity-60 hover:opacity-100"
             color="danger"
             variant="ghost"
+            onClick={handleDelUser}
           >
             Delete
             <span className="sm:inline x:hidden"> your account</span>

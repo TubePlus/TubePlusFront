@@ -49,7 +49,7 @@ const UnauthenticatedUserDropdown = () => {
       key: 'contact',
       label: 'contact-us',
       icon: EnvelopeClosedIcon,
-      href: '/', // TODO: Contact Page를 별도로 만들던지(mailto), notion Page를 별도로 만들던지..
+      href: '/team', // TODO: Contact Page를 별도로 만들던지(mailto), notion Page를 별도로 만들던지..
     },
   ];
 

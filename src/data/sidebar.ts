@@ -16,7 +16,7 @@ export const defaultMenuItem = [
   {
     name: 'community',
     icon: GlobeIcon,
-    href: '/#community',
+    href: '/community',
   },
 ];
 
