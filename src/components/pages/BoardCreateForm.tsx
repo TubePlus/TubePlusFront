@@ -1,14 +1,14 @@
 'use client'
 
 import SimpleCard from '@/components/SimpleCard'
-import React from 'react'
+import React, { use } from 'react'
 import { Button, CardHeader, Input } from '@nextui-org/react'
 import { Select, SelectItem } from '@nextui-org/select'
 import { ChangeEvent } from 'react'
 import { useState } from 'react'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { baseUrl, endpointPrefix } from '@/lib/fetcher'
-import { useRouter } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
 
 // * TODO: 크리에이터만 가능하게 권한 체크
 // * limitTime 빼곤 null이면 안됨
@@ -35,9 +35,11 @@ const boardType = [
 // TODO: COMMUNITYID를 받아와야함
 export default function BoardCreation({communityId}: {communityId: number}) {
 
+  const path = usePathname();
   const queryClient = useQueryClient();
   const router = useRouter();
-  
+  const locale = path.split('/')[1];
+
   const createBoardMutation = useMutation<any, any, BoardData>((newBoard) => {
     return fetch(`https://tubeplus1.duckdns.org/api/v1/board-service/boards`, {
       method: 'POST',
@@ -51,7 +53,7 @@ export default function BoardCreation({communityId}: {communityId: number}) {
     onSuccess: () => {
       // 요청이 성공적으로 완료되면 캐시를 무효화하거나, 필요한 추가적인 액션을 수행합니다.
       queryClient.invalidateQueries(['boards']);
-      router.push(`/tube/${communityId}`);
+      router.push(`/${locale}/tube/${communityId}`);
     },
     onError: (error) => {
       // 에러 처리 로직을 작성합니다.

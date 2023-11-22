@@ -372,6 +372,7 @@ export const getFavoritesByUuid = (uuid: string) => {
     method: 'GET',
     headers: { 'content-type': 'application/json' },
   })
+
     .then(res => {
       if (res.ok) {
         return res.json();
