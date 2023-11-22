@@ -34,10 +34,10 @@ const SummaryCard = () => {
 
         editable: {
           uuid: session.user.uuid, // edit info user table address
-          username: session.user.username || '',
-          profileImage: session.user.image || '',
-          locale: session.user.locale || 'en',
-          bio: session.user.bio || '', // NOTE: no bio in user session
+          username: session.user.username || user.editable.username,
+          profileImage: session.user.image || user.editable.profileImage,
+          locale: session.user.locale || user.editable.locale,
+          bio: session.user.bio || user?.editable.bio || '', // NOTE: no bio in user session
         },
       });
     }
@@ -47,23 +47,30 @@ const SummaryCard = () => {
     console.log('remove');
   };
 
-  const { mutate, isLoading, isError, error, isSuccess } =
-    useMutation(updateAUser);
+  const {
+    mutate,
+    isLoading,
+    data: newSession,
+    isError,
+    error,
+    isSuccess,
+  } = useMutation(updateAUser);
 
   const handleUpdate = () => {
     const updateUser = {
       uuid: user?.editable.uuid,
       username: user?.editable.username,
       profileImage: user?.editable.profileImage,
-      locale: user?.editable.language,
+      locale: user?.editable.locale || session?.user.locale || 'en',
       bio: user?.editable.bio,
     };
+    console.log(updateUser);
     mutate(updateUser);
 
     if (isSuccess) {
       console.log(updateUser);
-      console.log('success');
-      update();
+      console.log('success/newSession: ', newSession);
+      // update();
     }
   };
   return (

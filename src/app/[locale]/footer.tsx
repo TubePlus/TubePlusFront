@@ -6,7 +6,7 @@ const Footer = () => {
   const t = useTranslations('Home');
 
   return (
-    <section className="w-full border-t-1 border-default-300 mx-auto p-0 pb-8">
+    <section className="w-full border-t-1 border-default-300 mx-auto mt-1 p-0 pb-8">
       <div className="xl:max-w-[1400px] lg:max-w-[1200px] md:max-w-[992px] sm:max-w-[640px] mx-auto pt-9">
         <div className="flex gap-x-12 gap-y-5 justify-center items-center flex-wrap-reverse px-4">
           <div className="flex items-center gap-2">

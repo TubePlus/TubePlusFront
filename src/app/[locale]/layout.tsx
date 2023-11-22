@@ -19,8 +19,9 @@ import CommunityHeader from '@/components/headers/CommunityHeader';
 import { notFound } from 'next/navigation';
 import { unstable_setRequestLocale } from 'next-intl/server';
 import { NextIntlClientProvider } from 'next-intl';
-import { ReactNode } from 'react';
+import { ReactNode, Suspense } from 'react';
 import Footer from './footer';
+import { NavigationEvents } from '@/components/NavigationEvents';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -74,7 +75,7 @@ export default async function LocaleLayout({
               {/* <SubNavbar /> */}
 
               <main
-                className={`relative grid mx-auto max-w-[1524px] px-4 scrollbar-thumb-rounded-full scrollbar-thumb-zinc-400 scrollbar-track-zinc-200
+                className={`relative grid mx-auto max-w-[1524px] px-4 scrollbar-thumb-rounded-full scrollbar-thumb-default-400 scrollbar-track-default-200
                         lg:gap-[.8rem]  lg:grid-cols-12
                         md:gap-unit-md  md:grid-cols-10
                         sm:gap-unit-sm  sm:grid-cols-8
@@ -82,6 +83,10 @@ export default async function LocaleLayout({
                         `}
               >
                 {children}
+
+                <Suspense fallback={null}>
+                  <NavigationEvents />
+                </Suspense>
               </main>
 
               <ScrollToTop />

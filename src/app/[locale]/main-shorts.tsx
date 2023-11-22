@@ -33,6 +33,7 @@ const MainShorts = () => {
     data: mockData,
     refetch: mockRefetch,
   } = useQuery(['main-shorts-mock'], getShorts);
+
   const { isLoading, isError, error, data, refetch } = useQuery(
     ['main-shorts'],
     getShortsFromServer,
@@ -44,7 +45,7 @@ const MainShorts = () => {
         {data?.data.map((s: ShortsProps) => (
           <Card
             key={s.channelId}
-            className="shadow-none min-h-[320px] min-w-[200px] border-0 border-red-500 hover:border-2 group"
+            className="shadow-none min-h-[320px] min-w-[200px] border-2 border-red-500/0 hover:border-red-500 transition-all duration-300 group"
           >
             <Link
               className="h-full w-full"
@@ -57,7 +58,7 @@ const MainShorts = () => {
                 <h1
                   className="w-8 h-8 flex justify-center items-center text-lg leading-4 font-semibold
                               text-foreground bg-default-200
-                              group-hover:text-default-100 group-hover:bg-red-600 duration-200
+                              group-hover:text-white group-hover:bg-red-600 duration-200
                               rounded-full"
                 >
                   {s.ranking}
@@ -90,10 +91,10 @@ const MainShorts = () => {
                     </span>
                   </Chip>
                   <Chip
-                    className="text-sm group-hover:bg-red-500 duration-200"
+                    className="text-sm group-hover:bg-red-400 duration-200"
                     size="sm"
                   >
-                    <span className="font-semibold group-hover:text-default-300 duration-200">
+                    <span className="font-semibold group-hover:text-default-foreground duration-200">
                       {t(`category.${s.videoCategory}`)}
                     </span>
                   </Chip>

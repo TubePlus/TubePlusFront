@@ -52,6 +52,7 @@ export default function Home({ params: { locale } }: Props) {
         <section className="grid grid-cols-5 gap-2 mt-4">
           <div className="sm:col-span-2 x:col-span-full flex sm:flex-col gap-4 x:flex-col-reverse">
             <FlatCard
+              className="bg-default-100"
               title={
                 <div className="flex items-center gap-2">
                   <Avatar name="TubePlus" size="md" src={''} />
@@ -63,18 +64,24 @@ export default function Home({ params: { locale } }: Props) {
                   </div>
                 </div>
               }
-              titleLink={{ name: t('see-details'), href: '' }}
+              titleLink={{
+                name: t('see-details'),
+                href: 'https://www.notion.so/0a89d8b8f2594072bebc7c0613cade3b',
+              }}
             >
               <FlatCardTubePlusTeamBody />
             </FlatCard>
 
             <FlatCard
-              className=""
+              className="bg-default-100"
               title={t('related-creator')}
-              titleLink={{ name: t('see-more'), href: '' }}
+              titleLink={{ name: t('see-more'), href: '/community' }}
             >
               <div className="p-2 pt-0">
-                <div className="p-2 flex items-center gap-2 justify-between border rounded-xl">
+                <div
+                  className="p-2 flex items-center gap-2 justify-between
+                                border border-default-300 rounded-xl"
+                >
                   <div className="flex items-center gap-2">
                     <Avatar
                       src=""
@@ -103,7 +110,7 @@ export default function Home({ params: { locale } }: Props) {
 
           <div className="sm:col-span-3 x:col-span-full">
             <FlatCard
-              className="h-full justify-between"
+              className="h-full justify-between bg-default-100"
               title={t('releases-accessible')}
               titleLink={{ name: t('see-all'), href: '' }}
             >
@@ -168,7 +175,11 @@ const FlatCard = ({
 const FlatCardTubePlusTeamBody = () => {
   return (
     <>
-      <CardBody className="p-0 min-h-50 overflow-hidden">
+      <CardBody
+        as={Link}
+        className="p-0 min-h-50 overflow-hidden"
+        href={'https://www.notion.so/0a89d8b8f2594072bebc7c0613cade3b'}
+      >
         <Image
           className="rounded-none scale-105 group-hover:scale-110 object-cover"
           src={

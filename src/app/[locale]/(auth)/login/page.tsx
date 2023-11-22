@@ -2,8 +2,11 @@ import SignIn from '@/components/SignIn';
 import { Button } from '@nextui-org/button';
 import { Card, CardBody, CardFooter, CardHeader } from '@nextui-org/card';
 import { ArrowLeftIcon } from '@radix-ui/react-icons';
+import { useTranslations } from 'next-intl';
 
 const LogInPage = () => {
+  const t = useTranslations('Auth');
+
   return (
     <div
       className="relative col-span-full
@@ -19,7 +22,7 @@ const LogInPage = () => {
             <Button size="sm">
               <ArrowLeftIcon />
 
-              <h2>Home</h2>
+              <h2>{t('home')}</h2>
             </Button>
           </CardHeader>
           <CardBody>

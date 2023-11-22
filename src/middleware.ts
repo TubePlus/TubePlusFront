@@ -2,11 +2,20 @@ import withAuth, { NextRequestWithAuth } from 'next-auth/middleware';
 import createIntlMiddleware from 'next-intl/middleware';
 
 const locales = ['en', 'ko'];
-const publicPages = ['/', '/login', '/join', '/about', '/team'];
+const publicPages = [
+  '/',
+  '/login',
+  '/join',
+  '/about',
+  '/team',
+  '/help',
+  '/policies-agreements',
+];
 
 const intlMiddleware = createIntlMiddleware({
   locales,
   defaultLocale: 'en',
+  localePrefix: 'always', //for intercepting routes
 });
 
 const authMiddleware = withAuth(
@@ -16,6 +25,9 @@ const authMiddleware = withAuth(
   },
 
   {
+    pages: {
+      signIn: '/login',
+    },
     callbacks: {
       // authorized: ({ token }) => token?.role == ('MEMBER' || 'ADMIN'),
       authorized: ({ token }) => token != null,

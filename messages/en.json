@@ -4,6 +4,18 @@
     "locale": "{locale, select, de {German} en {English} other {Unknown}}"
   },
 
+  "Auth": {
+    "home": "Home",
+    "welcome": "Welcome",
+    "login": "Log in",
+    "auth-description": "By continuing, you are setting up TubePlus account and agree to out User Agreement and Privacy Policy.",
+    "new-here": "New to TubePlus",
+    "register": "Register",
+    "already-have-account": "Already a member of TubePlus",
+    "continue-with-google": "Continue with Google",
+    "teams-greetings": "Welcome to TubePlus! We're"
+  },
+
   "Home": {
     "title": "Hello world!",
     "theme": "Theme",
@@ -28,7 +40,10 @@
 
     "sidebar": {
       "home": "Home",
+      "overview": "Overview",
       "community": "Community",
+      "my-subscription": "My Subscription",
+      "my-community": "My Community",
       "about-tube": "About tubePlus",
       "help": "Help",
       "user-agreements": "User Agreements",

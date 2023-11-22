@@ -51,12 +51,17 @@ export const QuickResultBox = ({
   return (
     // TODO: isLoading 대응
     <div className="relative w-full">
-      <div className="hidden group-focus-within:block duration-200">
+      <div
+        className="hidden group-focus-within:block duration-200
+                      scrollbar-thumb-rounded-full scrollbar-thumb-default-400 scrollbar-track-default-200
+                      "
+      >
         <div
           className="absolute flex flex-col w-full z-[999]
                       bg-zinc-100 dark:bg-zinc-800
-                      min-h-[150px] max-h-60
-                      shadow-medium overflow-y-auto"
+                      min-h-[150px] max-h-80
+                      shadow-medium overflow-y-scroll scrollbar-thin
+                      "
         >
           <div className="flex flex-col justify-center gap-2 whitespace-break-spaces px-5 py-2">
             {searchValue ? (

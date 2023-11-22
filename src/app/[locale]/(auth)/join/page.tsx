@@ -3,8 +3,11 @@ import SignUp from '@/components/SignUp';
 import { ArrowLeftIcon } from '@radix-ui/react-icons';
 import { Card, CardHeader, CardBody, CardFooter } from '@nextui-org/card';
 import { Button } from '@nextui-org/button';
+import { useTranslations } from 'next-intl';
 
-const JoinPage = async () => {
+const JoinPage = () => {
+  const t = useTranslations('Auth');
+
   return (
     <div
       className="relative col-span-full
@@ -20,7 +23,7 @@ const JoinPage = async () => {
             <Button size="sm" variant="flat">
               <ArrowLeftIcon />
 
-              <h2>Home</h2>
+              <h2>{t('home')}</h2>
             </Button>
           </CardHeader>
 

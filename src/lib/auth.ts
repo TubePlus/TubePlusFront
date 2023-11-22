@@ -71,6 +71,7 @@ export const authOptions: NextAuthOptions = {
           locale: profile.locale,
 
           image: dbUser.data.profileImage,
+          bio: dbUser.data.bio,
           uuid: dbUser.data.uuid,
           username: dbUser.data.username,
           role: dbUser.data.role,
@@ -90,6 +91,7 @@ export const authOptions: NextAuthOptions = {
           email: profile.email,
 
           locale: dbUser.data.locale,
+          bio: dbUser.data.bio,
           image: dbUser.data.profileImage,
           token: tokens.access_token,
           uuid: dbUser.data.uuid,

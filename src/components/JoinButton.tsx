@@ -6,6 +6,7 @@ import { Image } from '@nextui-org/image';
 import { Input } from '@nextui-org/input';
 import { User } from '@nextui-org/user';
 import { useSession } from 'next-auth/react';
+import { useTranslations } from 'next-intl';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { userInfo } from 'os';
 import React, { useEffect, useState } from 'react';
@@ -27,6 +28,7 @@ const JoinButton = () => {
   const { data: session } = useSession();
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const router = useRouter();
+  const t = useTranslations('Auth');
   const searchParams = useSearchParams();
 
   const signUpWithGoogle = async () => {
@@ -207,7 +209,7 @@ const JoinButton = () => {
         }
         onClick={signUpWithGoogle}
       >
-        {!session && 'Continue with Google'}
+        {!session && t('continue-with-google')}
       </Button>
     </form>
   );

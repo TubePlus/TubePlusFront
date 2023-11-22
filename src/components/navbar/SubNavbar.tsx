@@ -8,6 +8,7 @@ import {
 import { Link } from '@nextui-org/link';
 import { useParams, usePathname } from 'next/navigation';
 import { useSession } from 'next-auth/react';
+import { useLocale } from 'next-intl';
 
 interface DirProps {
   id: number;
@@ -33,10 +34,10 @@ const SubNavbar = ({ dir }: { dir: DirProps[] }) => {
         {dir.map((link: DirProps) =>
           !session?.user.is_creator && !link.forCreator ? (
             <NavbarItem key={link.id}>
-              <Link
+              {/* <Link
                 className={`text-sm ${
                   link.label === 'Overview'
-                    ? link.href === pathname
+                    ? '/' + locale + link.href === pathname
                       ? 'font-semibold text-default-foreground dark:text-default-900'
                       : 'text-default-500'
                     : pathname.startsWith(link.href)
@@ -46,7 +47,8 @@ const SubNavbar = ({ dir }: { dir: DirProps[] }) => {
                 href={link.href}
               >
                 {link.label}
-              </Link>
+              </Link> */}
+              <SubNavLink pathname={pathname} link={link} />
             </NavbarItem>
           ) : !session?.user.is_creator && link.forCreator ? ( //TODO: session 느낌표 제거
             <NavbarItem key={link.id}>
@@ -73,3 +75,28 @@ const SubNavbar = ({ dir }: { dir: DirProps[] }) => {
 };
 
 export default SubNavbar;
+
+const SubNavLink = ({
+  pathname,
+  link,
+}: {
+  pathname: string;
+  link: DirProps;
+}) => {
+  const locale = useLocale();
+  const concatPath = '/' + locale + link.href;
+  const isEqual = pathname === concatPath;
+
+  return (
+    <Link
+      className={`text-sm ${
+        isEqual
+          ? 'font-semibold text-default-foreground dark:text-default-900'
+          : 'text-default-500'
+      }`}
+      href={link.href}
+    >
+      {link.label}
+    </Link>
+  );
+};

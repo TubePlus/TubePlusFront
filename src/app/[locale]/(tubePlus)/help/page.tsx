@@ -3,7 +3,7 @@ import { Card, CardHeader } from '@nextui-org/card';
 import { User } from '@nextui-org/user';
 import { Skeleton } from '@nextui-org/skeleton';
 
-export default function AboutPage() {
+export default function HelpPage() {
   return (
     <>
       <div className="col-span-6 pt-2">
@@ -15,7 +15,7 @@ export default function AboutPage() {
             <div className="flex flex-col w-full">
               <div className="flex gap-2 justify-between items-end">
                 <h1 className="font-bold text-4xl overflow-hidden text-ellipsis">
-                  About TubePlus
+                  Help Center
                 </h1>
                 <span className="pb-1 text-sm tracking-wide text-end italic translate-y-1">
                   2023/11/23 Fri
@@ -23,7 +23,8 @@ export default function AboutPage() {
               </div>
 
               <p className="text-ellipsis line-clamp-3">
-                We’re New to Here! SSG Spharos Team Aces’ First Step out.
+                You know what? This is not help center... Actually, We’re the
+                peopel who need to get help!
               </p>
             </div>
           </div>

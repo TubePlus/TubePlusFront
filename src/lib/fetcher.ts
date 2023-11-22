@@ -104,6 +104,16 @@ export const getAUserByEmail = (email: string) => {
   return result;
 };
 
+export const deleteUser = async (uuid: string) => {
+  const res = await fetch(baseUrl + endpointPrefix + '/users/softdelete', {
+    method: 'PUT',
+    headers: { 'content-type': 'application/json' },
+    body: JSON.stringify({ uuid }),
+  });
+  const data = await res.json();
+  return data;
+};
+
 /**
  * @warning     tubePlus Server API
  * @description get a user from server
@@ -208,7 +218,9 @@ export const uploadPost = (post: {
   };
 
   const result = fetch(
-    'https://tubeplus1.duckdns.org' + endpointPrefix + '/board-service/postings',
+    'https://tubeplus1.duckdns.org' +
+      endpointPrefix +
+      '/board-service/postings',
     {
       method: 'POST',
       headers: { 'content-type': 'application/json' },

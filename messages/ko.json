@@ -4,12 +4,24 @@
     "locale": "{locale, select, de {German} en {English} other {Unknown}}"
   },
 
+  "Auth": {
+    "home": "홈페이지",
+    "welcome": "환영합니다!",
+    "login": "로그인",
+    "auth-description": "계속 진행하여, TubePlus 계정을 설정하고 사용자 동의서와 개인 정보 보호 정책에 동의합니다.",
+    "new-here": "TubePlus에 처음이신가요",
+    "register": "회원가입",
+    "already-have-account": "이미 회원이신가요",
+    "continue-with-google": "Google로 로그인",
+    "teams-greetings": "TubePlus에 오신것을 환영합니다!"
+  },
+
   "Home": {
     "title": "안녕하세요!",
     "theme": "테마",
 
     "top": "위로",
-    "join": "가입",
+    "join": "회원가입",
     "see-all": "모두보기",
     "see-details": "자세히 보기",
     "see-more": "더 보기",
@@ -23,12 +35,15 @@
 
     "login": "로그인",
     "logout": "로그아웃",
-    "register": "가입",
+    "register": "회원가입",
     "register-creator": "크리에이터 등록",
 
     "sidebar": {
       "home": "홈페이지",
+      "overview": "개요",
       "community": "커뮤니티",
+      "my-subscription": "즐겨찾기",
+      "my-community": "나의 커뮤니티",
       "about-tube": "TubePlus 알아보기",
       "help": "헬프센터",
       "user-agreements": "이용약관",
