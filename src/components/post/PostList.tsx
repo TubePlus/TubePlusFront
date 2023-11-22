@@ -132,6 +132,8 @@ const PostList = ( {communityId , boardId} : {communityId:number , boardId:numbe
     userUuid: session.data?.user.uuid ?? '',
   };
 
+  console.log(postcontents)
+
   return (
     <>
       <div className={`${isJoined || isMaster ? '' : 'blurred'}`}>
@@ -141,14 +143,16 @@ const PostList = ( {communityId , boardId} : {communityId:number , boardId:numbe
             {postcontents &&
               postcontents.map((item: PostType) => (
                 <div key={item.id} className='p-3 col-span-10 gap-5 justify-between'>
-                  <div className='flex justify-between'> 
-                  <div className='flex gap-5'>
+                  <div className='flex justify-between items-center pt-2 pb-2'> 
+                  <div className='flex pl-4 gap-5'>
+                    <div>
                     <strong>{item.title}</strong>
                     <p>{item.authorName}</p>
-                    <ImageIcon />
+                    </div>
+                    &nbsp; &nbsp;  <ImageIcon />
                   </div>
                   <div className='pr-5'>
-                    <p>Favorite : {item.voteCounts}</p>
+                    <p>Favorite Count : <strong> {item.voteCounts} </strong> </p>
                   </div>
                   </div>
                   <Divider />

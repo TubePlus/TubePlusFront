@@ -38,7 +38,7 @@ const Posting = ({ boardId }: { boardId: number }) => {
   const quillRef = useRef<ReactQuill>(null);
   const path = usePathname();
 
-  const bId = Number(path.split('/')[3]);
+  const bId = Number(path.split('/')[4]);
 
   const { mutate, isLoading, isError, error, isSuccess } =
     useMutation(uploadPost);
@@ -70,7 +70,7 @@ const Posting = ({ boardId }: { boardId: number }) => {
           if (range != null) {
             editor.insertEmbed(range, 'image', upload.filepath);
           }
-        }
+        } 
 
         isWithImage(true);
       } catch (err) {
@@ -79,7 +79,6 @@ const Posting = ({ boardId }: { boardId: number }) => {
     };
   };
   
-
   // Quill.register('modules/imageHandler', imageHandler);
 
   // QUILL 모듈

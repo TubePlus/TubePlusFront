@@ -18,7 +18,7 @@ import {
   ThickArrowUpIcon,
 } from '@radix-ui/react-icons';
 import Link from 'next/link';
-import { useMutation, useQuery } from '@tanstack/react-query';
+import { useInfiniteQuery, useMutation, useQuery } from '@tanstack/react-query';
 import { useSession } from 'next-auth/react';
 import { usePathname } from 'next/navigation';
 import PostContents from './PostContents';
@@ -60,7 +60,9 @@ const Post = ( { communityId , boardId } : { communityId:number , boardId:number
   const session = useSession();
   const path = usePathname();
   const locale = path.split('/')[1];
-  const [ contents , setContents ] = useState<PostType[] | null>(null);;
+  const [ contents , setContents ] = useState<PostType[] | null>(null);
+
+  const [ posts, setPosts ] = useState([]);
 
   const [verified, setVerified] = useState({
     isJoined: false,
@@ -71,6 +73,17 @@ const Post = ( { communityId , boardId } : { communityId:number , boardId:number
     isMaster: false,
     isNotMaster: false
   });
+
+  const isJoined = 
+  (session.data?.user && session.data.user.uuid) ? 
+  (verified.isJoined) : true;
+const isMaster =
+  (session.data?.user && session.data.user.uuid) ?
+  (verifiedCreator.isMaster) : true;
+
+const joinCheck: verifiedProps = {
+  userUuid: session.data?.user.uuid ?? '',
+};
 
   const fetchVerifiedMutation = useMutation<any, any, verifiedProps>(() => {
     return fetch(`https://tubeplus.duckdns.org/api/v1/communities/${communityId}/verified`, {
@@ -116,9 +129,9 @@ const Post = ( { communityId , boardId } : { communityId:number , boardId:number
   }, [session.data?.user, communityId]);
 
   // 한단계 더 감싸진 배열형식의 리스트
-  const fetchPostContainer = async () => {
-    const res = await fetch(`https://tubeplus1.duckdns.org/api/v1/board-service/postings?search-type-req=BOARD_ID&view-type-req=FEED&boardId=${boardId}&feedSize=3`,
-    {
+  const fetchPostContainer = async ({ pageParam = 0 }) => {
+    const res = await fetch(`https://tubeplus1.duckdns.org/api/v1/board-service/postings?search-type-req=BOARD_ID&view-type-req=FEED&boardId=${boardId}&feedSize=3&cursor=${pageParam}`,
+    {                       
       method: 'GET',
       headers: { 'Content-Type': 'application/json' },
     });
@@ -134,51 +147,92 @@ const {
   error,
   isLoading,
   isSuccess,
-} = useQuery(['postType'], fetchPostContainer);
+  fetchNextPage,
+  hasNextPage,
+} = useInfiniteQuery(['postType'], fetchPostContainer, {
+  getNextPageParam: (lastPage) => {
+    return lastPage.hasNextFeed ? lastPage.lastCursoredId : undefined;
+  },
+});
+
+// 스크롤 핸들러
+const handleScroll = () => {
+  // 스크롤 위치 확인 및 fetchNextPage 호출 로직
+  if (hasNextPage) {
+    // 다음 페이지가 있으면 fetchNextPage 호출
+    fetchNextPage();
+  }
+};
+
+// useEffect에서 스크롤 이벤트 핸들러 부착 및 해제
+useEffect(() => {
+  window.addEventListener('scroll', handleScroll);
+  return () => {
+    window.removeEventListener('scroll', handleScroll);
+  };
+}, [hasNextPage]);
+
+
+
+
+// useEffect(() => {
+//   if (postContainer && postContainer && postContainer.data.feedPostingData) {
+//     setContents(postContainer.data.fedPostingData.data);
+//   }
+// }, [postContainer]);
+
+// useEffect(() => {
+//   if (isSuccess) {
+//     const postData = postContainer.data.fedPostingData?.data;
+//     if (postData) {
+//       setContents(postData);
+//     }
+//   }
+// }, [isSuccess]);
+
+
 
 useEffect(() => {
-  if (postContainer && postContainer.data && postContainer.data.feedPostingData) {
-    setContents(postContainer.data.fedPostingData.data);
+  if (postContainer?.pages[0].data.fedPostingData.data) {
+    setPosts(postContainer.pages[0].data.fedPostingData.data);
   }
 }, [postContainer]);
 
-useEffect(() => {
-  if (isSuccess) {
-    const postData = postContainer.data.fedPostingData?.data;
-    if (postData) {
-      setContents(postData);
-    }
-  }
-}, [isSuccess]);
 
-if (isLoading) return <Spinner size='lg' />;
+
+if (posts.length === 0) {
+  return <Spinner size='lg' />;
+}
+
+
+if (isLoading) return <Spinner size='lg' />
 if (error) return <div>Error fetching data</div>;
 
-  const isJoined = 
-    (session.data?.user && session.data.user.uuid) ? 
-    (verified.isJoined) : true;
-  const isMaster =
-    (session.data?.user && session.data.user.uuid) ?
-    (verifiedCreator.isMaster) : true;
 
-  const joinCheck: verifiedProps = {
-    userUuid: session.data?.user.uuid ?? '',
-  };
 
-  console.log("게시물 형식1번:", postContainer.data.fedPostingData.data)
-  console.log("게시물 형식2번:", postContainer)
-  console.log("게시물 형식3번:", contents)
-  console.log("테스트",)
 
-  if (contents === null) {
-    return <Spinner size='lg' />;
-  }
-  
+
+
+
+
+  // console.log("게시물 형식1번:", postContainer.data.fedPostingData.data)
+  console.log("게시물 데이터 : ", postContainer?.pages[0].data.fedPostingData.data)
+  // console.log("게시물 형식3번:", contents)
+  // console.log("테스트",)
+
+  // const { data , fetchNextPage , hasNextFeed } = useInfiniteQuery({ queryKey: ['postType'] , fetchNextPage: ({ pageParam = 0 }) => fetchPostContainer() }
+
+
+  // if (contents === null) {
+  //   return <Spinner size='lg' />;
+  // }
+  // if (!postContainer) return <Spinner size='lg' />;
+
   return (
     <>
-    <div className={`${isJoined || isMaster ? '' : 'blurred'}`}>
+    <div onScroll={handleScroll} className={`${isJoined || isMaster ? '' : 'blurred'}`}>
 
-      {contents && contents.length > 0 && contents.map(( item: PostType ) => (
+        { posts && posts.map(( item : PostType )  => (
         
           <div key={item.id} className='mb-7'>
             <Card>
@@ -202,7 +256,7 @@ if (error) return <div>Error fetching data</div>;
                   </div>
                 </div>
               </CardHeader>
-              <Link href={`${locale}/tube/${communityId}/${boardId}/posting/${item.id}`}>
+              <Link href={`/${locale}/tube/${communityId}/${boardId}/posting/${item.id}`}>
 
                 <CardBody>
 
@@ -223,8 +277,13 @@ if (error) return <div>Error fetching data</div>;
                 </CardFooter>
               </Link>
             </Card>
+
           </div>
-        ))}
+          ))}
+
+        {hasNextPage && (
+          <button onClick={() => fetchNextPage()}>Read More</button>
+        )}
 
     </div>
     </>

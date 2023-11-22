@@ -11,6 +11,7 @@ import SubNavbar from '@/components/navbar/SubNavbar'
 import { usePathname } from 'next/navigation'
 import PostList from '@/components/post/PostList'
 import { HamburgerMenuIcon, ViewHorizontalIcon } from '@radix-ui/react-icons'
+import { Selection } from '@nextui-org/react'
 
 interface communityType {
   communityId: number
@@ -54,13 +55,21 @@ function Tube() {
     () => Array.from(selectedKeys).join(", ").replaceAll("_", " "),
     [selectedKeys]
   );
+
+  const [selectedView, setSelectedView] = useState<string>("Card");
+
+  const handleSelectionChange = (keys: React.Key[]) => {
+    // 첫 번째 선택된 키를 사용하여 뷰 상태를 업데이트합니다.
+    // 여기서는 첫 번째 키만 사용하고 있지만, 필요에 따라 로직을 조정할 수 있습니다.
+    const firstKey = keys[0] as string; // 'React.Key'를 'string'으로 타입 캐스팅합니다.
+    setSelectedView(firstKey === "Compact" ? "Compact" : "Card");
+  };
   
   const path = usePathname()
   const communityId = Number(path.split('/')[3]) as number
-  const boardId = Number(path.split('/')[4])
+  const boardId = Number(path.split('/')[4]) as number
   const locale = path.split('/')[1]
   
-
   const fetchCommunity = async () => {
     const res = await fetch(`${baseUrl}${endpointPrefix}/communities/${communityId}/info`, {
       headers: {
@@ -168,41 +177,38 @@ function Tube() {
                   </Button>
                 </DropdownTrigger>
                 <DropdownMenu
-                  aria-label="Single selection example"
+                  aria-label="View mod"
                   variant="flat"
                   disallowEmptySelection
                   selectionMode="single"
-                  selectedKeys={selectedKeys}
-                  // onSelectionChange={setSelectedKeys}
+                  selectedKeys={new Set([selectedView])}
+                  // onSelectionChange={handleSelectionChange}
                 >
                   <DropdownItem key="Compact">
                     <HamburgerMenuIcon className="w-6 h-6"/>
-                    
                   </DropdownItem>
                   <DropdownItem key="Card">
                     <ViewHorizontalIcon className='w-6 h-6'/>
                   </DropdownItem>
-                  
                 </DropdownMenu>
               </Dropdown>
-
-
               </div>
-
               </div>
 
               
-              <Post communityId={communitycontents.data.communityId} boardId={boardId} />
+              {/* 조건부 렌더링 */}
+              {selectedView === "Card" ? (
+                <Post communityId={communitycontents.data.communityId} boardId={boardId} />
+              ) : (
+                <PostList communityId={communitycontents.data.communityId} boardId={boardId} />
+              )}
 
-            {/* <PostList communityId={communitycontents.data.communityId} boardId={boardId} /> */}
-          </div>
-          {/* </div> */}
+            </div>
           
           <div className='col-span-3 flex flex-col pt-32 gap-5 whitespace-nowrap'> 
             <SideBlock communityid={communitycontents.data.communityId} />
           </div>
 
-        {/* </div> */}
     </>
   )
 }

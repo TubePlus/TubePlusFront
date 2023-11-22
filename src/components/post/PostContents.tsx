@@ -38,14 +38,15 @@ function PostContents( { postId } : { postId : number } ) {
 
 
   console.log("게시물 아이디", postId)
-  console.log('게시물 컨텐츠 :',postcontents)
+  console.log('게시물 컨텐츠 :', postcontents)
 
   if (isLoading) return <div>Loading...</div>;
   if (error) return <div>Error fetching data</div>;
 
+  const postContents = postcontents && postcontents.data.contents
+
   return (
-    <div className="flex flex-nowrap gap-4 overflow-hidden">
-      {postcontents && postcontents.data.contents}  
+    <div className="flex flex-nowrap gap-4 overflow-hidden" dangerouslySetInnerHTML={{__html:postContents}}>
     </div>
   )
 }
