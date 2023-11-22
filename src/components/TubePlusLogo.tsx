@@ -24,8 +24,8 @@ const TubePlusLogo = ({
           fill="#FF0000"
         />
         <path
-          fill-rule="evenodd"
-          clip-rule="evenodd"
+          fillRule="evenodd"
+          clipRule="evenodd"
           d="M88.3604 26.504V18.6265H82.3844L82.3844 26.504H74.5068V32.48H82.3844L82.3844 40.3576H88.3604V32.48H96.238V26.504H88.3604Z"
           fill="white"
         />
@@ -54,8 +54,8 @@ const TubePlusLogo = ({
           fill="#FF0000"
         />
         <path
-          fill-rule="evenodd"
-          clip-rule="evenodd"
+          fillRule="evenodd"
+          clipRule="evenodd"
           d="M88.3604 26.504V18.6265H82.3844L82.3844 26.504H74.5068V32.48H82.3844L82.3844 40.3576H88.3604V32.48H96.238V26.504H88.3604Z"
           fill="white"
         />
