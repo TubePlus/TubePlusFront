@@ -11,7 +11,7 @@ const SignIn = () => {
 
   return (
     <>
-      <TubePlusLogo classNames={{ base: 'flex justify-center' }} />
+      <TubePlusLogo classNames={{ base: 'my-4 flex justify-center' }} />
 
       <h1 className="text-2xl">{t('login')}</h1>
 

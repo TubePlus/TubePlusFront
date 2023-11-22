@@ -1,6 +1,7 @@
 import { NextAuthOptions, getServerSession } from 'next-auth';
 import GoogleProvider from 'next-auth/providers/google';
 import { baseUrl, endpointPrefix } from './fetcher';
+import Swal from 'sweetalert2';
 
 const clientId = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID!;
 const clientSecret = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_SECRET!;
@@ -14,6 +15,12 @@ export const authOptions: NextAuthOptions = {
   session: {
     strategy: 'jwt',
   },
+
+  pages: {
+    signIn: '/login',
+    error: '/error',
+  },
+
   providers: [
     GoogleProvider({
       name: 'google',
@@ -46,21 +53,22 @@ export const authOptions: NextAuthOptions = {
             body: JSON.stringify(logInBody),
           },
         );
-        const dbUser = await response.json();
+        const db = await response.json();
         console.info(
-          '[INFO] Check DBUser: User Infomation from TubePlus Database\n',
-          dbUser,
+          '[INFO] Check db: User Infomation from TubePlus Database\n',
+          db,
         );
 
         if (
-          dbUser.message == '로그인 실패' ||
-          dbUser.message == 'Internal Server Error' ||
-          dbUser.message == '해당 회원이 존재하지 않습니다.'
+          db.message == '로그인 실패' ||
+          db.message == 'Internal Server Error' ||
+          db.message == '해당 회원이 존재하지 않습니다.' ||
+          db.message == '탈퇴한 유저입니다.'
         ) {
           console.error(
             "[ERROR] Log in Failed: User Data isn't exists in tubePlus Database...\n",
           );
-
+          throw new Error(db);
           // redirect('/join'); //NOTE: redirect 안됨
         }
 
@@ -70,13 +78,13 @@ export const authOptions: NextAuthOptions = {
           email: profile.email,
           locale: profile.locale,
 
-          image: dbUser.data.profileImage,
-          bio: dbUser.data.bio,
-          uuid: dbUser.data.uuid,
-          username: dbUser.data.username,
-          role: dbUser.data.role,
-          is_creator: dbUser.data.isCreator,
-          darkmode: dbUser.data.darkMode,
+          image: db.data.profileImage,
+          bio: db.data.bio,
+          uuid: db.data.uuid,
+          username: db.data.username,
+          role: db.data.role,
+          is_creator: db.data.isCreator,
+          darkmode: db.data.darkMode,
         };
 
         console.log(
@@ -90,15 +98,15 @@ export const authOptions: NextAuthOptions = {
           name: profile.name,
           email: profile.email,
 
-          locale: dbUser.data.locale,
-          bio: dbUser.data.bio,
-          image: dbUser.data.profileImage,
+          locale: db.data.locale,
+          bio: db.data.bio,
+          image: db.data.profileImage,
           token: tokens.access_token,
-          uuid: dbUser.data.uuid,
-          username: dbUser.data.username,
-          role: dbUser.data.role,
-          is_creator: dbUser.data.isCreator,
-          darkmode: dbUser.data.darkMode,
+          uuid: db.data.uuid,
+          username: db.data.username,
+          role: db.data.role,
+          is_creator: db.data.isCreator,
+          darkmode: db.data.darkMode,
         };
       },
 
@@ -122,10 +130,8 @@ export const authOptions: NextAuthOptions = {
       return session;
     },
     async signIn({ user }) {
-      if (user) {
-        console.log('user', user);
-      }
-      return true;
+      if (user) return true;
+      return false;
     },
     // async redirect() {
     //   return '/';
