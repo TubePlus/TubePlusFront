@@ -18,9 +18,10 @@ import {
   ThickArrowDownIcon,
   ThickArrowUpIcon,
 } from '@radix-ui/react-icons';
-import { useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import { baseUrl , endpointPrefix } from '@/lib/fetcher';
 import { usePathname } from 'next/navigation';
+import { useSession } from 'next-auth/react';
 
 interface PostProps {
   postingId: number;
@@ -42,12 +43,47 @@ interface CommentProps
   avatar: string;  // MEMO: 댓글 작성자 프로필이미지 넣을지 여부 상의 필요
   }
 
+interface CommentPost {
+  postingId: number;
+  parentId?: number;
+  commenterUuid: string;
+  contents: string;
+}
+
+// {
+//   "postingId": number {게시물 id}
+//   "parentId": number {대댓글의 경우 원 댓글의 id, 대댓글 아니면 null}
+//   "commenterUuid: string {댓글 쓴사람 uuid}
+//   "contents": string {댓글 내용}
+// }
+
 // `https://652c497bd0d1df5273ef56a5.mockapi.io/api/v1/post/${postId}/comments` 데이터패칭 되는것을 확인한 MOCK API 주소
 
 function Posting({ params }: { params: { postingId: number , parentId?: number } }) {
 
+  const session = useSession();
   const path = usePathname()
   const postingId = Number(path.split('/')[5])
+  const Uuid = session.data?.user?.uuid as string;
+
+  const fetchCommentPostMutation = useMutation<any, any, CommentPost>((commentPost) => {
+      return fetch(
+        `https://tubeplus1.duckdns.org/api/v1/board-service/comments`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(commentPost),
+        }).then((res) => res.json());
+    }, {
+      onSuccess: () => {
+      },
+      onError: () => {
+      },
+    });
+
+
 
   const fetchPosts = async () => {
     const res = await fetch(`https://tubeplus1.duckdns.org/api/v1/board-service/postings/${postingId}`, {
@@ -106,6 +142,14 @@ function Posting({ params }: { params: { postingId: number , parentId?: number }
     return <span>Error</span>;
   }
 
+
+  const commentPost: CommentPost = {
+    postingId: postingId,
+    parentId: params.parentId,
+    commenterUuid: Uuid,
+    contents: 'contents',
+  };
+
   console.log(postcontents)
   console.log(comments)
 
@@ -155,6 +199,8 @@ function Posting({ params }: { params: { postingId: number , parentId?: number }
 
           {/* 하단부 댓글 컴포넌트 */}
 
+          {/* <form onSubmit={handleSubmit}> */}
+
           <div className="flex flex-nowrap pt-5 pl-5 pr-5 border-t-5">
             <div className="flex flex-nowrap gap-x-2">
               <Avatar />
@@ -167,6 +213,7 @@ function Posting({ params }: { params: { postingId: number , parentId?: number }
                   labelPlacement="outside"
                   placeholder="Enter your Comments"
                   className="col-span-10 md:col-span-6 mb-6 md:mb-0"
+                  name='contents'
                 ></Textarea>
 
                 <div className="pt-6 pr-5">
@@ -238,6 +285,7 @@ function Posting({ params }: { params: { postingId: number , parentId?: number }
                 })}
             </div>
           )}
+          {/* </form> */}
         </Card>
       </div>
     </>
