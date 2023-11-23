@@ -5,26 +5,14 @@ import { Button } from '@nextui-org/react';
 import { Image } from "@nextui-org/react";
 import { usePathname, useRouter } from 'next/navigation';
 import { useSession } from 'next-auth/react';
-
-
-interface communityType {
-  communityId: number
-  bannerImage: string
-  ownerUuid: string
-  profileImage: string
-  youtubeName: string
-  communityName: string
-  description: string
-  communityMemberCount: number
-  createdDate: string
-  updatedDate: string
-}
+import { communityType } from '@/types/communitytypes';
+import { CalendarIcon, CountdownTimerIcon, PersonIcon, VideoIcon } from '@radix-ui/react-icons';
 
 interface JoinType {
   userUUid: string;
 }
 
-function CommunityInner( { communityId }: { communityId : Number} ) {
+function CommunityInner( { communityId, communitycontents }: { communityId : string, communitycontents: communityType} ) {
 
   const router = useRouter()
   const queryClient = useQueryClient();
@@ -32,6 +20,10 @@ function CommunityInner( { communityId }: { communityId : Number} ) {
   const [ joinCheck, setJoinCheck ] = React.useState(false);
   const path = usePathname()
   const locale = path.split('/')[1]
+
+  console.log(communitycontents?.profileImage.split('.').find((item) => item === 'webp'));
+
+  const avatarImage = communitycontents?.profileImage.split('.').find((item) => item === 'webp') === 'webp' ? 'https://i.pinimg.com/originals/d6/a0/1f/d6a01f07a283fdf690f29edbdef7c458.png' : communitycontents?.profileImage
 
   // 해당 커뮤니티 가입 이력 조회
 
@@ -84,7 +76,7 @@ function CommunityInner( { communityId }: { communityId : Number} ) {
   //     headers: {
   //       'Content-Type': 'application/json',
   //     },
-  //     body: JSON.stringify(session.data?.user.uuid),
+  //     body: JSON.stringify(session.user.uuid),
   //   }).then((res) => res.json());
   //   }, {
   //     onSuccess: (data) => {
@@ -100,7 +92,7 @@ function CommunityInner( { communityId }: { communityId : Number} ) {
 
   //   useEffect(())
   //   useEffect(() => {
-  //     if (session.data?.user && session.data.user.uuid) {
+  //     if (session.user && session.data.user.uuid) {
   //       fetchJoinHistory()
   //         .then(data => {
   //           if (data.joined) {
@@ -113,45 +105,45 @@ function CommunityInner( { communityId }: { communityId : Number} ) {
   //           console.error('Error fetching join history:', error);
   //         });
   //     }
-  //   }, [session.data?.user, communityId]);
+  //   }, [session.user, communityId]);
 
 
 
   //커뮤니티 정보 조회  
-  const fetchCommunity = async () => {
-    const res = await fetch(`${baseUrl}${endpointPrefix}/communities/${communityId}/info`, {
-      headers: {
-        'Content-Type': 'application/json',
-      }
-  })
-    if (!res.ok) {
-      throw new Error('Network response was not ok')
-    }
-    return res.json()
-  };
+  // const fetchCommunity = async () => {
+  //   const res = await fetch(`${baseUrl}${endpointPrefix}/communities/${communityId}/info`, {
+  //     headers: {
+  //       'Content-Type': 'application/json',
+  //     }
+  // })
+  //   if (!res.ok) {
+  //     throw new Error('Network response was not ok')
+  //   }
+  //   return res.json()
+  // };
   
-  const {
-    data: communitycontents,
-    isLoading: isLoadingCommunity,
-    isError: isErrorCommunity,
-  } = useQuery(['communitycontents', communityId], fetchCommunity);
+  // const {
+  //   data: communitycontents,
+  //   isLoading: isLoadingCommunity,
+  //   isError: isErrorCommunity,
+  // } = useQuery(['communitycontents', communityId], fetchCommunity);
 
   // useEffect(() => {
-  //   if (session.data?.user && session.data.user.uuid) {
+  //   if (session.user && session.data.user.uuid) {
   //     joinhistoryMutation.mutate({ userUUid: session.data.user.uuid });
   //   }
-  // }, [session.data?.user, communityId]);
+  // }, [session.user, communityId]);
   
-  if (isLoadingCommunity || isLoading ) {
-    return <span>Loading...</span>;
-  }
-  // 에러 상태 처리
-  if (isErrorCommunity || isError ) {
-    return <span>Error!</span>;
-  }
+  // if (isLoadingCommunity || isLoading ) {
+  //   return <span>Loading...</span>;
+  // }
+  // // 에러 상태 처리
+  // if (isErrorCommunity || isError ) {
+  //   return <span>Error!</span>;
+  // }
 
   // const handleJoinClick = () => {
-  //   if (session.data?.user && session.data.user.uuid) {
+  //   if (session.user && session.data.user.uuid) {
   //     joinCommunityMutation.mutate({ userUUid: session.data.user.uuid });
   //     setJoinCheck(true);
   //   } else {
@@ -170,30 +162,51 @@ function CommunityInner( { communityId }: { communityId : Number} ) {
 
   return (
     <>
-      <div
-        className='flex absolute w-full h-[500px]  justify-center items-end mb-10 blur-sm -z-10'
-        style={{backgroundImage: `${communitycontents.data?.bannerImage}`, backgroundPosition: "center", backgroundSize: "cover", backgroundRepeat: "no-repeat"}}
-        />
-        <div className='grid mx-auto max-w-[1524px] pl-5 pr-3 pt-4 pb-3 min-h-[200px]'>
-        <div className='flex w-full'>
-          <Image src={communitycontents.data?.bannerImage}/>
-        </div>
-        <div className='flex pt-3 flex-col gap-unit-md'>
-          <div className='flex items-center justify-center gap-unit-xl'>
+    { communitycontents && 
+      
+        <div className='
+          flex justify-between items-center relative z-10 top-10 min-w-[360px] max-w-[1524px] m-auto px-4'>
+          <div className='flex justify-start items-center w-2/5 h-[300px]'>
+            <div className='flex justify-center items-end rounded-full w-[150px] h-[150px] overflow-hidden bg-[#ffffff66] border-2 border-dashed border-slate-300 animate-bounce'>
+              <Image src={avatarImage} alt='creator' width={120} height={120} />
+            </div>
+            <div className='flex flex-col gap-3 ml-5 relative -top-[30px]'>
+              <p className='text-2xl ml-7 text-white flex items-center gap-2'>{communitycontents.communityName} <VideoIcon width={20} height={20}/> </p>
+              <div className='flex items-start gap-2 ml-5 text-white w-fit px-4 py-2 rounded-[1.5rem] border border-slate-300'>
+                <PersonIcon />
+                <p className='text-[0.75rem] pr-2'>{communitycontents.communityMemberCount} members</p>
+                <CountdownTimerIcon />
+                <p className='text-[0.75rem]'>{communitycontents.createdDate}</p>
+              </div>
+            </div>
+            <div>
 
-          <div className='w-[200px] h-[200px] rounded-full overflow-hidden flex justify-center items-center bg-white'>
-            <Image src={communitycontents.data?.profileImage} alt='creator' width={200} height={200} />
+            </div>
           </div>
-            
-          <div className='w-[15%] flex-col gap-3 hidden sm:flex'>
-            <div className='text-2xl font-bold'>{communitycontents.data?.communityName}</div>
-            <div className='text-base font-bold'>{communitycontents.data?.communityMemberCount} Members</div>
-            <div className='text-base'>{communitycontents.data?.createdDate}</div>
-            <div className='a'>
-              
+          <div className='flex justify-end items-center w-3/5 h-[300px] bg-slate-400'>
 
-            <div className='a'>
-              {/* Conditionally render "Join" or "Joined" based on joinCheck */}
+          </div>
+        </div>
+    }
+    </>
+  )
+}
+
+export default CommunityInner;
+
+{/* <div
+className='flex absolute w-full h-[500px]  justify-center items-end mb-10 blur-sm -z-10'
+style={{backgroundImage: `${communitycontents.bannerImage}`, backgroundPosition: "center", backgroundSize: "cover", backgroundRepeat: "no-repeat"}}
+/> */}
+
+{/* <div className='flex pt-3 flex-col gap-unit-md relative z-10'>
+          <div className='flex items-center justify-center gap-unit-xl'>
+          <Image src={avatarImage} alt='creator' width={200} height={200} />
+          <div className='w-[15%] flex-col gap-3 hidden sm:flex text-white'>
+            <p className='text-xl font-semiBold'>{communitycontents.communityName}</p>
+            <p>{communitycontents.communityMemberCount} Members</p>
+            <p>{communitycontents.createdDate}</p>
+          
               
               {joinCheck === true ? (
                 <Button radius='full' size='lg' color='success' disabled>
@@ -204,9 +217,6 @@ function CommunityInner( { communityId }: { communityId : Number} ) {
                   Join
                 </Button>
               )}
-            </div>
-
-            </div>
           </div>
 
           <div className='w-[50%] flex-col gap-3 hidden md:flex'>
@@ -215,14 +225,8 @@ function CommunityInner( { communityId }: { communityId : Number} ) {
             </div>
 
             <div className='flex flex-row items-center gap-unit-md'>
-              <p className='text-base font-sans'>{communitycontents.data?.description}</p>
+              <p className='text-base font-sans'>{communitycontents.description}</p>
             </div>
           </div>
         </div>
-      </div>
-    </div>
-    </>
-  )
-}
-
-export default CommunityInner;
+      </div> */}
