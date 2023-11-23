@@ -183,7 +183,7 @@ function CommunityInner( { communityId, communitycontents }: { communityId : str
 
             </div>
           </div>
-          <div className='flex justify-end items-center w-3/5 h-[300px] bg-slate-400'>
+          <div className='flex justify-end items-center w-3/5 h-[300px]'>
 
           </div>
         </div>
