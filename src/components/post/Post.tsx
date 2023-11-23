@@ -1,5 +1,5 @@
 'use client';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import {
   Card,
   CardHeader,
@@ -60,6 +60,9 @@ const Post = ( { communityId , boardId } : { communityId:number , boardId:number
   const session = useSession();
   const path = usePathname();
   const locale = path.split('/')[1];
+
+  const observerRef = useRef(null);
+  
   const [ contents , setContents ] = useState<PostType[] | null>(null);
 
   const [ posts, setPosts ] = useState([]);
@@ -173,7 +176,24 @@ useEffect(() => {
 }, [hasNextPage]);
 
 
+useEffect(() => {
+  const observer = new IntersectionObserver((entries) => {
+    if (entries[0].isIntersecting && hasNextPage) {
+      // 감시 대상 요소가 뷰포트에 들어오면 추가 데이터 로드
+      fetchNextPage();
+    }
+  });
 
+  if (observerRef.current) {
+    observer.observe(observerRef.current);
+  }
+
+  return () => {
+    if (observerRef.current) {
+      observer.unobserve(observerRef.current);
+    }
+  };
+}, [hasNextPage, fetchNextPage]);
 
 // useEffect(() => {
 //   if (postContainer && postContainer && postContainer.data.feedPostingData) {
@@ -190,43 +210,20 @@ useEffect(() => {
 //   }
 // }, [isSuccess]);
 
-
-
 useEffect(() => {
   if (postContainer?.pages[0].data.fedPostingData.data) {
     setPosts(postContainer.pages[0].data.fedPostingData.data);
   }
 }, [postContainer]);
 
-
-
 if (posts.length === 0) {
   return <Spinner size='lg' />;
 }
 
-
 if (isLoading) return <Spinner size='lg' />
 if (error) return <div>Error fetching data</div>;
 
-
-
-
-
-
-
-
-  // console.log("게시물 형식1번:", postContainer.data.fedPostingData.data)
   console.log("게시물 데이터 : ", postContainer?.pages[0].data.fedPostingData.data)
-  // console.log("게시물 형식3번:", contents)
-  // console.log("테스트",)
-
-  // const { data , fetchNextPage , hasNextFeed } = useInfiniteQuery({ queryKey: ['postType'] , fetchNextPage: ({ pageParam = 0 }) => fetchPostContainer() }
-
-
-  // if (contents === null) {
-  //   return <Spinner size='lg' />;
-  // }
-  // if (!postContainer) return <Spinner size='lg' />;
 
   return (
     <>
@@ -286,6 +283,7 @@ if (error) return <div>Error fetching data</div>;
         )}
 
     </div>
+    <div ref={observerRef} />
     </>
   );
 };
