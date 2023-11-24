@@ -11,6 +11,7 @@ import {
   Button,
   Textarea,
   User,
+  Spinner,
 } from '@nextui-org/react';
 import {
   BookmarkIcon,
@@ -23,6 +24,7 @@ import { baseUrl , endpointPrefix } from '@/lib/fetcher';
 import { usePathname } from 'next/navigation';
 import { useSession } from 'next-auth/react';
 
+// MOCK 타입
 interface PostProps {
   postingId: number;
   authorName: string;
@@ -32,6 +34,7 @@ interface PostProps {
   votecounts: number;
 }
 
+// MOCK 타입
 interface CommentProps
   {
   commentId: number;
@@ -43,6 +46,15 @@ interface CommentProps
   avatar: string;  // MEMO: 댓글 작성자 프로필이미지 넣을지 여부 상의 필요
   }
 
+interface PostType {
+  authorUuid: string;
+  voteCount: number;
+  contents: string;
+  title: string;
+  userVoteId: number;
+  withImage: boolean;
+}
+
 interface CommentPost {
   postingId: number;
   parentId?: number;
@@ -51,19 +63,28 @@ interface CommentPost {
 }
 
 // {
-//   "postingId": number {게시물 id}
-//   "parentId": number {대댓글의 경우 원 댓글의 id, 대댓글 아니면 null}
-//   "commenterUuid: string {댓글 쓴사람 uuid}
-//   "contents": string {댓글 내용}
+//   "data": [
+//        {
+//              "id": number {댓글 id},
+//               "viewInfo": {
+//                  "contents": string {댓글 내용},
+//                  "parentId": number {원댓글 id, 원댓글이라면 null},
+//                  "childCount": number {대댓글 갯수, 대댓글이라면 null},
+//                  "commenterUuid: string {댓글 작성자 uuid}
+//              }
+//        }, ...
+//    ]
+//   "message": "성공",
+//   "code": "S001"
 // }
 
 // `https://652c497bd0d1df5273ef56a5.mockapi.io/api/v1/post/${postId}/comments` 데이터패칭 되는것을 확인한 MOCK API 주소
 
-function Posting({ params }: { params: { postingId: number , parentId?: number } }) {
+function Comments({ params } : { params : { parentId?: number } }) {
 
   const session = useSession();
   const path = usePathname()
-  const postingId = Number(path.split('/')[5])
+  const postingId = Number(path.split('/')[6])
   const Uuid = session.data?.user?.uuid as string;
 
   const fetchCommentPostMutation = useMutation<any, any, CommentPost>((commentPost) => {
@@ -83,31 +104,29 @@ function Posting({ params }: { params: { postingId: number , parentId?: number }
       },
     });
 
-
-
-  const fetchPosts = async () => {
-    const res = await fetch(`https://tubeplus1.duckdns.org/api/v1/board-service/postings/${postingId}`, {
-      headers: {
-        'Content-Type': 'application/json',
+    const fetchPostContents = async () => {
+      const res = await fetch(`https://tubeplus1.duckdns.org/api/v1/board-service/postings/${postingId}?user-uuid=${Uuid}`,
+        {
+          method: 'GET',
+          headers: { 'Content-Type': 'application/json' },
+        },
+      );
+      if (!res.ok) {
+        throw new Error('Network response was not ok');
       }
-  });
-    if (!res.ok) {
-      throw new Error('Network response was not ok');
-    }
-    return res.json();
-  };
+      return res.json();
+    };
+  
+    const {
+      data : postcontents,
+      error : isErrorPost,
+      isLoading : isLoadingPost,
+    } = useQuery(['posts', postingId], fetchPostContents);
 
-  const {
-    data: postcontents,
-    isLoading: isLoadingPost,
-    isError: isErrorPost,
-  } = useQuery(['postcontents', params.postingId], fetchPosts);
-
-
-  const fetchComments = async (postingId: number, parentId?: number) => {
-    let url = `https://tubeplus1.duckdns.org/api/v1/board-service/comments?postingId=${postingId}`;
+  const fetchComments = async (parentId?: number) => {
+    let url = `https://tubeplus1.duckdns.org/api/v1/board-service/comments?posting-id=${postingId}`;
     if (parentId) {
-      url += `&parentId=${parentId}`; // 대댓글 조회를 위한 parentId 추가
+      url += `&parent-id=${parentId}`; // 대댓글 조회를 위한 parentId 추가
     }
   
     const res = await fetch(url, {
@@ -125,8 +144,7 @@ function Posting({ params }: { params: { postingId: number , parentId?: number }
     data: comments,
     isLoading: isLoadingComments,
     isError: isErrorComments,
-  } = useQuery(['comments', params.postingId, params.parentId], () => fetchComments(params.postingId, params.parentId));
-
+  } = useQuery(['comments', params.parentId], () => fetchComments(params.parentId));
 
   const variants = ['flat', 'faded', 'bordered', 'underlined'];
   const postStyle = {
@@ -134,14 +152,13 @@ function Posting({ params }: { params: { postingId: number , parentId?: number }
   };
   const [isCommentView, setCommentView] = useState(false);
 
-  if (isLoadingPost || isLoadingComments) {
-    return <span>Loading...</span>;
+  if (isLoadingPost) {
+    return <Spinner size='lg'/>;
   }
 
-  if (isErrorPost || isErrorComments) {
-    return <span>Error</span>;
+  if (isErrorPost) {
+    return <span>Error!</span>;
   }
-
 
   const commentPost: CommentPost = {
     postingId: postingId,
@@ -291,4 +308,4 @@ function Posting({ params }: { params: { postingId: number , parentId?: number }
     </>
   );
 }
-export default Posting;
+export default Comments;
