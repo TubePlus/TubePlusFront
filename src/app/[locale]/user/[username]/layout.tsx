@@ -25,11 +25,42 @@ export default function UserLayout({
   // }, [user]);
 
   const dir = [
-    { id: 1, label: 'Overview', href: `/user/${params.username}` },
-    { id: 2, label: 'History', href: `/user/${params.username}/history` },
-    { id: 3, label: 'Comments', href: `/user/${params.username}/comments` },
-    { id: 4, label: 'Favorites', href: `/user/${params.username}/favorites` },
-    { id: 4, label: 'Report', href: `/user/${params.username}/report` },
+    {
+      id: 1,
+      label: 'Overview',
+      href: `/user/${params.username}`,
+      forCreator: false,
+    },
+    {
+      id: 2,
+      label: 'My Community',
+      href: `/user/${params.username}/my-community`,
+      forCreator: true,
+    },
+    {
+      id: 3,
+      label: 'History',
+      href: `/user/${params.username}/history`,
+      forCreator: false,
+    },
+    {
+      id: 4,
+      label: 'Comments',
+      href: `/user/${params.username}/comments`,
+      forCreator: false,
+    },
+    {
+      id: 5,
+      label: 'Favorites',
+      href: `/user/${params.username}/favorites`,
+      forCreator: false,
+    },
+    {
+      id: 6,
+      label: 'Report',
+      href: `/user/${params.username}/report`,
+      forCreator: false,
+    },
   ];
 
   return (

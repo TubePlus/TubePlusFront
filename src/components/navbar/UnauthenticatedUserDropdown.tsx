@@ -29,7 +29,7 @@ const UnauthenticatedUserDropdown = () => {
 
   useEffect(() => {
     setMounted(true);
-    console.log('UnauthenticatedUserDropdown mounted');
+    // console.log('UnauthenticatedUserDropdown mounted');
   }, []);
 
   const items = [

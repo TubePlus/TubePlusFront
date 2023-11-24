@@ -205,3 +205,5 @@ const SbLocaleItem = ({
     </LocLink>
   );
 };
+
+export { SbRootItem, SbButtonItem, SbLocaleItem };

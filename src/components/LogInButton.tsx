@@ -30,11 +30,9 @@ const LoginButton = () => {
     setIsLoading(false);
   };
 
-  // INFO: queryString 감지(로그인 실패)시 Swal
-  // TODO: Swal 디자인
   useEffect(() => {
     const queryString = window.location.search;
-    console.log(queryString);
+
     if (queryString && !session?.user) {
       Swal.fire({
         icon: 'error',
@@ -48,6 +46,22 @@ const LoginButton = () => {
             'w-full flex justify-end px-4 pt-2 border-t border-default-200',
           confirmButton: 'min-w-unit-20',
         },
+      });
+    } else if (session?.user.is_retrieved) {
+      Swal.fire({
+        icon: 'error',
+        title: t('login-welcomeback-title'),
+        text: t('login-welcomeback-description'),
+        timer: 3000,
+        timerProgressBar: true,
+        customClass: {
+          htmlContainer: '!break-words',
+          actions:
+            'w-full flex justify-end px-4 pt-2 border-t border-default-200',
+          confirmButton: 'min-w-unit-20',
+        },
+      }).then(() => {
+        router.push('/');
       });
     }
   }, []);

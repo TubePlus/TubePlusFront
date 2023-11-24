@@ -27,7 +27,9 @@ const authMiddleware = withAuth(
   {
     pages: {
       signIn: '/login',
+      error: '/error',
     },
+
     callbacks: {
       // authorized: ({ token }) => token?.role == ('MEMBER' || 'ADMIN'),
       authorized: ({ token }) => token != null,

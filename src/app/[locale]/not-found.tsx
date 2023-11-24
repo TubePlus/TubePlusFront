@@ -1,8 +1,10 @@
 import MainSidebar from '@/components/sidebar/MainSidebar';
 import Sidebar from '@/components/sidebar/Sidebar';
 import { Image } from '@nextui-org/image';
+import { useTranslations } from 'next-intl';
 
 export default function NotFound() {
+  const t = useTranslations('404');
   return (
     <>
       <Sidebar className={`x:bg-zinc-50 dark:x:bg-zinc-900`} isDrawerOnly>
@@ -27,10 +29,7 @@ export default function NotFound() {
 
           <div className="flex flex-col sm:items-start x:items-center">
             <h2 className="text-2xl">Not Founds</h2>
-            <p>
-              The page you are looking for may have been moved, deleted or
-              possibly never existed...
-            </p>
+            <p>{t('description')}</p>
           </div>
         </div>
       </div>

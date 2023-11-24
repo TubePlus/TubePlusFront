@@ -59,7 +59,7 @@ const JoinButton = () => {
       } else {
         Swal.fire({
           icon: 'error',
-          title: t('signup-duplicate-title'),
+          title: t('signup-fail-title'),
           text: t('signup-duplicate-description'),
           timer: 3000,
           timerProgressBar: true,
@@ -71,12 +71,14 @@ const JoinButton = () => {
           },
         });
         setIsInvalid(true);
-        setInvalidMsg(`${username}은 중복되거나 유효하지 않습니다!`);
+        setInvalidMsg(`${username}이 이미 존재하거나 유효하지 않습니다!`);
       }
       // await signIn('google', { redirect: false });
     } catch (error) {
       // toast notification
-      alert(`${error}\n API is not working...`);
+      if(error instanceof Error) {
+        alert(`${error.message}\n API is not working...`);
+      }
     } finally {
       setIsLoading(false);
     }

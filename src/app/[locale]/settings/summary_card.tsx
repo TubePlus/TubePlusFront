@@ -9,12 +9,14 @@ import { Chip } from '@nextui-org/chip';
 import { Spinner } from '@nextui-org/react';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { useSession } from 'next-auth/react';
+import { useTranslations } from 'next-intl';
 import { useEffect } from 'react';
 
 const SummaryCard = () => {
   const { data: session, update } = useSession();
   // TODO: get user infomation
   const [user, setUser] = useGlobalState('/settings');
+  const t = useTranslations('User');
 
   const { data } = useQuery(['me'], async () => {
     if (user?.uuid) {
@@ -75,10 +77,10 @@ const SummaryCard = () => {
   };
   return (
     <div className="flex flex-col gap-2">
-      <SimpleCard title="Settings Summary">
+      <SimpleCard title={t('settings-summary')}>
         <ul className="px-2 space-y-1">
           <li className="flex items-center gap-2">
-            Email:
+            {t('email')}:
             <Chip
               classNames={{
                 base: 'overflow-hidden',
@@ -92,7 +94,7 @@ const SummaryCard = () => {
           </li>
 
           <li className="flex items-center gap-2">
-            Username:
+            {t('username')}:
             <Chip size="sm" onClose={handleRemove}>
               {user?.editable.username || session?.user.username}
             </Chip>
@@ -100,7 +102,7 @@ const SummaryCard = () => {
 
           {user?.editable.locale && (
             <li className="flex items-center gap-2">
-              Language:
+              {t('language')}:
               <Chip size="sm" onClose={handleRemove}>
                 {
                   languages.find(lang =>
@@ -113,7 +115,7 @@ const SummaryCard = () => {
 
           {user?.editable.bio && (
             <li className="flex items-center gap-2">
-              About(bio):
+              {t('about')}:
               <Chip
                 size="sm"
                 classNames={{

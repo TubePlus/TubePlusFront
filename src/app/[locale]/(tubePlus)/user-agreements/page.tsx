@@ -5,7 +5,7 @@ import { User } from '@nextui-org/user';
 type Props = {
   params: { locale: string };
 };
-export default function TeamPage({ params: { locale } }: Props) {
+export default function UserAgreementPage({ params: { locale } }: Props) {
   return (
     <div className="col-span-6 pt-2 min-h-screen">
       {/* Image Here, Actually MockAPI here All resources */}
@@ -16,7 +16,7 @@ export default function TeamPage({ params: { locale } }: Props) {
           <div className="flex flex-col w-full">
             <div className="flex gap-2 justify-between items-end">
               <h1 className="font-bold text-4xl overflow-hidden text-ellipsis">
-                Team Aces
+                User Agreements
               </h1>
               <span className="pb-1 text-sm tracking-wide text-end italic translate-y-1">
                 2023/11/22 Wed

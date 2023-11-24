@@ -1,5 +1,6 @@
 import MainSidebar from '@/components/sidebar/MainSidebar';
 import Sidebar from '@/components/sidebar/Sidebar';
+import SidebarR from './sidebar_r';
 
 export default function CommunityLayout({
   children,
@@ -21,6 +22,14 @@ export default function CommunityLayout({
       </div>
 
       {children}
+
+      <div
+        className="col-span-3 pt-2 w-full
+                    md:block x:hidden
+      "
+      >
+        <SidebarR />
+      </div>
     </>
   );
 }

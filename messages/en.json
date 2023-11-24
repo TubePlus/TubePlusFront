@@ -13,7 +13,13 @@
     "register": "Register",
     "already-have-account": "Already a member of TubePlus",
     "continue-with-google": "Continue with Google",
-    "teams-greetings": "Welcome to TubePlus! We're"
+    "teams-greetings": "Welcome to TubePlus! We're",
+
+    "login-fail-title": "Login failed",
+    "login-fail-description": "Log in with this username or Please check your email and username and try again",
+
+    "register-fail-title": "Registration failed",
+    "register-duplicate-description": "Please check your username. This username is already taken."
   },
 
   "Home": {
@@ -117,5 +123,26 @@
       "docs": "Docs",
       "about": "About"
     }
+  },
+  "User": {
+    "my-posts": "My Posts",
+    "my-communities": "My Communities",
+    "my-favorites": "My Favorites",
+
+    "display-lang": "Display Language",
+    "locale": {
+      "en": "English",
+      "ko": "한국어",
+      "ja": "日本語",
+      "zh": "中国话",
+      "es": "Español"
+    },
+    "edit": "프로필 편집"
+  },
+  "404": {
+    "description": "The page you are looking for may have been moved, deleted or possibly never existed..."
+  },
+  "Card": {
+    "welcome-to-tubeplus": "Welcome to TubePlus!"
   }
 }

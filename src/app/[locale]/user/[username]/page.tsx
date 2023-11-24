@@ -18,6 +18,7 @@ import {
 import { Spinner } from '@nextui-org/spinner';
 import SimpleCard from '@/components/SimpleCard';
 import { Key } from 'react';
+import { useTranslations } from 'next-intl';
 
 interface UserPageProps {
   params: {
@@ -46,7 +47,9 @@ const myCommunityColumns = [
   { key: 'communityMembers', label: 'Members' },
 ];
 
+//TODO: uuid 변경
 export default function UserPage({ params }: UserPageProps) {
+  const t = useTranslations('User');
   const {
     isLoading: isPostsLoading,
     isError: isPostsError,
@@ -88,7 +91,10 @@ export default function UserPage({ params }: UserPageProps) {
                   xs:col-span-full
                   flex flex-col gap-y-10 gap-unit-md z-0 scrollbar-thin`}
     >
-      <SimpleCard title={`My Posts(${myPosts?.length || 0})`} externalLink={``}>
+      <SimpleCard
+        title={`${t('my-posts')}(${myPosts?.length || 0})`}
+        externalLink={``}
+      >
         {isPostsLoading ? (
           <Spinner size="lg" color="default" />
         ) : (
@@ -137,7 +143,7 @@ export default function UserPage({ params }: UserPageProps) {
       </SimpleCard>
 
       <SimpleCard
-        title={`My Communities(${myPosts?.length || 0})`}
+        title={`${t('my-communities')}(${myPosts?.length || 0})`}
         externalLink={``}
       >
         {isCommuinitiesLoading ? (
@@ -187,7 +193,7 @@ export default function UserPage({ params }: UserPageProps) {
       </SimpleCard>
 
       <SimpleCard
-        title={`My Favorites(${myPosts?.length || 0})`}
+        title={`${t('my-favorites')}(${myPosts?.length || 0})`}
         externalLink={``}
       >
         {isPostsLoading ? (

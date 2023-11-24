@@ -9,8 +9,12 @@ import { usePathname, useRouter } from 'next/navigation';
 import { Md } from '../Responsive';
 import Link from 'next/link';
 import TubePlusLogo from '../TubePlusLogo';
+import { useSession } from 'next-auth/react';
 
 const BrandBox = ({ locale }: { locale: string }) => {
+  const { data: session } = useSession();
+  const router = useRouter();
+
   const [mounted, setMounted] = useState(false);
   const pathname = usePathname();
 
@@ -20,11 +24,22 @@ const BrandBox = ({ locale }: { locale: string }) => {
     `/${locale}/team`,
     `/${locale}/about`,
     `/${locale}/help`,
+    `/${locale}/user-agreements`,
+    `/${locale}/policies-agreements`,
+    `/${locale}/community`,
+    `/${locale}/latest-posts`,
   ];
 
   useEffect(() => {
     setMounted(true);
   }, []);
+
+  // TODO: sidebar onclick 활성화 시 주석 해제
+  // useEffect(() => {
+  //   if (session?.user) {
+  //     router.push('/' + session?.user.locale);
+  //   }
+  // }, [session?.user.locale]);
 
   return mounted ? (
     <NavbarBrand className="min-w-fit max-w-[145px] flex-grow-0 gap-2">

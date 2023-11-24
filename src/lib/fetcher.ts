@@ -82,6 +82,52 @@ export const getShortsFromServer = () => {
   return result;
 };
 
+export const preLogin = ({
+  email,
+  token,
+}: {
+  email: string;
+  token: string | undefined;
+}) => {
+  const logInBody = {
+    email,
+    token,
+  };
+
+  const response = fetch(baseUrl + endpointPrefix + '/users/login', {
+    method: 'POST',
+    headers: {
+      'Content-type': 'application/json',
+    },
+    body: JSON.stringify(logInBody),
+  });
+
+  return response;
+};
+
+export const retrieveUser = ({
+  email,
+  token,
+}: {
+  email: string;
+  token: string | undefined;
+}) => {
+  const logInBody = {
+    email,
+    token,
+  };
+
+  const response = fetch(baseUrl + endpointPrefix + '/users/retrieve', {
+    method: 'PUT',
+    headers: {
+      'Content-type': 'application/json',
+    },
+    body: JSON.stringify(logInBody),
+  });
+
+  return response;
+};
+
 /**
  * @warning     MockAPI
  * @description get a user from server
@@ -372,7 +418,6 @@ export const getFavoritesByUuid = (uuid: string) => {
     method: 'GET',
     headers: { 'content-type': 'application/json' },
   })
-
     .then(res => {
       if (res.ok) {
         return res.json();
@@ -419,4 +464,64 @@ export const getBoardById = async (boardId: string) => {
     throw new Error('Network response was not ok');
   }
   return res.json();
+};
+
+export const getAllLatestPosts = () => {
+  const result = fetch(
+    'https://tubeplus1.duckdns.org/api/v1/board-service/postings?search-type-req=ALL&view-type-req=PAGE&pageIndex=0&pageSize=10',
+  )
+    .then(res => {
+      if (res.ok) return res.json();
+    })
+    .catch(e => console.log(e));
+  return result;
+};
+
+export const getRandomCommunity = () => {
+  const result = fetch(
+    'https://tubeplus.duckdns.org/api/v1/communities/random/10',
+  )
+    .then(res => {
+      if (res.ok) return res.json();
+    })
+    .catch(e => console.log(e));
+  return result;
+};
+
+export const isVerified = (uuid: string, communityId: number) => {
+  const result = fetch(
+    `https://tubeplus.duckdns.org/api/v1/communities/${communityId}/verified`,
+    {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ uuid }),
+    },
+  )
+    .then(res => {
+      if (res.ok) return res.json();
+    })
+    .catch(e => console.log(e));
+  return result;
+};
+
+export const joinCommunity = (uuid: string, communityId: number) => {
+  const result = fetch(
+    `https://tubeplus.duckdns.org/api/v1/communities/${communityId}/users/me`,
+    {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        uuid: uuid,
+      }),
+    },
+  ).then(res => {
+    if (!res.ok) {
+      console.log('Network response was not ok');
+    }
+    return res.json();
+  });
 };

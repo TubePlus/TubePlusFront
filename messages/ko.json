@@ -13,7 +13,18 @@
     "register": "회원가입",
     "already-have-account": "이미 회원이신가요",
     "continue-with-google": "Google로 로그인",
-    "teams-greetings": "TubePlus에 오신것을 환영합니다!"
+    "teams-greetings": "TubePlus에 오신것을 환영합니다!",
+
+    "login-fail-title": "로그인 실패",
+    "login-fail-description": "회원가입되어 있지 않거나, 세션이 초기화되어 있지 않습니다.",
+    "login-welcomeback-title": "돌아오신 것을 환영합니다!",
+    "login-welcomeback-description": "다시 돌아오신 것을 환영합니다!",
+
+    "signup-fail-title": "회원가입 실패",
+    "signup-duplicate-description": "사용자명이 이미 존재합니다. 사용자명으로 로그인하거나, 다른 사용자명으로 가입해주세요.",
+
+    "signup-welcome-title": "환영합니다!",
+    "signup-welcome-description": "TubePlus의 회원이 되신 것을 환영합니다."
   },
 
   "Home": {
@@ -116,6 +127,94 @@
       "status": "상태",
       "docs": "문서",
       "about": "자세히"
+    }
+  },
+
+  "User": {
+    "my-posts": "나의 게시물",
+    "my-community": "나의 커뮤니티",
+    "community-name": "커뮤니티 이름",
+    "community-description": "커뮤니티 설명",
+    "my-communities": "나의 커뮤니티",
+    "my-favorites": "나의 즐겨찾기",
+    "my-comments": "나의 댓글",
+
+    "display-lang": "표시 언어",
+    "locale": {
+      "en": "English",
+      "ko": "한국어",
+      "ja": "日本語",
+      "zh": "中国话",
+      "es": "Español"
+    },
+    "edit": "프로필 편집",
+    "edit-img": "프로필 이미지 편집",
+    "edit-img-description": "Upload an image to customize your community’s banner preview. Images should be at least 640×320px (1280×640px for best display).",
+
+    "email": "이메일",
+    "username": "사용자명",
+    "language": "언어",
+    "about": "자기소개",
+
+    "account-delete": "계정 삭제",
+    "delete-button": "계정을 삭제 합니다",
+    "account-delete-description": "If you press the Delete button, your account will be completely removed from the tubePlus. Even if your account is deleted from tubePlus, it will not be deleted from YouTube.",
+    "please-add-bio": "여기서 자기소개를 편집할 수 있습니다. 자기소개는 프로필에 표시됩니다.",
+    "account-preference": "계정 설정",
+    "profile-preference": "프로필 설정",
+    "creator-registration": "크리에이터 등록",
+    "creator-registration-description": "Are you already a creator, or do you want to be a creator? Start by creating a community on TubePlus!",
+
+    "community-setting": "커뮤니티 설정",
+    "community-setting-description": "The tubePlus community is designed to compatible with YouTube, but operates independently.",
+
+    "community-setting-general": "기본 설정(General)",
+    "community-setting-owner": "커뮤니티 생성자",
+    "community-setting-name": "커뮤니티 이름",
+    "add-community-name": "커뮤니티 이름 입력...",
+    "community-bio": "커뮤니티 소개",
+    "add-bio": "소개글 입력...",
+
+    "community-preference": "설정",
+    "community-category": "커뮤니티 카테고리",
+    "select-community-category": "커뮤니티 카테고리를 선택해주세요",
+    "community-banner": "커뮤니티 배너",
+
+    "noti-settings": "알림 설정",
+    "noti-community-alert": "커뮤니티 알림",
+    "noti-community-alert-description": "Controls notifications from the communities you join.",
+
+    "settings-summary": "설정 요약",
+
+    "safety-privacy": "보안 정책",
+    "safety-privacy-description": "Manage how we use data to personalize your Reddit experience, and control how other redditors interact with you. To learn more, visit our Privacy & Security FAQs.",
+    "safety-policy": "정책"
+  },
+
+  "404": {
+    "description": "The page you are looking for may have been moved, deleted or possibly never existed..."
+  },
+  "Error": {
+    "title": "Something went wrong!",
+    "try-again": "Try again"
+  },
+
+  "Card": {
+    "welcome-to-tubeplus": "TubePlus에 오신 것을 환영합니다!"
+  },
+
+  "SidebarRight": {
+    "Common": {
+      "title": "More About Aces!",
+      "contact": "Contact to Team Aces",
+      "help": "헬프센터",
+      "user-agreements": "User Agreements",
+      "policies-agreements": "Policies and Agreements"
+    },
+    "Community": {
+      "title": "More About TubePlus Community",
+      "random-community": "랜덤 커뮤니티",
+      "latest-posts": "최근 게시물"
     }
   }
 }

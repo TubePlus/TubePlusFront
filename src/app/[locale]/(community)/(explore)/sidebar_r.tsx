@@ -1,56 +1,37 @@
 'use client';
+
 import { Card, CardHeader, CardBody } from '@nextui-org/card';
 import { Button } from '@nextui-org/button';
 import Link from 'next/link';
 import React from 'react';
 import {
-  EnvelopeClosedIcon,
   ExternalLinkIcon,
-  InfoCircledIcon,
-  PersonIcon,
-  ReaderIcon,
-  VideoIcon,
+  GlobeIcon,
+  Pencil2Icon,
 } from '@radix-ui/react-icons';
 import { Tooltip } from '@nextui-org/tooltip';
-import { useLocale, useTranslations } from 'next-intl';
+import { SbButtonItem } from '@/components/sidebar/SidebarMenu';
 import { usePathname } from 'next/navigation';
+import { useLocale, useTranslations } from 'next-intl';
 
 const linkList = [
   {
-    name: 'about-tubePlus',
-    href: '/about',
-    icon: VideoIcon,
+    name: 'random-community',
+    href: '/community',
+    icon: GlobeIcon,
   },
-
   {
-    name: 'contact',
-    href: '/team',
-    icon: EnvelopeClosedIcon,
-  },
-
-  {
-    name: 'help',
-    href: '/help',
-    icon: InfoCircledIcon,
-  },
-
-  {
-    name: 'user-agreements',
-    href: '/user-agreements',
-    icon: ReaderIcon,
-  },
-
-  {
-    name: 'policies-agreements',
-    href: '/policies-agreements',
-    icon: PersonIcon,
+    name: 'latest-posts',
+    href: '/latest-posts',
+    icon: Pencil2Icon,
   },
 ];
 
 const SidebarR = () => {
   const pathname = usePathname();
   const locale = useLocale();
-  const t = useTranslations('SidebarRight.Common');
+
+  const t = useTranslations('SidebarRight.Community');
 
   return (
     <Card
@@ -63,16 +44,6 @@ const SidebarR = () => {
                             border-b-1 border-default-300 bg-default-200"
       >
         <h2 className="font-bold">{t('title')}</h2>
-        <Tooltip content="TubePlus Notion Page">
-          <Button
-            as={Link}
-            size="sm"
-            isIconOnly
-            href="https://www.notion.so/About-TubePlus-9183790a57494cacbfe6164f9929b0ad"
-          >
-            <ExternalLinkIcon />
-          </Button>
-        </Tooltip>
       </CardHeader>
 
       <CardBody className="gap-2">

@@ -13,12 +13,12 @@ import { profileMemusStatic } from '@/data/sidebar';
 import Link from 'next/link';
 import { GlobeIcon, HomeIcon } from '@radix-ui/react-icons';
 import { Card } from '@nextui-org/card';
-import { Badge } from '@nextui-org/badge';
-import { Tooltip } from '@nextui-org/tooltip';
+import { useTranslations } from 'next-intl';
 
 const UserCard = () => {
   const session = useSession();
   const user = session.data?.user;
+  const t = useTranslations('User');
 
   const { isLoading, isError, error, data, refetch } = useQuery(
     ['me'],
@@ -97,15 +97,15 @@ const UserCard = () => {
 
                   <Button
                     className={`h-6 min-w-[60px] w-[60px] text-[.6rem] leading-3
-                              flex
+                              flex items-center justify-center
                             ${
                               fromUser?.role == 'ADMIN'
                                 ? 'border-danger-700 text-danger-700'
                                 : fromUser?.isCreator
-                                ? 'border-warning-700 text-warning-700'
+                                ? 'bg-red-700 text-white'
                                 : 'border-success-700 text-success-700'
                             }`}
-                    variant="bordered"
+                    variant={fromUser?.isCreator ? 'solid' : 'bordered'}
                     radius="full"
                     disabled
                   >
@@ -125,7 +125,7 @@ const UserCard = () => {
 
               <div className="flex flex-col gap-2">
                 <span className="mt-1">
-                  Display Language: {fromUser?.locale}
+                  {t('display-lang')}: {t(`locale.${fromUser?.locale}`)}
                 </span>
 
                 <span
@@ -135,8 +135,7 @@ const UserCard = () => {
                       : 'text-default-500'
                   }`}
                 >
-                  {fromUser?.bio ||
-                    'Enter your bio here. It will be shown on your profile.'}
+                  {fromUser?.bio || t('please-add-bio')}
                 </span>
               </div>
             </div>
@@ -147,8 +146,7 @@ const UserCard = () => {
               fromUser?.bio ? 'text-default-foreground' : 'text-default-500'
             }`}
           >
-            {fromUser?.bio ||
-              'Enter your bio here. It will be shown on your profile.'}
+            {fromUser?.bio || t('please-add-bio')}
           </span>
 
           <Button
@@ -159,7 +157,7 @@ const UserCard = () => {
             as={Link}
             href="/settings/account"
           >
-            Edit Profile
+            {t('edit')}
           </Button>
 
           {fromUser?.link && (
