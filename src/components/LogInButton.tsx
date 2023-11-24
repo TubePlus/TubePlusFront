@@ -1,44 +1,70 @@
 'use client';
 
+import React, { useEffect, useState } from 'react';
+import { usePathname, useRouter } from 'next/navigation';
+import { signIn, useSession } from 'next-auth/react';
+import { useLocale, useTranslations } from 'next-intl';
+
 import { Button } from '@nextui-org/button';
 import { Image } from '@nextui-org/image';
 import { User } from '@nextui-org/user';
-import { signIn, useSession } from 'next-auth/react';
-import { useLocale, useTranslations } from 'next-intl';
-import { useRouter } from 'next/navigation';
-import React, { useState } from 'react';
+
+import Swal from 'sweetalert2';
 
 const LoginButton = () => {
   const locale = useLocale();
   const t = useTranslations('Auth');
+
   const router = useRouter();
+
   const { data: session } = useSession();
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const loginWithGoogle = async () => {
     setIsLoading(true);
 
-    try {
-      // for login
-      await signIn('google', {
-        redirect: false,
-        redirectTo: `/${locale}`,
-      }).then(result => {
-        if (result?.error) {
-          // toast notification
-          alert('Err: Login Failure!');
-        } else {
-          // toast notification
-          alert('Login Success!');
-        }
-      });
-    } catch (error) {
-      // toast notification
-      alert('Err: Login Failure!');
-    } finally {
-      setIsLoading(false);
-    }
+    await signIn('google', {
+      // callbackUrl: '/',
+      redirect: false,
+    });
+    setIsLoading(false);
   };
+
+  useEffect(() => {
+    const queryString = window.location.search;
+
+    if (queryString && !session?.user) {
+      Swal.fire({
+        icon: 'error',
+        title: t('login-fail-title'),
+        text: t('login-fail-description'),
+        timer: 3000,
+        timerProgressBar: true,
+        customClass: {
+          htmlContainer: '!break-words',
+          actions:
+            'w-full flex justify-end px-4 pt-2 border-t border-default-200',
+          confirmButton: 'min-w-unit-20',
+        },
+      });
+    } else if (session?.user.is_retrieved) {
+      Swal.fire({
+        icon: 'error',
+        title: t('login-welcomeback-title'),
+        text: t('login-welcomeback-description'),
+        timer: 3000,
+        timerProgressBar: true,
+        customClass: {
+          htmlContainer: '!break-words',
+          actions:
+            'w-full flex justify-end px-4 pt-2 border-t border-default-200',
+          confirmButton: 'min-w-unit-20',
+        },
+      }).then(() => {
+        router.push('/');
+      });
+    }
+  }, []);
 
   return (
     <form className="flex flex-col gap-4 py-unit-md">

@@ -14,6 +14,49 @@ type Props = {
   params: { locale: string };
 };
 
+const releasePostLIst = [
+  {
+    title: 'New Members!1',
+    img: 'https://storage.cloud.google.com/tubeplus-bucket/dummy/spharos3rd.png',
+    href: '',
+    createdAt: '2023/10/21 Fri',
+    contents:
+      'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
+  },
+  {
+    title: 'New Members! 2',
+    img: 'https://storage.cloud.google.com/tubeplus-bucket/dummy/spharos3rd.png',
+    href: '',
+    createdAt: '2023/11/10 Fri',
+    contents:
+      'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
+  },
+  {
+    title: 'New Members! 3',
+    img: 'https://storage.cloud.google.com/tubeplus-bucket/dummy/spharos3rd.png',
+    href: '',
+    createdAt: '2023/11/10 Fri',
+    contents:
+      'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
+  },
+  {
+    title: 'New Members! 4',
+    img: 'https://storage.cloud.google.com/tubeplus-bucket/dummy/spharos3rd.png',
+    href: '',
+    createdAt: '2023/11/10 Fri',
+    contents:
+      'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
+  },
+  {
+    title: 'New Members! 5',
+    img: 'https://storage.cloud.google.com/tubeplus-bucket/dummy/spharos3rd.png',
+    href: '',
+    createdAt: '2023/11/10 Fri',
+    contents:
+      'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
+  },
+];
+
 export default function Home({ params: { locale } }: Props) {
   const t = useTranslations('Home');
   return (
@@ -114,10 +157,10 @@ export default function Home({ params: { locale } }: Props) {
               title={t('releases-accessible')}
               titleLink={{ name: t('see-all'), href: '' }}
             >
-              <FlatCardRelease />
-              <FlatCardRelease />
-              <FlatCardRelease />
-              <FlatCardRelease />
+              {/** //TODO: map 사용해서 데이터 표시 */}
+              {releasePostLIst.map(post => (
+                <ReleasesPost key={post.title} post={post} />
+              ))}
             </FlatCard>
           </div>
         </section>
@@ -173,6 +216,7 @@ const FlatCard = ({
 };
 
 const FlatCardTubePlusTeamBody = () => {
+  const t = useTranslations('Card');
   return (
     <>
       <CardBody
@@ -191,7 +235,7 @@ const FlatCardTubePlusTeamBody = () => {
       </CardBody>
       <CardFooter className="flex-col gap-2">
         <div className="w-full flex items-center justify-between text-default-800">
-          <h3>Welcome to TubePlus!</h3>
+          <h3>{t('welcome-to-tubeplus')}</h3>
           <i className="text-tiny text-default-500">2023/11/08 Wed</i>
         </div>
 
@@ -209,35 +253,41 @@ const FlatCardTubePlusTeamBody = () => {
   );
 };
 
-const FlatCardRelease = () => {
+type ReleasePost = {
+  title: string;
+  img: string;
+  href: string;
+  createdAt: string;
+  contents: string;
+};
+
+const ReleasesPost = ({ post }: { post: ReleasePost }) => {
   return (
-    <div className="flex gap-2 p-2 pt-0 group">
+    <Link className="flex gap-2 p-2 pt-0 group/release" href={post.href}>
       <div className="w-48 h-full overflow-hidden rounded-lg">
         <Image
-          className="scale-105 hover:scale-110"
-          src="https://storage.cloud.google.com/tubeplus-bucket/dummy/spharos3rd.png"
+          className="scale-105 group-hover/release:scale-110"
+          src={post.img}
           alt=""
         />
       </div>
       <div className="w-full flex flex-col gap-2">
         <div className="flex gap-2 justify-between">
           <div className="w-full flex gap-1 justify-between">
-            <h2 className="">New Members!</h2>
+            <h2 className="text-default-400 group-hover/release:text-default-800 duration-200">
+              {post.title}
+            </h2>
 
-            <i className="text-[11px] text-default-600">2023/11/10 Fri</i>
+            <i className="text-[11px] text-default-400 group-hover/release:text-default-800 duration-200">
+              {post.createdAt}
+            </i>
           </div>
         </div>
 
-        <p className="text-small text-ellipsis line-clamp-3 break-all text-justify text-default-400 group-hover:text-default-600 duration-300">
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-          eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
-          minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-          aliquip ex ea commodo consequat. Duis aute irure dolor in
-          reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
-          pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
-          culpa qui officia deserunt mollit anim id est laborum.
+        <p className="text-small text-ellipsis line-clamp-3 break-all text-justify text-default-400 group-hover/release:text-default-600 duration-300">
+          {post.contents}
         </p>
       </div>
-    </div>
+    </Link>
   );
 };

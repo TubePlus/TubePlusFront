@@ -17,6 +17,7 @@ export interface DBUserProps extends DefaultUser {
   role?: Role;
   locale?: string;
   darkmode?: boolean;
+  is_retrieved?: boolean;
   link?: [{ url: string }];
   is_creator?: boolean;
   created_at?: string;

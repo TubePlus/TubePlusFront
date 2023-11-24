@@ -15,6 +15,7 @@ import {
 import { Spinner } from '@nextui-org/spinner';
 import { useQuery } from '@tanstack/react-query';
 import { Key } from 'react';
+import { useTranslations } from 'next-intl';
 
 const myPostColumns = [
   // { key: 'id', label: 'Id' },
@@ -27,7 +28,9 @@ const myPostColumns = [
   { key: 'actions', label: 'Actions' },
 ];
 
+//TODO: 추후 renderCell 커스텀 필요할 경우 내부에서 정의
 export default function HistoryPage() {
+  const t = useTranslations();
   const {
     isLoading: isPostsLoading,
     isError: isPostsError,
@@ -56,7 +59,7 @@ export default function HistoryPage() {
       </SimpleCard>
 
       <SimpleCard
-        title={`My Communities(${myPosts?.length || 0})`}
+        title={`${t('my-communities')}(${myPosts?.length || 0})`}
         externalLink={``}
       >
         {isPostsLoading ? (
@@ -107,7 +110,7 @@ export default function HistoryPage() {
       </SimpleCard>
 
       <SimpleCard
-        title={`My Comments(${myPosts?.length || 0})`}
+        title={`${t('my-comments')}(${myPosts?.length || 0})`}
         externalLink={``}
       >
         {isPostsLoading ? (

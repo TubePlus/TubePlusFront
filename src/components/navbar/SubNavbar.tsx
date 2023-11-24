@@ -6,7 +6,7 @@ import {
   NavbarItem,
 } from '@nextui-org/navbar';
 import { Link } from '@nextui-org/link';
-import { useParams, usePathname } from 'next/navigation';
+import { usePathname } from 'next/navigation';
 import { useSession } from 'next-auth/react';
 import { useLocale } from 'next-intl';
 
@@ -32,42 +32,17 @@ const SubNavbar = ({ dir }: { dir: DirProps[] }) => {
     >
       <NavbarContent as={'div'} justify="center" className="w-full gap-4">
         {dir.map((link: DirProps) =>
-          !session?.user.is_creator && !link.forCreator ? (
+          link.forCreator ? (
+            !session?.user.is_creator ? (
+              <NavbarItem key={link.id}>
+                <SubNavLink pathname={pathname} link={link} />
+              </NavbarItem>
+            ) : null
+          ) : (
             <NavbarItem key={link.id}>
-              {/* <Link
-                className={`text-sm ${
-                  link.label === 'Overview'
-                    ? '/' + locale + link.href === pathname
-                      ? 'font-semibold text-default-foreground dark:text-default-900'
-                      : 'text-default-500'
-                    : pathname.startsWith(link.href)
-                    ? 'font-semibold text-default-foreground dark:text-default-900'
-                    : 'text-default-500'
-                }`}
-                href={link.href}
-              >
-                {link.label}
-              </Link> */}
               <SubNavLink pathname={pathname} link={link} />
             </NavbarItem>
-          ) : !session?.user.is_creator && link.forCreator ? ( //TODO: session 느낌표 제거
-            <NavbarItem key={link.id}>
-              <Link
-                className={`text-sm ${
-                  link.label === 'Overview'
-                    ? link.href === pathname
-                      ? 'font-semibold text-default-foreground dark:text-default-900'
-                      : 'text-default-500'
-                    : pathname.startsWith(link.href)
-                    ? 'font-semibold text-default-foreground dark:text-default-900'
-                    : 'text-default-500'
-                }`}
-                href={link.href}
-              >
-                {link.label}
-              </Link>
-            </NavbarItem>
-          ) : null,
+          ),
         )}
       </NavbarContent>
     </NextNavbar>

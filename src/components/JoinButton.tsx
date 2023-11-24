@@ -10,6 +10,7 @@ import { useTranslations } from 'next-intl';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { userInfo } from 'os';
 import React, { useEffect, useState } from 'react';
+import Swal from 'sweetalert2';
 
 const clientId = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID!;
 const clientSecret = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_SECRET!;
@@ -56,15 +57,28 @@ const JoinButton = () => {
 
         signUp();
       } else {
-        // TODO: toast invalid(duplicated) error
-        console.log(isDuplicate);
+        Swal.fire({
+          icon: 'error',
+          title: t('signup-fail-title'),
+          text: t('signup-duplicate-description'),
+          timer: 3000,
+          timerProgressBar: true,
+          customClass: {
+            htmlContainer: '!break-words',
+            actions:
+              'w-full flex justify-end px-4 pt-2 border-t border-default-200',
+            confirmButton: 'min-w-unit-20',
+          },
+        });
         setIsInvalid(true);
-        setInvalidMsg(`${username}은 중복되거나 유효하지 않습니다!`);
+        setInvalidMsg(`${username}이 이미 존재하거나 유효하지 않습니다!`);
       }
       // await signIn('google', { redirect: false });
     } catch (error) {
       // toast notification
-      alert(`${error}\n API is not working...`);
+      if(error instanceof Error) {
+        alert(`${error.message}\n API is not working...`);
+      }
     } finally {
       setIsLoading(false);
     }
@@ -139,7 +153,19 @@ const JoinButton = () => {
       const result = await signUpResponse.json();
       console.log(result);
       if (result.code === 'S001') {
-        alert('Welcome!! 가입성공!');
+        Swal.fire({
+          icon: 'success',
+          title: t('signup-welcome-title'),
+          text: t('signup-welcome-description'),
+          timer: 3000,
+          timerProgressBar: true,
+          customClass: {
+            htmlContainer: '!break-words',
+            actions:
+              'w-full flex justify-end px-4 pt-2 border-t border-default-200',
+            confirmButton: 'min-w-unit-20',
+          },
+        });
       }
     };
 

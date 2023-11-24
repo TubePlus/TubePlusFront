@@ -49,10 +49,10 @@ export default async function LocaleLayout({
 }: Props) {
   let messages;
   try {
-    console.log(`/${locale}.json`);
+    // console.log(`/${locale}.json`);
     messages = (await import(`../../../messages/${locale}.json`)).default;
 
-    console.log(messages);
+    // console.log(messages);
   } catch (error) {
     notFound();
   }

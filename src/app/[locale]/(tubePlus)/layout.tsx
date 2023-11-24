@@ -23,7 +23,13 @@ export default function TubePlusLayout({
 
       {children}
 
-      <SidebarR />
+      <div
+        className="col-span-3 pt-2 w-full
+                    md:block x:hidden
+      "
+      >
+        <SidebarR />
+      </div>
     </>
   );
 }

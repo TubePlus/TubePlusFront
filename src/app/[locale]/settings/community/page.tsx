@@ -12,11 +12,13 @@ import { Divider } from '@nextui-org/divider';
 import { Select, SelectItem } from '@nextui-org/select';
 import { Tooltip } from '@nextui-org/tooltip';
 import { communityCategory } from '@/data/sidebar';
+import { useTranslations } from 'next-intl';
 
 export default function CommuSettingsPage() {
   const { data: session } = useSession();
   const [bio, setBio] = useState(''); // 초기값 가져오기
   const [category, setCategory] = useState<string[]>();
+  const t = useTranslations('User');
   // check is_creator, has_community...
 
   const handleCategoryChange = (e: ChangeEvent<HTMLSelectElement>) => {
@@ -26,22 +28,19 @@ export default function CommuSettingsPage() {
   return (
     <section className="flex flex-col gap-8 ">
       <div className="">
-        <h2 className="px-2 text-lg">Community Setting</h2>
-        <p className="px-2 text-sm">
-          The tubePlus community is designed to compatible with YouTube, but
-          operates independently.
-        </p>
+        <h2 className="px-2 text-lg">{t('community-setting')}</h2>
+        <p className="px-2 text-sm">{t('community-setting-description')}</p>
       </div>
 
       <SimpleCard classNames={{ card: '!p-0' }}>
         <CardHeader className="px-4 py-2 bg-default-200 border-b-1 border-default-300 rounded-none mb-4">
-          <h2 className="px-2">General</h2>
+          <h2 className="px-2">{t('community-setting-general')}</h2>
         </CardHeader>
 
         <div className="px-6 pb-6 flex flex-col gap-2 items-between border-b-1 border-default-300">
           <div className="grid grid-cols-4 gap-4 w-full text-sm items-center py-2">
             <span className="col-span-1 line-clamp-1 text-ellipsis">
-              <s className="sm:inline x:hidden no-underline">Community</s> Owner
+              {t('community-setting-owner')}
             </span>
             <div className="col-span-3 flex flex-wrap">
               <span className="font-semibold">{session?.user.username}</span>
@@ -53,12 +52,12 @@ export default function CommuSettingsPage() {
 
           <div className="grid grid-cols-4 gap-4 w-full text-sm items-center py-2">
             <span className="col-span-1 line-clamp-1 text-ellipsis">
-              <s className="sm:inline x:hidden no-underline">Community</s> Name
+              {t('community-setting-name')}
             </span>
             <Input
               className="col-span-2 w-60"
               isReadOnly
-              value={'Add community name...'} // TODO: 내 community 불러오기
+              value={t('add-community-name')} // TODO: 내 community 불러오기
               type="text"
               variant="bordered"
             />
@@ -66,7 +65,7 @@ export default function CommuSettingsPage() {
 
           <div className="grid grid-cols-4 gap-4 w-full text-sm items-center py-2">
             <span className="col-span-1 line-clamp-1 text-ellipsis">
-              <s className="sm:inline x:hidden no-underline">Community</s> Bio
+              {t('community-bio')}
             </span>
             <div className="relative col-span-3 flex flex-col">
               <Textarea
@@ -74,7 +73,7 @@ export default function CommuSettingsPage() {
                 // isReadOnly
                 minRows={2}
                 variant="bordered"
-                value={bio || 'Add a bio...'}
+                value={bio || t('add-bio')}
                 onValueChange={setBio}
                 isInvalid={bio.length > 255}
               />
@@ -90,14 +89,13 @@ export default function CommuSettingsPage() {
         </div>
 
         <CardHeader className="px-4 py-2 bg-default-200 border-b-1 border-default-300 rounded-none mb-4">
-          <h2 className="px-2">Preference</h2>
+          <h2 className="px-2">{t('community-preference')}</h2>
         </CardHeader>
 
         <div className="px-6 pb-6 flex flex-col gap-2 items-between border-b-1 border-default-300">
           <div className="grid grid-cols-4 gap-4 w-full text-sm py-2">
             <span className="font-semibold col-span-1 line-clamp-1 text-ellipsis">
-              <s className="sm:inline x:hidden no-underline">Community</s>{' '}
-              Category
+              {t('community-category')}
             </span>
             <div className="col-span-3 flex-col">
               <Select
@@ -105,7 +103,7 @@ export default function CommuSettingsPage() {
                   base: 'col-span-3 !w-full',
                 }}
                 label="Community Category"
-                description="Select a category for the community"
+                description={t('select-community-category')}
                 selectedKeys={category}
                 onChange={handleCategoryChange}
                 selectionMode="single"
@@ -123,8 +121,7 @@ export default function CommuSettingsPage() {
 
           <div className="grid grid-cols-4 gap-4 w-full text-sm py-2">
             <span className="font-semibold col-span-1 line-clamp-1 text-ellipsis">
-              <s className="sm:inline x:hidden no-underline">Community</s>{' '}
-              Banner
+              {t('community-banner')}
             </span>
             <div className="col-span-3 flex-col">
               <ButtonGroup className="h-10 w-full">
@@ -137,19 +134,17 @@ export default function CommuSettingsPage() {
                 >
                   {'file name...'}
                 </Button>
-                <Button>Edit</Button>
+                <Button>{t('edit-img')}</Button>
               </ButtonGroup>
               <p className="text-xs p-1 text-justify">
-                Upload an image to customize your community’s banner preview.
-                Images should be at least 640×320px (1280×640px for best
-                display).
+                {t('edit-img-description')}
               </p>
             </div>
           </div>
         </div>
       </SimpleCard>
 
-      <SimpleCard classNames={{ base: '!border-[#FF0000]', card: '!p-0' }}>
+      {/* <SimpleCard classNames={{ base: '!border-[#FF0000]', card: '!p-0' }}>
         <CardHeader className="px-4 py-2 bg-[#FF0000] border-b-1 border-[#FF0000] rounded-none mb-4">
           <h2 className="px-2 text-white">
             Youtube{' '}
@@ -204,7 +199,7 @@ export default function CommuSettingsPage() {
             </Button>
           </div>
         </div>
-      </SimpleCard>
+      </SimpleCard> */}
     </section>
   );
 }

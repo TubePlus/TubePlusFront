@@ -18,6 +18,7 @@ import DefaultPreference from './default-preferences';
 import ProfilePreference from './profile-preferences';
 import { useMutation } from '@tanstack/react-query';
 import { deleteUser } from '@/lib/fetcher';
+import { useTranslations } from 'next-intl';
 
 const communityInfo = [
   { id: 1, title: 'Category', value: '엔터테인먼트' },
@@ -30,6 +31,7 @@ const communityInfo = [
 export default function AccountPage() {
   const { data: session, update } = useSession();
   const [user, setUser] = useGlobalState('/settings');
+  const t = useTranslations('User');
 
   useEffect(() => {
     // TODO: getUser infomation not from session
@@ -73,7 +75,7 @@ export default function AccountPage() {
     deleteUserMutate(session?.user.uuid as string);
 
     if (isSuccess) {
-      //TODO 삭제 완료 및 로그아웃
+      //TODO 삭제 완료 시 로그아웃
       window.confirm('User has been deleted');
       update();
       window.location.href = '/';
@@ -84,13 +86,13 @@ export default function AccountPage() {
     <section className="flex flex-col gap-8 min-h-[800px]">
       <SimpleCard classNames={{ card: '!p-0' }}>
         <CardHeader className="px-4 py-2 bg-default-200 border-b-1 border-default-300 rounded-none mb-4">
-          <h2 className="px-2">Account Preferences</h2>
+          <h2 className="px-2">{t('account-preference')}</h2>
         </CardHeader>
 
         <div className="px-6 pb-6 flex flex-col gap-2 items-center border-b-1 border-default-300">
           <div className="grid grid-cols-5 flex-row gap-16 w-full text-sm">
             <h5 className="col-span-1 font-semibold whitespace-nowrap">
-              Email
+              {t('email')}
             </h5>
 
             <div className="col-span-4 flex justify-between">
@@ -100,15 +102,14 @@ export default function AccountPage() {
                 <p>Loading...</p>
               )}
               <Chip
-                className="text-[.6rem] "
-                color={
-                  userRole === 'MEMBER'
-                    ? 'success'
-                    : userRole === 'ADMIN'
-                    ? 'danger'
-                    : 'warning'
+                className={`text-[.6rem] flex items-center ${
+                  userRole === 'CREATOR' || 'ADMIN'
+                    ? 'bg-red-600 text-white'
+                    : 'border-success-600'
+                }`}
+                variant={
+                  userRole === 'CREATOR' || 'ADMIN' ? 'solid' : 'bordered'
                 }
-                variant="bordered"
               >
                 {userRole}
               </Chip>
@@ -117,7 +118,7 @@ export default function AccountPage() {
 
           <div className="grid grid-cols-5 flex-row gap-16 items-center w-full text-sm">
             <h5 className="col-span-1 min-w-unit-24 font-semibold whitespace-nowrap overflow-hidden text-ellipsis">
-              <span className="md:inline x:hidden">Display</span> Language
+              {t('display-language')}
             </h5>
 
             <div className="col-span-4 flex justify-between">
@@ -130,7 +131,7 @@ export default function AccountPage() {
         </div>
 
         <CardHeader className="px-4 py-2 bg-default-200 border-b-1 border-default-300 rounded-none mb-4">
-          <h2 className="px-2">Profile Preferences</h2>
+          <h2 className="px-2">{t('profile-preference')}</h2>
         </CardHeader>
         <ProfilePreference
         // Profile Image
@@ -142,14 +143,11 @@ export default function AccountPage() {
       {!session?.user.is_creator ? (
         <SimpleCard classNames={{ card: '!p-0' }}>
           <CardHeader className="px-4 py-2 bg-default-200 border-b-1 border-default-300 rounded-none mb-4">
-            <h2 className="px-2">Creator Registration</h2>
+            <h2 className="px-2">{t('creator-registration')}</h2>
           </CardHeader>
 
           <div className="px-6 pb-6 flex flex-col gap-2 items-between border-b-1 border-default-300">
-            <p className="text-sm">
-              Are you already a creator, or do you want to be a creator? Start
-              by creating a community on TubePlus!
-            </p>
+            <p className="text-sm">{t('creator-registration-description')}</p>
             <div className="grid grid-cols-4 flex-row items-start md:gap-8 x:gap-4 w-full text-sm">
               <Select
                 classNames={{
@@ -193,7 +191,7 @@ export default function AccountPage() {
       ) : (
         <SimpleCard classNames={{ card: '!p-0' }}>
           <CardHeader className="px-4 py-2 bg-default-200 border-b-1 border-default-300 rounded-none mb-4">
-            <h2 className="px-2">My Community</h2>
+            <h2 className="px-2">{t('my-community')}</h2>
           </CardHeader>
           <div className="px-6 pb-6 flex flex-col gap-2 items-between border-b-1 border-default-300">
             <div className="flex flex-row items-center gap-4 justify-between">
@@ -201,9 +199,9 @@ export default function AccountPage() {
                 <Avatar src={''} alt={'Community avatar'} size="lg" />
 
                 <div className="flex flex-col gap-1">
-                  <h3>{'Community Name'}</h3>
+                  <h3>{t('community-name')}</h3>
                   <p className="text-sm font-light line-clamp-3">
-                    {'Community description'}
+                    {t('community-description')}
                   </p>
                 </div>
               </div>
@@ -232,14 +230,12 @@ export default function AccountPage() {
       >
         <CardHeader className="px-4 py-2 bg-danger-200 border-b-1 border-danger-300 rounded-none mb-4">
           <h2 className="px-2 text-danger-600 font-semibold text-xl">
-            Delete account
+            {t('account-delete')}
           </h2>
         </CardHeader>
         <div className="px-6 pb-6 grid grid-cols-4 gap-8 items-center">
           <p className="col-span-3 text-justify md:text-sm x:text-xs">
-            If you press the Delete button, your account will be completely
-            removed from the tubePlus. Even if your account is deleted from
-            tubePlus, it will not be deleted from YouTube.
+            {t('account-delete-description')}
           </p>
           <Button
             className="opacity-60 hover:opacity-100"
@@ -247,8 +243,7 @@ export default function AccountPage() {
             variant="ghost"
             onClick={handleDelUser}
           >
-            Delete
-            <span className="sm:inline x:hidden"> your account</span>
+            <span>{t('delete-button')}</span>
           </Button>
         </div>
       </SimpleCard>

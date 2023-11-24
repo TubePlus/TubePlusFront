@@ -6,7 +6,7 @@ import { Skeleton } from '@nextui-org/skeleton';
 export default function PaPage() {
   return (
     <>
-      <div className="col-span-6 pt-2">
+      <div className="col-span-6 pt-2 min-h-screen">
         {/* Image Here, Actually MockAPI here All resources */}
         <Skeleton className="min-h-[240px] w-full" />
 
