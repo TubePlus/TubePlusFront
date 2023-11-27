@@ -47,8 +47,8 @@ function PostContents( { postId } : { postId : number } ) {
 
   return (
     <>
-    <div className="flex flex-nowrap gap-4 overflow-hidden" dangerouslySetInnerHTML={{__html:postContents}}>
-    </div>
+      <div className="flex flex-nowrap gap-4 overflow-hidden" dangerouslySetInnerHTML={{__html:postContents}}>
+      </div>
     </>
   )
 }

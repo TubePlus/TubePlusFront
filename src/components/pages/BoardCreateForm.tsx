@@ -71,17 +71,23 @@ export default function BoardCreation({communityId}: {communityId: number}) {
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
-  
-    // 사용자가 입력한 분을 정수로 변환
-    const limitTimeInMinutes = parseInt(formData.get('Limit Date Time') as string, 10);
     
-    // 현재 시간에 사용자가 입력한 분을 더하고 ISO 형식으로 변환
-    let limitDateTime = '';
-    if (!isNaN(limitTimeInMinutes)) {
-      const currentDate = new Date();
-      currentDate.setMinutes(currentDate.getMinutes() + limitTimeInMinutes);
-      limitDateTime = currentDate.toISOString();
-    }
+  // 사용자가 입력한 분을 정수로 변환
+  const limitTimeInMinutes = parseInt(formData.get('Limit Date Time') as string, 10);
+
+  // 현재 시간에 사용자가 입력한 분을 더하고 ISO 형식으로 변환
+  let limitDateTime = '';
+  if (!isNaN(limitTimeInMinutes)) {
+    const currentDate = new Date();
+    const currentTime = currentDate.getTime();
+    const timezoneOffset = currentDate.getTimezoneOffset() * 60000; // 현재 로컬 시간대의 오프셋을 밀리초로 변환
+
+    // 로컬 시간 기준으로 시간 계산
+    currentDate.setTime(currentTime - timezoneOffset + limitTimeInMinutes * 60000);
+    limitDateTime = currentDate.toISOString();
+  }
+
+
   
     const newBoard: BoardData = {
       communityId: communityId,
@@ -91,6 +97,9 @@ export default function BoardCreation({communityId}: {communityId: number}) {
       limitDateTime: limitDateTime, // 계산된 시간을 사용
     };
     createBoardMutation.mutate(newBoard);
+
+    console.log(limitDateTime); // 이 부분을 추가하여 실제로 계산된 limitDateTime 값을 확인
+
   }
 
 

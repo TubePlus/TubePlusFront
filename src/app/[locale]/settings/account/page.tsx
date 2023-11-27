@@ -176,7 +176,7 @@ export default function AccountPage() {
                             bg-default-200 hover:bg-default-800 duration-200
                             rounded-xl"
                   href={{
-                    pathname: '/settings/community/new',
+                    pathname: '/creation/community',
                     query: {
                       category: Object.values(category),
                     },

@@ -7,6 +7,7 @@ import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { baseUrl, endpointPrefix } from '@/lib/fetcher';
+import Swal from 'sweetalert2'
 
 interface CommunityData {
   communityName: string;
@@ -39,8 +40,11 @@ export default function CommunityCreation() {
       body: JSON.stringify(createCommunityCheck),
     }).then((res) => res.json());
   }, {
-    onSuccess: () => {
-      router.push(`/`);
+    onSuccess: (data) => {
+      if (data.data && data.data.communityExists===true) {
+        router.push(`/`);
+      }
+      
     }
   }
   );
@@ -71,7 +75,22 @@ export default function CommunityCreation() {
     onSuccess: () => {
       // 요청이 성공적으로 완료되면 캐시를 무효화하거나, 필요한 추가적인 액션을 수행합니다.
       queryClient.invalidateQueries(['communities']);
-      // router.push(`/`);
+      
+      Swal.fire({
+        icon: 'success',
+        title: '커뮤니티 생성 완료',
+        text: '커뮤니티가 생성되었습니다.',
+        timer: 3000,
+        timerProgressBar: true,
+        customClass: {
+          htmlContainer: '!break-words',
+          actions:
+            'w-full flex justify-end px-4 pt-2 border-t border-default-200',
+          confirmButton: 'min-w-unit-20',
+        },
+      });
+
+      router.push(`/`);
     },
     onError: (error) => {
       // 에러 처리 로직을 작성합니다.
@@ -124,7 +143,20 @@ export default function CommunityCreation() {
       if (data.code === 'S001') {
         setIsInvalid(false);
         setIsDuplicateCheckComplete(true);
-        console.log('중복검사완료');
+        Swal.fire({
+          icon: 'success',
+          title: '중복 검사 완료',
+          text: '사용 가능한 커뮤니티 이름입니다.',
+          timer: 3000,
+          timerProgressBar: true,
+          customClass: {
+            htmlContainer: '!break-words',
+            actions:
+              'w-full flex justify-end px-4 pt-2 border-t border-default-200',
+            confirmButton: 'min-w-unit-20',
+          },
+        });
+
       } else {
         setIsInvalid(true);
         setIsDuplicateCheckComplete(false);

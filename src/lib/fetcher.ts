@@ -69,7 +69,7 @@ export const getShorts = () => {
 
 export const getShortsFromServer = () => {
   // NOTE: body에 email
-  const url = new URL(baseUrl + endpointPrefix + '/etc/trendingVideos');
+  const url = new URL('https://tubeplus.duckdns.org/api/v1/etc/trendingVideos');
 
   const result = fetch(url, {
     method: 'GET',
