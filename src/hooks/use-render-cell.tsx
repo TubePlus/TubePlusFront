@@ -45,7 +45,7 @@ const renderCell = (row: any, columnKey: Key) => {
             {datetimeFormatter(row.createdAt)}
           </span>
           <span className="md:hidden x:table-cell">
-            {datetimeFormatter(row.createdAt).split(' ')[0]}
+            {/* {datetimeFormatter(row.createdAt).split(' ')[0]} */}
           </span>
         </div>
       );
