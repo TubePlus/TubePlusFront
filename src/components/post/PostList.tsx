@@ -40,6 +40,71 @@ interface verifiedProps {
   userUuid: string;
 }
 
+// interface PostType {
+//   id: number;
+//   authorUuid: string;
+//   voteCounts: number;
+//   title: string;
+//   withImage: boolean;
+// }
+
+// interface PostContainerType {
+  
+
+
+// {
+//   "data": {
+//     "pagedPostingData": {
+//       "content": [
+//         {
+//           "id": 2,
+//           "authorUuid": "string",
+//           "voteCount": 0,
+//           "pinned": false,
+//           "title": "string",
+//           "withImage": true
+//         },
+//         {
+//           "id": 1,
+//           "authorUuid": "string",
+//           "voteCount": 0,
+//           "pinned": false,
+//           "title": "string",
+//           "withImage": true
+//         }
+//       ],
+//       "pageable": {
+//         "pageNumber": 1,
+//         "pageSize": 3,
+//         "sort": {
+//           "sorted": false,
+//           "empty": true,
+//           "unsorted": true
+//         },
+//         "offset": 3,
+//         "paged": true,
+//         "unpaged": false
+//       },
+//       "last": true,
+//       "totalPages": 2,
+//       "totalElements": 5,
+//       "first": false,
+//       "size": 3,
+//       "number": 1,
+//       "sort": {
+//         "sorted": false,
+//         "empty": true,
+//         "unsorted": true
+//       },
+//       "numberOfElements": 2,
+//       "empty": false
+//     },
+//     "fedPostingData": null
+//   },
+//   "message": "성공",
+//   "code": "S001"
+// }
+
 const PostList = ( {communityId , boardId} : {communityId:number , boardId:number} ) => {
   const session = useSession();
 
@@ -96,6 +161,22 @@ const PostList = ( {communityId , boardId} : {communityId:number , boardId:numbe
     }
   }, [session.data?.user, communityId]);
     
+
+  // const { data : postcontents , isLoading : isLoading , error : error } = useQuery(['communityList'], () => {
+  //   return fetch(`https://tubeplus1.duckdns.org/api/v1/board-service/postings?boardId=${boardId}&search-type-req=BOARD_ID&view-type-req=PAGE`,
+  //   {
+  //     method: 'GET',
+  //     headers: {
+  //       'Content-Type': 'application/json',
+  //     }
+  // }).then((res) => res.json());
+  // }
+  // );
+
+
+
+
+
   const fetchPosts = async () => {
     const res = await fetch(
       'https://652c497bd0d1df5273ef56a5.mockapi.io/api/v1/post',

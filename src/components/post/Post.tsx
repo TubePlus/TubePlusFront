@@ -18,11 +18,12 @@ import {
   ThickArrowUpIcon,
 } from '@radix-ui/react-icons';
 import Link from 'next/link';
-import { useInfiniteQuery, useMutation, useQuery } from '@tanstack/react-query';
+import { useInfiniteQuery, useMutation } from '@tanstack/react-query';
 import { useSession } from 'next-auth/react';
 import { usePathname } from 'next/navigation';
 import PostContents from './PostContents';
 import UserInfo from './UserInfo';
+import { useInView } from "react-intersection-observer";
 
 
   interface PostContentsType {
@@ -44,29 +45,60 @@ import UserInfo from './UserInfo';
     id: number;
     authorUuid: string;
     voteCount: number;
-    pinned: boolean;
+    commentsCount: number;
     title: string;
     withImage: boolean;
   }
 
-
-
   interface verifiedProps {
     userUuid: string;
   }
+  
+  // 서버 응답 타입 정의
+  interface ServerResponse {
+    message: string;
+    status: string;
+    errors: any[];
+    code: string;
+  }
 
+  // 컴포넌트의 타입 정의
+  interface PostProps {
+    communityId: number;
+    boardId: number;
+  }
 
 const Post = ( { communityId , boardId } : { communityId:number , boardId:number } ) => {
   const session = useSession();
   const path = usePathname();
   const locale = path.split('/')[1];
-
-  const observerRef = useRef(null);
-  
   const [ contents , setContents ] = useState<PostType[] | null>(null);
+  const [ posts, setPosts ] = useState<PostType[]>([]);
+  
+  //react-intersection-observer를 위한 설정
+  const { ref, inView} = useInView();
 
-  const [ posts, setPosts ] = useState([]);
+  useEffect(() => {
+    if(inView) {
+      fetchNextPage();
+    }
+    
+  }, [inView]);
 
+
+  // const observer = new IntersectionObserver(entries => {
+  //   if (entries[0].isIntersecting && hasNextPage) {
+  //     console.log('Fetching next page');
+  //     fetchNextPage();
+  //   }
+  // }, {
+  //   root: null, // 뷰포트를 기준으로 관찰
+  //   rootMargin: '0px', // margin을 '0px'으로 설정
+  //   threshold: 1.0
+  // });
+  
+
+  // TODO : join 과 master 체크 추가 확인 필요
   const [verified, setVerified] = useState({
     isJoined: false,
     isUnJoined: false
@@ -77,7 +109,7 @@ const Post = ( { communityId , boardId } : { communityId:number , boardId:number
     isNotMaster: false
   });
 
-  const isJoined = 
+const isJoined = 
   (session.data?.user && session.data.user.uuid) ? 
   (verified.isJoined) : true;
 const isMaster =
@@ -131,115 +163,109 @@ const joinCheck: verifiedProps = {
     }
   }, [session.data?.user, communityId]);
 
-  // 한단계 더 감싸진 배열형식의 리스트
+  // 한단계 더 감싸진 배열형식의 게시물 Container
   const fetchPostContainer = async ({ pageParam = 0 }) => {
-    const res = await fetch(`https://tubeplus1.duckdns.org/api/v1/board-service/postings?search-type-req=BOARD_ID&view-type-req=FEED&boardId=${boardId}&feedSize=3&cursor=${pageParam}`,
+    const res = await fetch(`https://tubeplus1.duckdns.org/api/v1/board-service/postings?search-type-req=BOARD_ID&view-type-req=FEED&boardId=${boardId}&feedSize=10&cursor=${pageParam}`,
     {                       
       method: 'GET',
       headers: { 'Content-Type': 'application/json' },
     });
   if (!res.ok) {
-    throw new Error('Network response was not ok');
+    throw new Error('조회할 게시물이 없습니다.');
   }
   
   return res.json();
-};
-
-const {
-  data: postContainer,
-  error,
-  isLoading,
-  isSuccess,
-  fetchNextPage,
-  hasNextPage,
-} = useInfiniteQuery(['postType'], fetchPostContainer, {
-  getNextPageParam: (lastPage) => {
-    return lastPage.hasNextFeed ? lastPage.lastCursoredId : undefined;
-  },
-});
-
-// 스크롤 핸들러
-const handleScroll = () => {
-  // 스크롤 위치 확인 및 fetchNextPage 호출 로직
-  if (hasNextPage) {
-    // 다음 페이지가 있으면 fetchNextPage 호출
-    fetchNextPage();
-  }
-};
-
-// useEffect에서 스크롤 이벤트 핸들러 부착 및 해제
-useEffect(() => {
-  window.addEventListener('scroll', handleScroll);
-  return () => {
-    window.removeEventListener('scroll', handleScroll);
   };
-}, [hasNextPage]);
 
-
-useEffect(() => {
-  const observer = new IntersectionObserver((entries) => {
-    if (entries[0].isIntersecting && hasNextPage) {
-      // 감시 대상 요소가 뷰포트에 들어오면 추가 데이터 로드
-      fetchNextPage();
-    }
+  const {
+    data: postContainer,
+    error,
+    isLoading,
+    isSuccess,
+    fetchNextPage,
+    hasNextPage,
+  } = useInfiniteQuery(['postType'], fetchPostContainer, {
+    getNextPageParam: (lastPage) => {
+      return lastPage.hasNextFeed ? lastPage.lastCursoredId : undefined;
+    },
   });
 
-  if (observerRef.current) {
-    observer.observe(observerRef.current);
-  }
-
-  return () => {
-    if (observerRef.current) {
-      observer.unobserve(observerRef.current);
+   // 모든 페이지 데이터를 하나의 배열로 병합
+  useEffect(() => {
+    if (postContainer?.pages) {
+      const allPosts = postContainer.pages.flatMap(page => page.data.fedPostingData.data as PostType[]);
+      setPosts(allPosts);
     }
-  };
-}, [hasNextPage, fetchNextPage]);
+  }, [postContainer]);
 
-// useEffect(() => {
-//   if (postContainer && postContainer && postContainer.data.feedPostingData) {
-//     setContents(postContainer.data.fedPostingData.data);
-//   }
-// }, [postContainer]);
+  // Intersection Observer를 사용하여 무한 스크롤 구현
+  const observerRef = useRef<HTMLDivElement>(null); // 타입 정의
 
-// useEffect(() => {
-//   if (isSuccess) {
-//     const postData = postContainer.data.fedPostingData?.data;
-//     if (postData) {
-//       setContents(postData);
-//     }
-//   }
-// }, [isSuccess]);
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting && hasNextPage) {
+          console.log('Fetching next page');
+          fetchNextPage();
+        }
+      },
+      {
+        root: null,
+        rootMargin: '0px',
+        threshold: 0.1, // 보다 민감하게 반응하도록 threshold 조정
+      }
+    );
 
-useEffect(() => {
-  if (postContainer?.pages[0].data.fedPostingData.data) {
-    setPosts(postContainer.pages[0].data.fedPostingData.data);
+    const currentObserverRef = observerRef.current;
+    if (currentObserverRef) {
+      observer.observe(currentObserverRef);
+    }
+
+    return () => {
+      if (currentObserverRef) {
+        observer.unobserve(currentObserverRef);
+      }
+    };
+  }, [hasNextPage, fetchNextPage]);
+  
+
+  useEffect(() => {
+    if (postContainer?.pages[0].data.fedPostingData.data) {
+      setPosts(postContainer.pages[0].data.fedPostingData.data);
+    }
+  }, [postContainer]);
+
+
+
+  if (isLoading) return <Spinner size='lg' />
+  if (error) {
+  // error 객체의 타입을 'any'로 단언
+  const serverError = error as any;
+  // 타입 단언을 통해 error 객체의 내부 속성에 접근
+  const serverResponse: ServerResponse = serverError.response?.data || serverError;
+  if (serverResponse?.message === "해당 자원이 존재하지 않습니다.") {
+    return <div>조회할 게시물이 없습니다.</div>;
   }
-}, [postContainer]);
 
-if (posts.length === 0) {
-  return <Spinner size='lg' />;
-}
-
-if (isLoading) return <Spinner size='lg' />
-if (error) return <div>Error fetching data</div>;
-
-  console.log("게시물 데이터 : ", postContainer?.pages[0].data.fedPostingData.data)
+  return <div className='font-semibold'>  No posts to display , {serverResponse?.message || '알 수 없는 오류'}</div>;
+  }
 
   return (
     <>
-    <div onScroll={handleScroll} className={`${isJoined || isMaster ? '' : 'blurred'}`}>
+    <div className={`${isJoined || isMaster ? '' : 'blurred'}`}>
 
         { posts && posts.map(( item : PostType )  => (
         
           <div key={item.id} className='mb-7'>
             <Card>
+            {/* <div ref={ref}> */}
               <CardHeader>
                 <div className="flex flex-nowrap justify-between w-full">
                   <div className="flex whitespace-nowrap gap-5">
 
                     <UserInfo authorUuid={item.authorUuid} />
-
-                      <span className='font-semibold'> {item.title} </span>
+                    
+                    <span className='font-semibold'> {item.title} </span>
                   </div>
 
                   <div className="flex flex-nowrap items-center gap-4">
@@ -260,70 +286,32 @@ if (error) return <div>Error fetching data</div>;
                   <PostContents postId={item.id}/>
                   
                 </CardBody>
-
+                
                 <CardFooter>
                   <div className="border-t-1 w-full">
-                    <div className="flex pt-5 flex-nowrap gap-x-2">
+                    <div className="flex pl-3 pt-5 pb-1 flex-nowrap gap-x-2">
                       <ChatBubbleIcon className="w-8 h-8"/>
-                      Comment
+                      {item.commentsCount} Comments
 
-                      <BookmarkIcon className="w-8 h-8" />
-                      BookMark
+                      {/* <BookmarkIcon className="w-8 h-8"/>
+                      BookMark */}
                     </div>
                   </div>
                 </CardFooter>
               </Link>
+
+              {/* </div> */}
             </Card>
-
+            
           </div>
+          
           ))}
+      </div> 
 
-        {hasNextPage && (
-          <button onClick={() => fetchNextPage()}>Read More</button>
-        )}
-
-    </div>
-    <div ref={observerRef} />
+      {/* <div ref={observerRef} style={{ height: '1px', visibility: 'hidden' }} /> */}
+      <div ref={observerRef} style={{ height: '1px', width: '100%' }} />
     </>
   );
 };
 
 export default Post;
-
-// mock type
-// interface PostType {
-//   id: number;
-//   isVoted: boolean;
-//   boardId: number;
-//   title: string;
-//   contents: string;
-//   voteCounts: number;
-//   authorUuid: string;
-//   authorName: string;
-//   avatar: string;
-// }
-
-
-  // 'https://652c497bd0d1df5273ef56a5.mockapi.io/api/v1/post' mock api 주소
-  // `https://tubeplus1.duckdns.org/api/v1/board-service/postings?search-type-req=BOARD_ID&view-type-req=FEED&boardId=${boardId}&feedSize=3` 한단계 더 감싸진 배열형식의 리스트 백 주소
-  // `https://tubeplus1.duckdns.org/api/v1/board-service/postings/{id}?user_uuid={사용자 uuid}` 리스트의 id값을 이용해서 조회하는 콘텐츠 데이터 패칭 주소
-
-  // 리스트의 id값을 이용해서 조회하는 데이터 패칭
-  // const fetchPosts = async () => {
-  //   const res = await fetch('https://652c497bd0d1df5273ef56a5.mockapi.io/api/v1/post',
-  //     {
-  //       method: 'GET',
-  //       headers: { 'Content-Type': 'application/json' },
-  //     },
-  //   );
-  //   if (!res.ok) {
-  //     throw new Error('Network response was not ok');
-  //   }
-  //   return res.json();
-  // };
-
-  // const {
-  //   data: postcontents,
-  //   error,
-  //   isLoading,
-  // } = useQuery(['posts'], fetchPosts);

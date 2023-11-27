@@ -79,7 +79,7 @@ export default function Home({ params: { locale } }: Props) {
                     x:col-span-full
                     overflow-y-auto pb-10
                     flex flex-col gap-y-10 gap-unit-md pt-4 
-                    scrollbar-thin min-h-screen`}
+                    scrollbar-thin min-h-[screen]`}
       >
         {/* banner */}
         <MainBanner />
