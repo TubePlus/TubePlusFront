@@ -8,7 +8,7 @@ import BoardTabBar from '@/components/BoardTabBar'
 import SideBlock from '@/components/SideBlock'
 import { baseUrl , endpointPrefix, getBoardById } from '@/lib/fetcher'
 import Link from 'next/link'
-import { usePathname, useRouter } from 'next/navigation'
+import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { useSession } from 'next-auth/react'
 import { HamburgerMenuIcon } from '@radix-ui/react-icons'
 import PostList from '@/components/post/PostList'
@@ -49,16 +49,17 @@ interface DirItem {
 
 //TODO: 게시판, 게시물, 댓글 API 요청 URL 숨기기
 
-function TubeGate() {
+function TubeGate({ params }: { params: { communityid: number, locale: string } }) {
   
   const path = usePathname()
-  const communityId = Number(path.split('/')[3]) as number
-  const boardId = Number(path.split('/')[4])
-  const locale = path.split('/')[1]
+
+  const { communityid, locale } = params
+
+  console.log(params)
   
 
   const fetchCommunity = async () => {
-    const res = await fetch(`${baseUrl}${endpointPrefix}/communities/${communityId}/info`, {
+    const res = await fetch(`${baseUrl}${endpointPrefix}/communities/${communityid}/info`, {
       headers: {
         'Content-Type': 'application/json',
       }
@@ -73,11 +74,11 @@ function TubeGate() {
     data : communitycontents,
     isLoading : isLoadingCommunity,
     isError : isErrorCommunity,
-  } = useQuery (['communitycontents', communityId] , fetchCommunity);
+  } = useQuery (['communitycontents', communityid] , fetchCommunity);
 
   
   const fetchBoard = async () => {
-    const res = await fetch(`https://tubeplus1.duckdns.org/api/v1/board-service/boards?community-id=${communityId}&board-search-type=ACCESSIBLE`, {
+    const res = await fetch(`https://tubeplus1.duckdns.org/api/v1/board-service/boards?community-id=${communityid}&board-search-type=ACCESSIBLE`, {
       headers: {
         'Content-Type': 'application/json',
       }
@@ -92,7 +93,7 @@ function TubeGate() {
     data : boardcontents,
     isLoading : isLoadingBoard,
     isError : isErrorBoard,
-  } = useQuery (['boardcontents', boardId] , fetchBoard);
+  } = useQuery (['boardcontents'] , fetchBoard);
 
   if (isLoadingCommunity) {
     return <Spinner>Loading...</Spinner>;
@@ -114,7 +115,7 @@ function TubeGate() {
 
             <div className='flex flex-wrap gap-5 pb-10'>
               <Button color='default'>
-                <Link href={`/${locale}/creation/board/${communityId}`}>게시판 추가</Link>
+                <Link href={`/${locale}/creation/board/${communityid}`}>게시판 추가</Link>
               </Button>
             
 
@@ -122,7 +123,7 @@ function TubeGate() {
             <div className='w-full'>
             {
               boardcontents !== undefined && communitycontents !== undefined ?
-              <BoardTabBar communityId={communityId} boardContents={boardcontents} />
+              <BoardTabBar communityId={communityid} boardContents={boardcontents} />
               : null
             }
             </div>
