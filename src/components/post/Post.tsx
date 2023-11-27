@@ -120,6 +120,8 @@ const joinCheck: verifiedProps = {
   userUuid: session.data?.user.uuid ?? '',
 };
 
+
+
   const fetchVerifiedMutation = useMutation<any, any, verifiedProps>(() => {
     return fetch(`https://tubeplus.duckdns.org/api/v1/communities/${communityId}/verified`, {
       method: 'POST',
@@ -133,9 +135,9 @@ const joinCheck: verifiedProps = {
     onSuccess: () => {
       setVerified({ isJoined: true, isUnJoined: false })
     },
-    onError: () => {
-      setVerified({ isJoined: false, isUnJoined: true })
-    }
+    // onError: () => {
+    //   setVerified({ isJoined: false, isUnJoined: true })
+    // }
   });
   
   const fetchVerifiedCreatorMutation = useMutation<any, any, verifiedProps>(() => {
