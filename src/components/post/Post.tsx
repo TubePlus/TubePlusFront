@@ -71,7 +71,7 @@ import { useInView } from "react-intersection-observer";
 const Post = ( { communityId , boardId } : { communityId:number , boardId:number } ) => {
   const session = useSession();
   const path = usePathname();
-  const locale = path.split('/')[1];
+  const locale = (path||'').split('/')[1];
   const [ contents , setContents ] = useState<PostType[] | null>(null);
   const [ posts, setPosts ] = useState<PostType[]>([]);
   

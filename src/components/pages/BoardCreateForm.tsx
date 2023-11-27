@@ -38,7 +38,7 @@ export default function BoardCreation({communityId}: {communityId: number}) {
   const path = usePathname();
   const queryClient = useQueryClient();
   const router = useRouter();
-  const locale = path.split('/')[1];
+  const locale = (path||'').split('/')[1];
 
   const createBoardMutation = useMutation<any, any, BoardData>((newBoard) => {
     return fetch(`https://tubeplus1.duckdns.org/api/v1/board-service/boards`, {

@@ -12,7 +12,7 @@ interface TabsProps {
 
 const BoardTabsBar = ({ communityId, boardContents }: TabsProps) => {
   const pathname = usePathname();
-  const locale = pathname.split('/')[1];
+  const locale = (pathname||'').split('/')[1];
 
   return (
     <nav>

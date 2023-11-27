@@ -94,7 +94,7 @@ function Comments() {
 
   const session = useSession();
   const path = usePathname()
-  const postingId = Number(path.split('/')[6])
+  const postingId = Number((path||'').split('/')[6])
   const Uuid = session.data?.user?.uuid as string;
   const [ commentContents , setCommentContents ] = useState('' as string);
   const [parentId, setParentId] = useState<number | undefined>(undefined);
