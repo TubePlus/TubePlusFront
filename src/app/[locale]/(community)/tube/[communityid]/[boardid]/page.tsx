@@ -153,7 +153,7 @@ function Tube() {
                 </Button>
 
                 <Button color="primary">
-                  <Link className='hover:text-white' color='foreground' href={`/${locale}/creation/posting/${boardId}`}> Posting </Link>
+                  <Link className='hover:text-white' color='foreground' href={`/${locale}/tube/${communityId}/posting/${boardId}`}> Posting </Link>
                 </Button>
 
               </div>

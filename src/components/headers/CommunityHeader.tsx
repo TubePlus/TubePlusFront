@@ -27,7 +27,7 @@ function CommunityHeader( ) {
       isError: isErrorCommunity,
     } = useQuery(['communitycontents', communityId], fetchCommunity);
 
-    if((path||'').split('/')[2] !== 'tube' || (path||'').split('/')[2] === undefined || ((path||'').split('/')[2] === 'tube'&& (path||'').split('/')[5] === 'posting' )) return null;
+    if((path||'').split('/')[2] !== 'tube' || (path||'').split('/')[2] === undefined || ((path||'').split('/')[2] === 'tube' && (path||'').split('/')[5] === 'posting') || ((path||'').split('/')[2] === 'tube' && (path||'').split('/')[4] === 'posting')) return null;
 
   return (
     <div className='w-full h-[350px] bg-black relative'>

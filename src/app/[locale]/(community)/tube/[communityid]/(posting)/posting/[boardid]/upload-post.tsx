@@ -37,11 +37,17 @@ const Posting = ({ boardId }: { boardId: number }) => {
   const session = useSession();
   const quillRef = useRef<ReactQuill>(null);
   const path = usePathname();
-
-  const bId = Number((path||'').split('/')[4]);
+  
+  const locale = (path||'').split('/')[1];
+  const communityId = Number((path||'').split('/')[3]);
+  const bId = Number((path||'').split('/')[5]);
 
   const { mutate, isLoading, isError, error, isSuccess } =
     useMutation(uploadPost);
+
+    if(isSuccess) {
+      window.location.href = `/${locale}/tube/${communityId}/${bId}`;
+    }
 
   const imageHandler = async () => {
     const input = document.createElement('input');
