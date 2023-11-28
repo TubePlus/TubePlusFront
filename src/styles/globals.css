@@ -93,3 +93,10 @@
 .blurred {
   filter: blur(5px); /* 조정 가능한 흐릿한 정도 */
 }
+
+/* bounce animaion 적용 */
+.bounce-twice {
+  animation-name: bounce;
+  animation-duration: 1s;
+  animation-iteration-count: 2; /* 애니메이션을 두 번만 실행 */
+}

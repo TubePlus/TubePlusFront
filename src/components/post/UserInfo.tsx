@@ -28,22 +28,26 @@ interface UserProps {
 
 function UserInfo({ authorUuid }: { authorUuid: string }) {
 
-  const { data : userInfo , isLoading, isError } = useQuery<ServerResponse | null>(['me'], async () => {
-    if (authorUuid) {
-      const data = await getUserByUuid(authorUuid);
-      return data;
+
+  const { data: userInfo, isLoading, isError } = useQuery<ServerResponse | null>(
+    ['userInfo', authorUuid],
+    () => getUserByUuid(authorUuid),
+    {
+      enabled: !!authorUuid,
     }
-    return null;
-  });
+  );
 
   if (isLoading) return <div>Loading...</div>;
   if (isError) return <div>Error fetching data</div>;
-  if (!userInfo) return <div>No data available</div>;
+  if (!userInfo || !userInfo.data) return <div><Avatar /></div>;
+
 
   return (
     <>
-        <Avatar src={userInfo.data.profileImage} />
-        <span className='font-semibold'>{userInfo.data.username}</span>
+      <div className='flex flex-nowrap gap-3 pb-2'>
+      <Avatar src={userInfo.data.profileImage} />
+      <span className='font-semibold'>{userInfo.data.username}</span>
+      </div>
     </>
   );
 }

@@ -32,9 +32,6 @@ const defaultContent =
 
 const SideBlock = ( { communityid } : SideBlockProps ) => {
 
-  
-console.log('커뮤니티 아이디:', communityid)
-
   // const fetchSideBlock = async () => {
   //   const res = await fetch(`https://34.64.88.166:8000/api/v1/communities/${communityid}/side/r`)
   //   return res.json()
@@ -67,13 +64,13 @@ console.log('커뮤니티 아이디:', communityid)
       <CardBody>
         <div className='flex'>
           {/* <Link href={sideblockcontents.link}> */}
-        <Image
+        {/* <Image
           alt="nextui logo"
           height={40}
           radius="sm"
           // src={sideblockcontents.imageUrl}
           width={40}
-        />
+        /> */}
           {/* </Link> */}
         <p>Make beautiful websites regardless of your design experience.</p>
         <Button color='primary'>Join</Button>
@@ -84,7 +81,7 @@ console.log('커뮤니티 아이디:', communityid)
         <Link
           isExternal
           showAnchorIcon
-          href="https://github.com/nextui-org/nextui"
+          href="https://github.com/TubePlus/TubePlusFront"
         >
           Visit source code on GitHub.
         </Link>

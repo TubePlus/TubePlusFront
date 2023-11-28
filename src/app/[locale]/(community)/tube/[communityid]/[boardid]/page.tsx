@@ -46,11 +46,13 @@ interface DirItem {
   href: string;
 }
 
+
+
 //TODO: 게시판, 게시물, 댓글 API 요청 URL 숨기기
 
 function Tube() {
+  const [selectedKeys, setSelectedKeys] = useState<Selection>(new Set(["Card"])); // Change to Selection type
 
-  const [selectedKeys, setSelectedKeys] = React.useState(new Set(["text"]));
   const selectedValue = React.useMemo(
     () => Array.from(selectedKeys).join(", ").replaceAll("_", " "),
     [selectedKeys]
@@ -58,17 +60,16 @@ function Tube() {
 
   const [selectedView, setSelectedView] = useState<string>("Card");
 
-  const handleSelectionChange = (keys: React.Key[]) => {
-    // 첫 번째 선택된 키를 사용하여 뷰 상태를 업데이트합니다.
-    // 여기서는 첫 번째 키만 사용하고 있지만, 필요에 따라 로직을 조정할 수 있습니다.
-    const firstKey = keys[0] as string; // 'React.Key'를 'string'으로 타입 캐스팅합니다.
+  const handleSelectionChange = (keys: Selection) => { // Change the parameter type to Selection
+    setSelectedKeys(keys);
+    const firstKey = Array.isArray(keys) ? keys[0] : keys; // Access the first key properly
     setSelectedView(firstKey === "Compact" ? "Compact" : "Card");
   };
   
   const path = usePathname()
-  const communityId = Number(path.split('/')[3]) as number
-  const boardId = Number(path.split('/')[4]) as number
-  const locale = path.split('/')[1]
+  const communityId = Number((path||'').split('/')[3]) as number
+  const boardId = Number((path||'').split('/')[4]) as number
+  const locale = (path||'').split('/')[1]
   
   const fetchCommunity = async () => {
     const res = await fetch(`${baseUrl}${endpointPrefix}/communities/${communityId}/info`, {
@@ -114,17 +115,10 @@ function Tube() {
     return <Spinner size='lg' />;
   }
 
-  console.log("보드데이터", boardcontents)
-  console.log("커뮤니티데이터", communitycontents)
-  console.log("아이디:", boardId)
-
   return (
     <>      
-        {/* <div className='flex flex-row flex-nowrap gap-5'> */}
-
         {/* TODO: 게시판 아이디값을 통해 해당 게시판에 속해있는 게시물만 표시 할 수 있도록 포스트 컴포넌트에 커뮤니티아이디와 게시판아이디를 넘겨줄 예정 */}
         
-          {/* <div className='grid col-start-1 col-end-10'> */}
           <div className='col-span-9 pt-4 pb-16 pr-1 gap-6'>
 
             <div className='flex flex-wrap gap-5 pb-10'>
@@ -158,7 +152,7 @@ function Tube() {
                   <Chip color="default"> Oldest </Chip>
                 </Button>
 
-                <Button color="primary" >
+                <Button color="primary">
                   <Link className='hover:text-white' color='foreground' href={`/${locale}/creation/posting/${boardId}`}> Posting </Link>
                 </Button>
 
@@ -166,7 +160,6 @@ function Tube() {
 
               <div>
                 
-                  
               <Dropdown>
                 <DropdownTrigger>
                   <Button
@@ -176,13 +169,14 @@ function Tube() {
                     {selectedValue}
                   </Button>
                 </DropdownTrigger>
+
                 <DropdownMenu
                   aria-label="View mod"
                   variant="flat"
                   disallowEmptySelection
                   selectionMode="single"
-                  selectedKeys={new Set([selectedView])}
-                  // onSelectionChange={handleSelectionChange}
+                  selectedKeys={selectedKeys}
+                  onSelectionChange={handleSelectionChange}
                 >
                   <DropdownItem key="Compact">
                     <HamburgerMenuIcon className="w-6 h-6"/>
@@ -192,6 +186,8 @@ function Tube() {
                   </DropdownItem>
                 </DropdownMenu>
               </Dropdown>
+
+
               </div>
               </div>
 
@@ -205,7 +201,7 @@ function Tube() {
 
             </div>
           
-          <div className='col-span-3 flex flex-col pt-32 gap-5 whitespace-nowrap'> 
+          <div className='col-span-3 flex flex-col pt-60 gap-5 pb-16 whitespace-nowrap'> 
             <SideBlock communityid={communitycontents.data.communityId} />
           </div>
 

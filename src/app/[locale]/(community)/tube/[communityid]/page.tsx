@@ -3,7 +3,7 @@
 import React, { use } from 'react'
 import Post from '@/components/post/Post'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { Image , Card , Button, Chip } from '@nextui-org/react'
+import { Image , Card , Button, Chip, Spinner } from '@nextui-org/react'
 import BoardTabBar from '@/components/BoardTabBar'
 import SideBlock from '@/components/SideBlock'
 import { baseUrl , endpointPrefix, getBoardById } from '@/lib/fetcher'
@@ -52,9 +52,9 @@ interface DirItem {
 function TubeGate() {
   
   const path = usePathname()
-  const communityId = Number(path.split('/')[3]) as number
-  const boardId = Number(path.split('/')[4])
-  const locale = path.split('/')[1]
+  const communityId = Number((path||'').split('/')[3]) as number
+  const boardId = Number((path||'').split('/')[4])
+  const locale = (path||'').split('/')[1]
   
 
   const fetchCommunity = async () => {
@@ -94,11 +94,11 @@ function TubeGate() {
     isError : isErrorBoard,
   } = useQuery (['boardcontents', boardId] , fetchBoard);
 
-  if (isLoadingCommunity || isLoadingBoard) {
-    return <span>Loading...</span>;
+  if (isLoadingCommunity) {
+    return <Spinner>Loading...</Spinner>;
   }
   // 에러 상태 처리
-  if (isErrorCommunity || isErrorBoard) {
+  if (isErrorCommunity) {
     return <span>Error!</span>;
   }
   
@@ -131,7 +131,7 @@ function TubeGate() {
             <div className='flex justify-between pt-3 pb-5'> 
 
               <div className="flex gap-3 flex-nowrap">
-                <Button>
+                {/* <Button>
                   <Chip color="default"> Newest </Chip>
                 </Button>
 
@@ -141,24 +141,24 @@ function TubeGate() {
 
                 <Button color='primary'>
                   <Link href={`${locale}/creation/posting/${boardId}`}>Posting</Link>
-                </Button>
+                </Button> */}
 
               </div>
 
               <div>
-                <Button>
+                {/* <Button>
                   <HamburgerMenuIcon className="w-8 h-8"/>
                   
-                </Button>
+                </Button> */}
               </div>
 
               </div>
             {/* <Post communityId={communitycontents.data.communityId} boardId={boardcontents.data.boardId} /> */}
-            <PostList communityId={communitycontents.data.communityId} boardId={boardId} />
+            {/* <PostList communityId={communitycontents.data.communityId} boardId={boardId} /> */}
           </div>
           {/* </div> */}
           
-          <div className='col-span-3 flex flex-col pt-32 gap-5 whitespace-nowrap'> 
+          <div className='col-span-3 flex flex-col pt-60 gap-5 pb-16 whitespace-nowrap'> 
             <SideBlock communityid={communitycontents.data.communityId} />
           </div>
 
