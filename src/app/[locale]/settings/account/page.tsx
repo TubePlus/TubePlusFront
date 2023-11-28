@@ -19,6 +19,8 @@ import ProfilePreference from './profile-preferences';
 import { useMutation } from '@tanstack/react-query';
 import { deleteUser } from '@/lib/fetcher';
 import { useTranslations } from 'next-intl';
+import { useRouter } from 'next/navigation';
+import Swal from 'sweetalert2';
 
 const communityInfo = [
   { id: 1, title: 'Category', value: '엔터테인먼트' },
@@ -29,6 +31,7 @@ const communityInfo = [
 ];
 
 export default function AccountPage() {
+  const router = useRouter();
   const { data: session, update } = useSession();
   const [user, setUser] = useGlobalState('/settings');
   const t = useTranslations('User');
@@ -70,6 +73,18 @@ export default function AccountPage() {
     error,
     isSuccess,
   } = useMutation(deleteUser);
+
+  const handleCommunityGen = (category: string) => {
+    if (category) {
+      router.push(`/creation/community?category=${category}`);
+    } else {
+      Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text: '커뮤니티 카테고리를 선택해주세요.',
+      });
+    }
+  };
 
   const handleDelUser = () => {
     deleteUserMutate(session?.user.uuid as string);
@@ -169,21 +184,16 @@ export default function AccountPage() {
               </Select>
 
               <div className="flex h-14 items-center w-full">
-                <Link
+                <Button
                   className="flex justify-center items-center
                             w-full h-2/3
                             text-base text-default-foreground hover:text-default-50
                             bg-default-200 hover:bg-default-800 duration-200
                             rounded-xl"
-                  href={{
-                    pathname: '/creation/community',
-                    query: {
-                      category: Object.values(category),
-                    },
-                  }}
+                  onClick={() => handleCommunityGen(Object.values(category)[0])}
                 >
                   Register
-                </Link>
+                </Button>
               </div>
             </div>
           </div>
