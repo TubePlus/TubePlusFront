@@ -14,9 +14,6 @@
 
 </center>
 
-// TODO: 라이브러리 뱃지 추가
-// TODO: 메인 이미지 완성 시 Readme에 추가
-
 ![tubePlus_logo](https://github.com/TubePlus/TubePlusFront/assets/122770896/e0dd7374-b970-47e6-9b83-33af7d1df120)
 
 tubePlus is a advanced Youtube community for creator and fans.
