@@ -67,9 +67,9 @@ function Tube() {
   };
   
   const path = usePathname()
-  const communityId = Number((path||'').split('/')[3]) as number
-  const boardId = Number((path||'').split('/')[4]) as number
-  const locale = (path||'').split('/')[1]
+  const communityId = Number(path.split('/')[3]) as number
+  const boardId = Number(path.split('/')[4]) as number
+  const locale = path.split('/')[1]
   
   const fetchCommunity = async () => {
     const res = await fetch(`${baseUrl}${endpointPrefix}/communities/${communityId}/info`, {

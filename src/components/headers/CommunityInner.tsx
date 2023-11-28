@@ -21,7 +21,7 @@ function CommunityInner( { communityId, communitycontents }: { communityId : str
   const session = useSession();
   const [ joinCheck, setJoinCheck ] = React.useState(false);
   const path = usePathname()
-  const locale = (path||'').split('/')[1]
+  const locale = path.split('/')[1]
 
   const avatarImage = communitycontents?.profileImage.split('.').find((item) => item === 'webp') === 'webp' ? 'https://cdn-icons-png.flaticon.com/512/1057/1057086.png' : communitycontents?.profileImage
 

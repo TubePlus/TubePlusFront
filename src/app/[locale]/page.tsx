@@ -9,6 +9,7 @@ import Link from 'next/link';
 import { MainBanner, SuggestedCreator } from './main-slider';
 import CreatorRanking from './creator-ranking';
 import { useTranslations } from 'next-intl';
+import { randomUUID } from 'crypto';
 
 type Props = {
   params: { locale: string };
@@ -83,6 +84,8 @@ export default function Home({ params: { locale } }: Props) {
       >
         {/* banner */}
         <MainBanner />
+
+        
 
         {/* recommended creator: ranking */}
         <CreatorRanking />

@@ -94,7 +94,7 @@ function Comments() {
 
   const session = useSession();
   const path = usePathname()
-  const postingId = Number((path||'').split('/')[6])
+  const postingId = Number(path.split('/')[6])
   const Uuid = session.data?.user?.uuid as string;
   const [ commentContents , setCommentContents ] = useState('' as string);
   const [parentId, setParentId] = useState<number | undefined>(undefined);
@@ -410,7 +410,7 @@ function Comments() {
                       comments.data.map((reply : CommentProps) => ( */}
                       {isCommentView[comment.id] && replies[comment.id] && replies[comment.id].map((reply: Reply) => (
                         <div key={reply.id} className="pl-10 pt-3">
-                        <UserInfo authorUuid={comment.viewInfo.commenterUuid}/>
+                        <UserInfo authorUuid={reply.viewInfo.commenterUuid}/>
                         <Textarea
                           isReadOnly
                           variant="bordered"

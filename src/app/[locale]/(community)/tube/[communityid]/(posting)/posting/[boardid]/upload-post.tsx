@@ -38,9 +38,9 @@ const Posting = ({ boardId }: { boardId: number }) => {
   const quillRef = useRef<ReactQuill>(null);
   const path = usePathname();
   
-  const locale = (path||'').split('/')[1];
-  const communityId = Number((path||'').split('/')[3]);
-  const bId = Number((path||'').split('/')[5]);
+  const locale = path.split('/')[1];
+  const communityId = Number(path.split('/')[3]);
+  const bId = Number(path.split('/')[5]);
 
   const { mutate, isLoading, isError, error, isSuccess } =
     useMutation(uploadPost);
