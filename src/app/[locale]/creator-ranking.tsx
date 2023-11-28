@@ -1,7 +1,7 @@
 'use client';
 
 import { communityCategory } from '@/data/sidebar';
-import { getRanks } from '@/lib/fetcher';
+import { getRanksfromMock } from '@/lib/fetcher';
 import { Chip } from '@nextui-org/chip';
 import { Button } from '@nextui-org/button';
 import { ScrollShadow } from '@nextui-org/scroll-shadow';
@@ -20,6 +20,8 @@ import React, { Key, useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { User } from '@nextui-org/user';
 import { cn } from '@nextui-org/system-rsc';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 
 const rankingTableColumn = [
   { key: 'id', label: 'order' },
@@ -43,7 +45,7 @@ const CreatorRanking = () => {
     error: postsError,
     data,
     refetch: postsRefetch,
-  } = useQuery(['community-ranking'], getRanks);
+  } = useQuery(['community-ranking'], getRanksfromMock);
 
   const filteredItems = React.useMemo(() => {
     if (data) {
@@ -70,7 +72,7 @@ const CreatorRanking = () => {
       setCategoryFilter(new Set(categoryKey.split(',')));
     }
   };
-
+  const router = useRouter();
   const t = useTranslations('Home');
 
   const rankingCell = (row: any, columnKey: Key) => {
@@ -85,7 +87,10 @@ const CreatorRanking = () => {
           <div className="whitespace-nowrap">
             <User
               classNames={{ description: 'italic' }}
-              avatarProps={{ src: row.profileImage }}
+              avatarProps={{
+                classNames: { img: 'hover:scale-125' },
+                src: row.profileImage,
+              }}
               name={row.username}
               description={`@${row.youtubeHandler}`}
             />
@@ -98,9 +103,12 @@ const CreatorRanking = () => {
             <span className="text-tiny line-clamp-1 text-ellipsis">
               {t(`category.${row.communityCategory}`)}
             </span>
-            <span className="text-sm line-clamp-1 text-ellipsis">
+            <Link
+              className="cursor-pointer text-sm line-clamp-1 text-ellipsis hover:font-semibold hover:text-red-500"
+              href={`/tube/${row.id}`}
+            >
               {row.communityName}
-            </span>
+            </Link>
           </div>
         );
 
@@ -174,7 +182,7 @@ const CreatorRanking = () => {
       >
         {(column: { key: string; label: string }) => (
           <TableColumn
-            className={` ${
+            className={`${
               column.key === 'communityMembers'
                 ? 'text-center'
                 : column.key === 'id'
@@ -199,6 +207,7 @@ const CreatorRanking = () => {
             <TableRow key={row.key}>
               {columnKey => (
                 <TableCell
+                  onClick={() => router.push(`/tube/${row.key}`)}
                   className={`text-xs ${
                     columnKey === 'communityName'
                       ? 'sm:table-cell xs:hidden'

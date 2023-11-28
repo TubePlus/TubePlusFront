@@ -15,6 +15,7 @@ import { Tooltip } from '@nextui-org/tooltip';
 import { LightningBoltIcon } from '@radix-ui/react-icons';
 import { Accordion, AccordionItem } from '@nextui-org/accordion';
 import { useTranslations } from 'next-intl';
+import { useQuery } from '@tanstack/react-query';
 
 const MainSidebar = ({ isRoot = false }: { isRoot?: boolean }) => {
   const { data: session } = useSession();
@@ -36,57 +37,12 @@ const MainSidebar = ({ isRoot = false }: { isRoot?: boolean }) => {
 
       <Divider />
 
-      {session?.user ? (
-        <>
-          <Accordion
-            className={`px-2 ${isRoot ? 'lg:block md:hidden' : 'block'}`}
-            isCompact
-          >
-            <AccordionItem
-              title={t(`sidebar.my-subscription`)}
-              classNames={{
-                title: 'pl-unit-md text-sm',
-                content: 'flex flex-col gap-2',
-              }}
-            >
-              <SidebarMenu
-                menuItem={subscribeMenuItem}
-                startContentType="avatar"
-                isRoot={isRoot}
-              />
-            </AccordionItem>
-          </Accordion>
-
-          <Tooltip
-            radius="sm"
-            placement="right"
-            content={t(`sidebar.my-subscription`)}
-          >
-            <Button
-              variant="light"
-              as={Link}
-              href={`/user/${username}/favorites`}
-              className={`flex w-[90%] mx-auto ${
-                isRoot ? 'lg:hidden md:flex x:hidden' : 'hidden'
-              }`}
-              fullWidth
-              isIconOnly
-            >
-              <LightningBoltIcon />
-            </Button>
-          </Tooltip>
-
-          <Divider />
-        </>
-      ) : (
-        <>
-          {/* TODO: session.user 가 아니라, mounted or loading 에 대응해야함
-          <div>
-            <Skeleton className="h-8 py-1.5 rounded-lg" />
-          </div>
-
-          <Divider /> */}
-        </>
+      {session?.user && (
+        <UserSidebar
+          uuid={session?.user?.uuid as string}
+          username={session?.user?.username as string}
+          isRoot={isRoot}
+        />
       )}
 
       <SidebarMenu
@@ -105,3 +61,79 @@ const MainSidebar = ({ isRoot = false }: { isRoot?: boolean }) => {
 };
 
 export default MainSidebar;
+
+const UserSidebar = ({
+  uuid,
+  username,
+  isRoot,
+}: {
+  uuid: string;
+  username: string;
+  isRoot: boolean;
+}) => {
+  const t = useTranslations('Home');
+
+  const getCommunitiesByUuid = (uuid: string) => {
+    const res = fetch(
+      '/communities/users/me/joined-communities?page=0&size=5',
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          userUuid: uuid,
+        }),
+      },
+    );
+  };
+  //TODO: user가 가입한 커뮤니티 리스트 표시
+  const { data } = useQuery(['users-communities'], () => {
+    return getCommunitiesByUuid(uuid);
+  });
+
+  // console.log(data);
+  return (
+    <>
+      <Accordion
+        className={`px-2 ${isRoot ? 'lg:block md:hidden' : 'block'}`}
+        isCompact
+      >
+        <AccordionItem
+          title={t(`sidebar.my-subscription`)}
+          classNames={{
+            title: 'pl-unit-md text-sm',
+            content: 'flex flex-col gap-2',
+          }}
+        >
+          <SidebarMenu
+            menuItem={subscribeMenuItem}
+            startContentType="avatar"
+            isRoot={isRoot}
+          />
+        </AccordionItem>
+      </Accordion>
+
+      <Tooltip
+        radius="sm"
+        placement="right"
+        content={t(`sidebar.my-subscription`)}
+      >
+        <Button
+          variant="light"
+          as={Link}
+          href={`/user/${username}/favorites`}
+          className={`flex w-[90%] mx-auto ${
+            isRoot ? 'lg:hidden md:flex x:hidden' : 'hidden'
+          }`}
+          fullWidth
+          isIconOnly
+        >
+          <LightningBoltIcon />
+        </Button>
+      </Tooltip>
+
+      <Divider />
+    </>
+  );
+};

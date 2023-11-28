@@ -13,7 +13,6 @@ import {
   Pencil2Icon,
   TrashIcon,
 } from '@radix-ui/react-icons';
-import { User } from '@nextui-org/user';
 
 const renderCell = (row: any, columnKey: Key) => {
   type Rows = (typeof row)[0];

@@ -31,7 +31,7 @@ export const getSlides = () => {
  * @param
  * @returns     json body
  */
-export const getRanks = () => {
+export const getRanksfromMock = () => {
   // NOTE: body에 email
   const url = new URL(mockUrl + endpointPrefix + 'hotCreator');
 
