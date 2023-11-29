@@ -25,16 +25,6 @@ import PostContents from './PostContents';
 import UserInfo from './UserInfo';
 import { useInView } from "react-intersection-observer";
 
-
-  interface PostContentsType {
-    authorUuid: string;
-    voteCount: number;
-    contents: string;
-    title: string;
-    userVoteId: number;
-    withImage: boolean;
-  }
-
   interface PostContainerType {
     data: any[];
     lastCursoredId: number;
@@ -75,22 +65,10 @@ const Post = ( { communityId , boardId } : { communityId:number , boardId:number
 
   const [ contents , setContents ] = useState<PostType[] | null>(null);
   const [ posts, setPosts ] = useState<PostType[]>([]);
+  const { ref , inView } = useInView({
+    threshold: 0.5,
+  });
   
-
-  //react-intersection-observer를 위한 설정
-  const { ref, inView} = useInView();
-
-  useEffect(() => {
-    // alert('inView : ' + inView);
-    if (inView === true && hasNextPage == true) {
-      fetchNextPage().then((res) => {
-
-      })
-    }   
-  }, [inView]);
-
-
-
   // TODO : join 과 master 체크 추가 확인 필요
   const [verified, setVerified] = useState({
     isJoined: false,
@@ -126,9 +104,6 @@ const joinCheck: verifiedProps = {
     onSuccess: () => {
       setVerified({ isJoined: true, isUnJoined: false })
     },
-    // onError: () => {
-    //   setVerified({ isJoined: false, isUnJoined: true })
-    // }
   });
   
   const fetchVerifiedCreatorMutation = useMutation<any, any, verifiedProps>(() => {
@@ -157,112 +132,63 @@ const joinCheck: verifiedProps = {
   }, [session.data?.user, communityId]);
 
 
-
-  // 무한스크롤을 구현하기 위해 한단계 더 감싸진 배열형식의 게시물 Container
-  const fetchPostContainer = async ({ pageParam = 0 }) => {
-    const res = await fetch(`https://tubeplus1.duckdns.org/api/v1/board-service/postings?search-type-req=BOARD_ID&view-type-req=FEED&boardId=${boardId}&feedSize=5`,
-    {
+  const getPostContainer = async ({ pageParam = '' }) => {
+    const queryParams = pageParam ? `&cursorId=${pageParam}` : ''; // 페이지 파라미터가 있으면 cursorId를 추가합니다.
+  
+    const res = await fetch(`https://tubeplus1.duckdns.org/api/v1/board-service/postings?search-type-req=BOARD_ID&view-type-req=FEED&boardId=${boardId}&feedSize=3${queryParams}`, {
       method: 'GET',
       headers: { 'Content-Type': 'application/json' },
     });
-  if (!res.ok) {
-    throw new Error('조회할 게시물이 없습니다.');
-  }
   
-  return res.json();
+    if (!res.ok) {
+      throw new Error('조회할 게시물이 없습니다.');
+    }
+  
+    return res.json();
   };
-
-  // cursorId=${pageParam}
 
   const {
     data: postContainer,
-    error,
-    isLoading,
-    isSuccess,
     fetchNextPage,
     hasNextPage,
-  } = useInfiniteQuery(['postType'], fetchPostContainer, {
+    isFetchingNextPage,
+  } = useInfiniteQuery({
+    queryKey: ['post'],
+    queryFn: ({ pageParam = '' }) => getPostContainer({ pageParam }), // 페이지 파라미터를 queryFn에 전달합니다.
     getNextPageParam: (lastPage) => {
-      return lastPage.hasNextFeed ? lastPage.lastCursoredId : undefined;
+      return lastPage.data.fedPostingData.lastCursoredId; // 다음 페이지를 요청할 때 마지막 ID를 반환합니다.
     },
   });
-
-
-   // 모든 페이지 데이터를 하나의 배열로 병합
-  useEffect(() => {
-    if (postContainer?.pages) {
-      const allPosts = postContainer.pages.flatMap(page => page.data.fedPostingData.data as PostType[]);
-      setPosts(allPosts);
-    }
-  }, [postContainer]);
-
-  // Intersection Observer를 사용하여 무한 스크롤 구현
-  const observerRef = useRef<HTMLDivElement>(null); // 타입 정의
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        if (entries[0].isIntersecting && hasNextPage) {
-          console.log('Fetching next page');
-          fetchNextPage();
-        }
-      },
-      {
-        root: null,
-        rootMargin: '0px',
-        threshold: 0.1, // 보다 민감하게 반응하도록 threshold 조정
-      }
-    );
-
-    const currentObserverRef = observerRef.current;
-    if (currentObserverRef) {
-      observer.observe(currentObserverRef);
-    }
-
-    return () => {
-      if (currentObserverRef) {
-        observer.unobserve(currentObserverRef);
-      }
-    };
-  }, [hasNextPage, fetchNextPage]);
   
-
-  useEffect(() => {
-    if (postContainer?.pages[0].data.fedPostingData.data) {
-      setPosts(postContainer.pages[0].data.fedPostingData.data);
-    }
-  }, [postContainer]);
-
-
-
-  if (isLoading) return <Spinner size='lg' />
-  if (error) {
-  // error 객체의 타입을 'any'로 단언
-  const serverError = error as any;
-  // 타입 단언을 통해 error 객체의 내부 속성에 접근
-  const serverResponse: ServerResponse = serverError.response?.data || serverError;
-  if (serverResponse?.message === "해당 자원이 존재하지 않습니다.") {
-    return <div>조회할 게시물이 없습니다.</div>;
-  }
-
-  return <div className='font-semibold'>  No posts to display , {serverResponse?.message || '알 수 없는 오류'}</div>;
-  }
+    // 모든 데이터 저장
+    useEffect(() => {
+      if (postContainer?.pages) {
+        const allPosts = postContainer.pages.flatMap(page => page.data.fedPostingData.data as PostType[]);
+        setPosts(allPosts);
+      }
+    }, [postContainer]);
+  
+    // 스크롤이 끝에 도달하면 다음 페이지를 불러오는 패칭
+    useEffect(() => {
+      if (inView && hasNextPage && !isFetchingNextPage) {
+        
+        fetchNextPage();
+      
+      }
+    }, [inView, fetchNextPage, hasNextPage]);
+  
 
   return (
     <>
     <div className={`${isJoined || isMaster ? '' : 'blurred'}`}>
-
         { posts && posts.map(( item : PostType )  => (
-        
           <div key={item.id} className='mb-7'>
             <Card>
-            
               <CardHeader>
                 <div className="flex flex-nowrap justify-between w-full">
                   <div className="flex whitespace-nowrap gap-5">
 
                     <UserInfo authorUuid={item.authorUuid} />
-                    
                     <span className='font-semibold'> {item.title} </span>
                   </div>
 
@@ -280,9 +206,7 @@ const joinCheck: verifiedProps = {
               <Link href={`/${locale}/tube/${communityId}/${boardId}/posting/${item.id}`}>
 
                 <CardBody>
-
                   <PostContents postId={item.id}/>
-                  
                 </CardBody>
                 
                 <CardFooter>
@@ -290,22 +214,15 @@ const joinCheck: verifiedProps = {
                     <div className="flex pl-3 pt-5 pb-1 flex-nowrap gap-x-2">
                       <ChatBubbleIcon className="w-8 h-8"/>
                       {item.commentsCount} Comments
-
-                      {/* <BookmarkIcon className="w-8 h-8"/>
-                      BookMark */}
                     </div>
                   </div>
                 </CardFooter>
               </Link>
-              
-              {/* </div> */}
             </Card>
-            <div ref={ref} />
           </div>
-          
           ))}
-      </div> 
-
+      <div ref={ref} />
+      </div>
     </>
   );
 };
