@@ -38,8 +38,8 @@ const LoginButton = () => {
         icon: 'error',
         title: t('login-fail-title'),
         text: t('login-fail-description'),
-        timer: 3000,
-        timerProgressBar: true,
+        // timer: 3000,
+        // timerProgressBar: true,
         customClass: {
           htmlContainer: '!break-words',
           actions:
@@ -106,7 +106,20 @@ const LoginButton = () => {
             />
           ) : null
         }
-        onClick={loginWithGoogle}
+        // onClick={loginWithGoogle}
+        onClick={ () => {Swal.fire({
+          icon: 'error',
+          title: t('login-fail-title'),
+          text: t('login-fail-description'),
+          timer: 10000,
+          timerProgressBar: true,
+          customClass: {
+            htmlContainer: '!break-words',
+            actions:
+              'w-full flex justify-end px-4 pt-2 border-t border-default-200',
+            confirmButton: 'min-w-unit-20',
+          },
+        });}}
       >
         {!session && t('continue-with-google')}
       </Button>

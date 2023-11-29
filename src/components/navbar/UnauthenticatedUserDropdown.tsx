@@ -21,9 +21,11 @@ import { NavbarItem } from '@nextui-org/navbar';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useLocale, useTranslations } from 'next-intl';
+import Swal from 'sweetalert2';
 
 const UnauthenticatedUserDropdown = () => {
   const t = useTranslations('Home');
+  const s = useTranslations('Auth');
 
   const [mounted, setMounted] = useState(false);
 
@@ -60,8 +62,22 @@ const UnauthenticatedUserDropdown = () => {
           <Button
             variant="light"
             className="text-default-600 hover:text-default-900"
-            as={Link}
-            href={`/login`}
+            // as={Link}
+            // href={`/login`}
+            onClick={ () => {Swal.fire({
+              icon: 'error',
+              title: s('login-fail-title'),
+              text: s('login-fail-description'),
+              timer: 10000,
+              timerProgressBar: true,
+              customClass: {
+                htmlContainer: '!break-words',
+                actions:
+                  'w-full flex justify-end px-4 pt-2 border-t border-default-200',
+                confirmButton: 'min-w-unit-20',
+              },
+            });}}
+
           >
             {t(`login`)}
           </Button>
@@ -71,8 +87,22 @@ const UnauthenticatedUserDropdown = () => {
           <Button
             variant="light"
             className="text-default-600 hover:text-default-900"
-            as={Link}
-            href={`/join`}
+            // as={Link}
+            onClick={ () => {
+              Swal.fire({
+                icon: 'info',
+                title: s('login-fail-title'),
+                text: s('login-fail-description'),
+                timer: 10000,
+                timerProgressBar: true,
+                customClass: {
+                  htmlContainer: '!break-words',
+                  actions:
+                    'w-full flex justify-end px-4 pt-2 border-t border-default-200',
+                  confirmButton: 'min-w-unit-20',
+                },
+              });
+            }}
           >
             {t('register')}
           </Button>

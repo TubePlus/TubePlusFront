@@ -15,8 +15,8 @@
     "continue-with-google": "Google로 로그인",
     "teams-greetings": "TubePlus에 오신것을 환영합니다!",
 
-    "login-fail-title": "로그인 실패",
-    "login-fail-description": "회원가입되어 있지 않거나, 세션이 초기화되어 있지 않습니다.",
+    "login-fail-title": "테스트 버전 제한 안내",
+    "login-fail-description": "죄송합니다. 현재 이 기능은 테스트 버전에서만 사용 가능합니다. 조만간 구글 API 허가를 받아 정식 버전을 제공하겠습니다",
     "login-welcomeback-title": "돌아오신 것을 환영합니다!",
     "login-welcomeback-description": "다시 돌아오신 것을 환영합니다!",
 
