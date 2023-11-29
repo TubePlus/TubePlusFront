@@ -63,13 +63,29 @@ function Tube() {
   const handleSelectionChange = (keys: Selection) => { // Change the parameter type to Selection
     setSelectedKeys(keys);
     const firstKey = Array.isArray(keys) ? keys[0] : keys; // Access the first key properly
-    setSelectedView(firstKey === "Compact" ? "Compact" : "Card");
+    setSelectedView(firstKey === "Card" ? "Card" : "Compact");
   };
   
   const path = usePathname()
   const communityId = Number(path.split('/')[3]) as number
   const boardId = Number(path.split('/')[4]) as number
   const locale = path.split('/')[1]
+
+  // selectedView 값이 변경될 때마다 컴포넌트를 재랜더링하기 위해 useEffect 사용
+  useEffect(() => {
+    // 여기서 다른 설정에 대한 처리 로직을 추가할 수 있습니다.
+    // 예를 들어, 다른 설정값에 따라 다른 동작을 수행하거나 상태를 업데이트할 수 있습니다.
+    // 이 코드는 selectedView 값이 변경될 때마다 실행됩니다.
+    // 예시로 다른 설정값에 따라 특정 동작을 수행하도록 구현해보겠습니다.
+    console.log(`Selected view changed to: ${selectedView}`);
+
+    // 예시: selectedView가 'Card'인 경우와 'Compact'인 경우에 따라 다른 동작 수행
+    // if (selectedView === 'Card') {
+    //   // 'Card'에 대한 처리
+    // } else if (selectedView === 'Compact') {
+    //   // 'Compact'에 대한 처리
+    // }
+    }, [selectedView]); // selectedView 값이 변경될 때 useEffect 실행
   
   const fetchCommunity = async () => {
     const res = await fetch(`${baseUrl}${endpointPrefix}/communities/${communityId}/info`, {
@@ -193,9 +209,11 @@ function Tube() {
 
               
               {/* 조건부 렌더링 */}
-              {selectedView === "Card" ? (
-                <Post communityId={communitycontents.data.communityId} boardId={boardId} />
-              ) : (
+              
+              {selectedView === "Card" && (
+              <Post communityId={communitycontents.data.communityId} boardId={boardId} />
+              )}
+              {selectedView === "Compact" && (
                 <PostList communityId={communitycontents.data.communityId} boardId={boardId} />
               )}
 

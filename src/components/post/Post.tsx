@@ -72,31 +72,24 @@ const Post = ( { communityId , boardId } : { communityId:number , boardId:number
   const session = useSession();
   const path = usePathname();
   const locale = (path||'').split('/')[1];
+
   const [ contents , setContents ] = useState<PostType[] | null>(null);
   const [ posts, setPosts ] = useState<PostType[]>([]);
   
+
   //react-intersection-observer를 위한 설정
   const { ref, inView} = useInView();
 
   useEffect(() => {
-    if(inView) {
-      fetchNextPage();
-    }
-    
+    // alert('inView : ' + inView);
+    if (inView === true && hasNextPage == true) {
+      fetchNextPage().then((res) => {
+
+      })
+    }   
   }, [inView]);
 
 
-  // const observer = new IntersectionObserver(entries => {
-  //   if (entries[0].isIntersecting && hasNextPage) {
-  //     console.log('Fetching next page');
-  //     fetchNextPage();
-  //   }
-  // }, {
-  //   root: null, // 뷰포트를 기준으로 관찰
-  //   rootMargin: '0px', // margin을 '0px'으로 설정
-  //   threshold: 1.0
-  // });
-  
 
   // TODO : join 과 master 체크 추가 확인 필요
   const [verified, setVerified] = useState({
@@ -119,8 +112,6 @@ const isMaster =
 const joinCheck: verifiedProps = {
   userUuid: session.data?.user.uuid ?? '',
 };
-
-
 
   const fetchVerifiedMutation = useMutation<any, any, verifiedProps>(() => {
     return fetch(`https://tubeplus.duckdns.org/api/v1/communities/${communityId}/verified`, {
@@ -165,10 +156,12 @@ const joinCheck: verifiedProps = {
     }
   }, [session.data?.user, communityId]);
 
-  // 한단계 더 감싸진 배열형식의 게시물 Container
+
+
+  // 무한스크롤을 구현하기 위해 한단계 더 감싸진 배열형식의 게시물 Container
   const fetchPostContainer = async ({ pageParam = 0 }) => {
-    const res = await fetch(`https://tubeplus1.duckdns.org/api/v1/board-service/postings?search-type-req=BOARD_ID&view-type-req=FEED&boardId=${boardId}&feedSize=10&cursor=${pageParam}`,
-    {                       
+    const res = await fetch(`https://tubeplus1.duckdns.org/api/v1/board-service/postings?search-type-req=BOARD_ID&view-type-req=FEED&boardId=${boardId}&feedSize=5`,
+    {
       method: 'GET',
       headers: { 'Content-Type': 'application/json' },
     });
@@ -178,6 +171,8 @@ const joinCheck: verifiedProps = {
   
   return res.json();
   };
+
+  // cursorId=${pageParam}
 
   const {
     data: postContainer,
@@ -191,6 +186,7 @@ const joinCheck: verifiedProps = {
       return lastPage.hasNextFeed ? lastPage.lastCursoredId : undefined;
     },
   });
+
 
    // 모든 페이지 데이터를 하나의 배열로 병합
   useEffect(() => {
@@ -260,7 +256,7 @@ const joinCheck: verifiedProps = {
         
           <div key={item.id} className='mb-7'>
             <Card>
-            {/* <div ref={ref}> */}
+            
               <CardHeader>
                 <div className="flex flex-nowrap justify-between w-full">
                   <div className="flex whitespace-nowrap gap-5">
@@ -301,17 +297,15 @@ const joinCheck: verifiedProps = {
                   </div>
                 </CardFooter>
               </Link>
-
+              
               {/* </div> */}
             </Card>
-            
+            <div ref={ref} />
           </div>
           
           ))}
       </div> 
 
-      {/* <div ref={observerRef} style={{ height: '1px', visibility: 'hidden' }} /> */}
-      <div ref={observerRef} style={{ height: '1px', width: '100%' }} />
     </>
   );
 };

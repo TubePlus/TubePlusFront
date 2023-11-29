@@ -22,91 +22,44 @@ import Link from 'next/link';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { useSession } from 'next-auth/react';
 
-interface PostType {
-  id: number;
-  isVoted: boolean;
-  boardId: number;
-  title: string;
-  contents: string;
-  voteCounts: number;
-  authorUuid: string;
-  authorName: string;
-  avatar: string;
-  withImage: boolean;
-  pinned: boolean;
-}
-
 interface verifiedProps {
   userUuid: string;
 }
 
-// interface PostType {
-//   id: number;
-//   authorUuid: string;
-//   voteCounts: number;
-//   title: string;
-//   withImage: boolean;
-// }
+interface PostType {
+  id: number;
+  authorUuid: string;
+  voteCounts: number;
+  title: string;
+  withImage: boolean;
+}
 
-// interface PostContainerType {
-  
+interface PostContainerType {
+  data: {
+    pagedPostingData: {
+      content: PostType[];
+    };
+  };
+}
 
-
-// {
-//   "data": {
-//     "pagedPostingData": {
-//       "content": [
-//         {
-//           "id": 2,
-//           "authorUuid": "string",
-//           "voteCount": 0,
-//           "pinned": false,
-//           "title": "string",
-//           "withImage": true
-//         },
-//         {
-//           "id": 1,
-//           "authorUuid": "string",
-//           "voteCount": 0,
-//           "pinned": false,
-//           "title": "string",
-//           "withImage": true
-//         }
-//       ],
-//       "pageable": {
-//         "pageNumber": 1,
-//         "pageSize": 3,
-//         "sort": {
-//           "sorted": false,
-//           "empty": true,
-//           "unsorted": true
-//         },
-//         "offset": 3,
-//         "paged": true,
-//         "unpaged": false
-//       },
-//       "last": true,
-//       "totalPages": 2,
-//       "totalElements": 5,
-//       "first": false,
-//       "size": 3,
-//       "number": 1,
-//       "sort": {
-//         "sorted": false,
-//         "empty": true,
-//         "unsorted": true
-//       },
-//       "numberOfElements": 2,
-//       "empty": false
-//     },
-//     "fedPostingData": null
-//   },
-//   "message": "성공",
-//   "code": "S001"
-// }
+interface PostListProps {
+  authorUuid: string;
+  voteCounts: number;
+  constents: string;
+  title: string;
+  boardId: number;
+  isVoted: boolean;
+  avatar: string;
+  authorName: string;
+  createdAt: string;
+  withImage: boolean;
+  id: string;
+}
 
 const PostList = ( {communityId , boardId} : {communityId:number , boardId:number} ) => {
   const session = useSession();
+
+  const [postList, setPostList] = useState<PostType[]>([]);
 
   const [verified, setVerified] = useState({
     isJoined: false,
@@ -162,20 +115,22 @@ const PostList = ( {communityId , boardId} : {communityId:number , boardId:numbe
   }, [session.data?.user, communityId]);
     
 
-  // const { data : postcontents , isLoading : isLoading , error : error } = useQuery(['communityList'], () => {
-  //   return fetch(`https://tubeplus1.duckdns.org/api/v1/board-service/postings?boardId=${boardId}&search-type-req=BOARD_ID&view-type-req=PAGE`,
+  // const { data : postcontents , isLoading : isLoading , error : iserror } = useQuery<PostContainerType>(['communityList'], () => {
+  //   return fetch(`https://tubeplus1.duckdns.org/api/v1/board-service/postings?boardId=${boardId}&pin=true&search-type-req=BOARD_ID&view-type-req=PAGE`,
   //   {
   //     method: 'GET',
   //     headers: {
   //       'Content-Type': 'application/json',
   //     }
   // }).then((res) => res.json());
-  // }
-  // );
+  // });
 
-
-
-
+  // // 모든 페이지 데이터를 하나의 배열로 병합
+  // useEffect(() => {
+  //   if (postcontents?.data?.pagedPostingData?.content) {
+  //     setPostList(postList.concat(postcontents.data.pagedPostingData.content));
+  //   }
+  // }, [postcontents]);
 
   const fetchPosts = async () => {
     const res = await fetch(
@@ -193,12 +148,12 @@ const PostList = ( {communityId , boardId} : {communityId:number , boardId:numbe
 
   const {
     data: postcontents,
-    error,
+    error : isError,
     isLoading,
   } = useQuery(['posts'], fetchPosts);
 
   if (isLoading) return <div>Loading...</div>;
-  if (error) return <div>Error fetching data</div>;
+  if (isError) return <div>Error fetching data</div>;
 
   const isJoined = 
     (session.data?.user && session.data.user.uuid) ? 
@@ -222,7 +177,7 @@ const PostList = ( {communityId , boardId} : {communityId:number , boardId:numbe
         <Card>
           <div className=''>
             {postcontents &&
-              postcontents.map((item: PostType) => (
+              postcontents.map((item: PostListProps) => (
                 <div key={item.id} className='p-3 col-span-10 gap-5 justify-between'>
                   <div className='flex justify-between items-center pt-2 pb-2'> 
                   <div className='flex pl-4 gap-5'>
@@ -230,7 +185,8 @@ const PostList = ( {communityId , boardId} : {communityId:number , boardId:numbe
                     <strong>{item.title}</strong>
                     <p>{item.authorName}</p>
                     </div>
-                    &nbsp; &nbsp;  <ImageIcon />
+                    &nbsp; &nbsp; { item.withImage ===  true ? <ImageIcon /> : null }
+                    {/* &nbsp; &nbsp; <ImageIcon /> */}
                   </div>
                   <div className='pr-5'>
                     <p>Favorite Count : <strong> {item.voteCounts} </strong> </p>
