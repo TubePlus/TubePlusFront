@@ -25,7 +25,9 @@ function CommunityHeader( ) {
       data: communitycontents,
       isLoading: isLoadingCommunity,
       isError: isErrorCommunity,
-    } = useQuery(['communitycontents', communityId], fetchCommunity);
+    } = useQuery(['communitycontents', communityId], fetchCommunity, {
+    enabled: path.split('/')[2] === 'tube' && path.split('/')[5] !== 'posting' && path.split('/')[4] !== 'posting',
+  });
 
     if(path.split('/')[2] !== 'tube' || path.split('/')[2] === undefined || (path.split('/')[2] === 'tube' && path.split('/')[5] === 'posting') || (path.split('/')[2] === 'tube' && path.split('/')[4] === 'posting')) return null;
 
