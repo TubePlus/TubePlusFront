@@ -22,13 +22,6 @@ interface PostingType {
   withImage: boolean;
 }
 
-// const REGION = process.env.AWS_REGION;
-// const ACCESS_KEY = process.env.AWS_ACCESS_KEY_ID;
-// const SECRET_ACCESS_KEY = process.env.AWS_SECRET_KEY_ID;
-// const BUCKET_NAME = process.env.AWS_BUCKET_NAME;
-
-// console.log(REGION, ACCESS_KEY, SECRET_ACCESS_KEY, BUCKET_NAME);
-//TODO: boardId 받아오기
 const Posting = ({ boardId }: { boardId: number }) => {
   const [title, setTitle] = useState('');
   const [contentValue, setContentValue] = useState('');
@@ -59,9 +52,6 @@ const Posting = ({ boardId }: { boardId: number }) => {
         return; // 파일이 선택되지 않은 경우 종료
       }
 
-      // const file = input.files[0];
-      console.log(input);
-
       const file = {
         preview: URL.createObjectURL(input.files[0]),
         data: input.files[0],
@@ -85,8 +75,6 @@ const Posting = ({ boardId }: { boardId: number }) => {
     };
   };
   
-  // Quill.register('modules/imageHandler', imageHandler);
-
   // QUILL 모듈
   const modules = useMemo(() => {
     return {
@@ -118,8 +106,6 @@ const Posting = ({ boardId }: { boardId: number }) => {
       contents: contentValue,
       withImage: withImage,
     };
-
-    console.log(newPosting);
     mutate(newPosting);
   };
 
@@ -158,8 +144,6 @@ const Posting = ({ boardId }: { boardId: number }) => {
         </div>
       </SimpleCard>
 
-      {/* <div // signedUrl 확인
-      >{contentValue}</div> */}
     </>
   );
 };

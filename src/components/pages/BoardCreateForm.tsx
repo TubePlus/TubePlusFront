@@ -97,9 +97,6 @@ export default function BoardCreation({communityId}: {communityId: number}) {
       limitDateTime: limitDateTime, // 계산된 시간을 사용
     };
     createBoardMutation.mutate(newBoard);
-
-    console.log(limitDateTime); // 이 부분을 추가하여 실제로 계산된 limitDateTime 값을 확인
-
   }
 
 

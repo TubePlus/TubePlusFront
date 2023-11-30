@@ -71,21 +71,9 @@ function Tube() {
   const boardId = Number(path.split('/')[4]) as number
   const locale = path.split('/')[1]
 
-  // selectedView 값이 변경될 때마다 컴포넌트를 재랜더링하기 위해 useEffect 사용
   useEffect(() => {
-    // 여기서 다른 설정에 대한 처리 로직을 추가할 수 있습니다.
-    // 예를 들어, 다른 설정값에 따라 다른 동작을 수행하거나 상태를 업데이트할 수 있습니다.
-    // 이 코드는 selectedView 값이 변경될 때마다 실행됩니다.
-    // 예시로 다른 설정값에 따라 특정 동작을 수행하도록 구현해보겠습니다.
-    console.log(`Selected view changed to: ${selectedView}`);
 
-    // 예시: selectedView가 'Card'인 경우와 'Compact'인 경우에 따라 다른 동작 수행
-    // if (selectedView === 'Card') {
-    //   // 'Card'에 대한 처리
-    // } else if (selectedView === 'Compact') {
-    //   // 'Compact'에 대한 처리
-    // }
-    }, [selectedView]); // selectedView 값이 변경될 때 useEffect 실행
+    }, [selectedView]); 
   
   const fetchCommunity = async () => {
     const res = await fetch(`${baseUrl}${endpointPrefix}/communities/${communityId}/info`, {
@@ -133,8 +121,6 @@ function Tube() {
 
   return (
     <>      
-        {/* TODO: 게시판 아이디값을 통해 해당 게시판에 속해있는 게시물만 표시 할 수 있도록 포스트 컴포넌트에 커뮤니티아이디와 게시판아이디를 넘겨줄 예정 */}
-        
           <div className='col-span-9 pt-4 pb-16 pr-1 gap-6'>
 
             <div className='flex flex-wrap gap-5 pb-10'>
@@ -206,9 +192,6 @@ function Tube() {
 
               </div>
               </div>
-
-              
-              {/* 조건부 렌더링 */}
               
               {selectedView === "Card" && (
               <Post communityId={communitycontents.data.communityId} boardId={boardId} />

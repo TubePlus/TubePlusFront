@@ -92,7 +92,6 @@ const UserSidebar = ({
     return getCommunitiesByUuid(uuid);
   });
 
-  // console.log(data);
   return (
     <>
       <Accordion

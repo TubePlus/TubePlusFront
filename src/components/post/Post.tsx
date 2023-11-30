@@ -227,4 +227,4 @@ const joinCheck: verifiedProps = {
   );
 };
 
-export default Post;
+export default Post

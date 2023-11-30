@@ -95,8 +95,6 @@ const PostCard = ({ post }: { post: PostCardProps }) => {
     return getUserByUuid(post.authorUuid);
   });
 
-  // console.log(data);
-
   //TODO: 카드 디자인 수정
   return (
     <Card className={cn('shadow-none border-1')} isPressable>

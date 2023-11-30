@@ -520,7 +520,6 @@ export const joinCommunity = (uuid: string, communityId: number) => {
     },
   ).then(res => {
     if (!res.ok) {
-      console.log('Network response was not ok');
     }
     return res.json();
   });

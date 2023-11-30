@@ -162,13 +162,9 @@ const PostList = ( {communityId , boardId} : {communityId:number , boardId:numbe
     (session.data?.user && session.data.user.uuid) ?
     (verifiedCreator.isMaster) : true;
 
-  console.log(isJoined, isMaster);
-
   const joinCheck: verifiedProps = {
     userUuid: session.data?.user.uuid ?? '',
   };
-
-  console.log(postcontents)
 
   return (
     <>
